@@ -1,6 +1,6 @@
 # encoding: utf-8
 """
-Training implementation for MNIST dataset.  
+Training implementation for CIFAR100 dataset  
 Author: Jason.Fang
 Update time: 16/08/2021
 """
@@ -13,38 +13,40 @@ import argparse
 import numpy as np
 import pandas as pd
 import torch
+import torchvision
 import torch.nn as nn
 import torchvision.datasets as dset
 import torchvision.transforms as transforms
 import torch.nn.functional as F
 import torch.optim as optim
 from torch.optim import lr_scheduler
+import matplotlib.pyplot as plt
 import math
 from thop import profile
 from tensorboardX import SummaryWriter
+import seaborn as sns
 #define by myself
 from utils.common import count_bytes
 from nets.resnet import resnet18
-from nets.densenet import densenet121
-
 #config
 os.environ['CUDA_VISIBLE_DEVICES'] = "0,1,2,3,4,5,6,7"
-max_epoches = 50
+max_epoches = 100
 batch_size = 256
-CKPT_PATH = '/data/pycode/SFSAttention/ckpts/mnist_resnet_sa.pkl'
+CKPT_PATH = '/data/pycode/SFConv/ckpts/cifar100_resnet_sfconv.pkl'
+#https://pytorch.org/tutorials/beginner/blitz/cifar10_tutorial.html
 def Train():
     print('********************load data********************')
-    root = '/data/tmpexec/mnist'
+    root = '/data/tmpexec/cifar'
     if not os.path.exists(root):
         os.mkdir(root)
-    trans = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5,), (1.0,))])
+    # Normalize training set together with augmentation
+    transform_train = transforms.Compose([
+        transforms.RandomHorizontalFlip(),
+        transforms.ToTensor(),
+        transforms.Normalize(mean=[0.507, 0.487, 0.441], std=[0.267, 0.256, 0.276])
+    ])
     # if not exist, download mnist dataset
-    train_set = dset.MNIST(root=root, train=True, transform=trans, download=True)
-    #test_set = dset.MNIST(root=root, train=False, transform=trans, download=True)
-
-    #split train set and val set
-    #sample_size = int(1.0 * len(train_set)/6) #[1.0, 1/6]
-    #train_set, _ = torch.utils.data.random_split(train_set, [sample_size, len(train_set) - sample_size])
+    train_set = dset.CIFAR100(root=root, train=True, transform=transform_train, download=True)
     train_size = int(0.8 * len(train_set))#8:2
     val_size = len(train_set) - train_size
     train_dataset, val_dataset = torch.utils.data.random_split(train_set, [train_size, val_size])
@@ -63,7 +65,7 @@ def Train():
     print('********************load data succeed!********************')
 
     print('********************load model********************')
-    model = resnet18(pretrained=False, num_classes=10).cuda()
+    model = resnet18(pretrained=False, num_classes=100)
     if os.path.exists(CKPT_PATH):
         checkpoint = torch.load(CKPT_PATH)
         model.load_state_dict(checkpoint) #strict=False
@@ -76,8 +78,8 @@ def Train():
     print('********************load model succeed!********************')
 
     print('********************begin training!********************')
-    log_writer = SummaryWriter('/data/tmpexec/tensorboard-log') #--port 10002, start tensorboard
-    acc_min = 0.50 
+    #log_writer = SummaryWriter('/data/tmpexec/tensorboard-log') #--port 10002, start tensorboard
+    acc_min = 0.50 #float('inf')
     for epoch in range(max_epoches):
         since = time.time()
         print('Epoch {}/{}'.format(epoch+1 , max_epoches))
@@ -130,34 +132,30 @@ def Train():
 
         time_elapsed = time.time() - since
         print('Training epoch: {} completed in {:.0f}m {:.0f}s'.format(epoch+1, time_elapsed // 60 , time_elapsed % 60))
-        log_writer.add_scalars('CrossEntropyLoss/MNIST-ResNet-SA', {'train':np.mean(loss_train), 'val':np.mean(loss_test)}, epoch+1)
-    log_writer.close() #shut up the tensorboard
+        #log_writer.add_scalars('CrossEntropyLoss/CIFAR100-ResNet-SFConv', {'Train':np.mean(loss_train), 'Test':np.mean(loss_test)}, epoch+1)
+    #log_writer.close() #shut up the tensorboard
 
 def Test():
     print('********************load data********************')
-    root = '/data/tmpexec/mnist'
+    root = '/data/tmpexec/cifar'
     if not os.path.exists(root):
         os.mkdir(root)
-    trans = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5,), (1.0,))])
+    # Normalize test set same as training set without augmentation
+    transform_test = transforms.Compose([
+        transforms.ToTensor(),
+        transforms.Normalize(mean=[0.507, 0.487, 0.441], std=[0.267, 0.256, 0.276])
+    ])
     # if not exist, download mnist dataset
-    train_set = dset.MNIST(root=root, train=True, transform=trans, download=True)
-    test_set = dset.MNIST(root=root, train=False, transform=trans, download=True)
-
-    train_loader = torch.utils.data.DataLoader(
-                    dataset=train_set,
-                    batch_size=batch_size,
-                    shuffle=True, num_workers=1)
+    test_set = dset.CIFAR100(root=root, train=False, transform=transform_test, download=True)
     test_loader = torch.utils.data.DataLoader(
                     dataset=test_set,
                     batch_size=batch_size,
                     shuffle=False, num_workers=1)
-
-    print ('==>>> total trainning batch number: {}'.format(len(train_loader)))
     print ('==>>> total testing batch number: {}'.format(len(test_loader)))
     print('********************load data succeed!********************')
 
     print('********************load model********************')
-    model = resnet18(pretrained=False, num_classes=10).cuda()
+    model = resnet18(pretrained=False, num_classes=100).cuda()
     if os.path.exists(CKPT_PATH):
         checkpoint = torch.load(CKPT_PATH)
         model.load_state_dict(checkpoint) #strict=False
@@ -166,39 +164,53 @@ def Test():
     print('********************load model succeed!********************')
 
     print('********************begin Testing!********************')
-    for loader in [train_loader, test_loader]:
-        total_cnt, correct_cnt = 0, 0 
-        time_res = []
-        with torch.autograd.no_grad():
-            for batch_idx,  (img, lbl) in enumerate(loader):
-                #forward
-                var_image = torch.autograd.Variable(img).cuda()
-                var_label = torch.autograd.Variable(lbl).cuda()
-                start = time.time()
-                var_out = model(var_image)
-                end = time.time()
-                time_res.append(end-start)
-                _, pred_label = torch.max(var_out.data, 1)
-                total_cnt += var_image.data.size()[0]
-                correct_cnt += (pred_label == var_label.data).sum()
-                sys.stdout.write('\r testing process: = {}'.format(batch_idx+1))
-                sys.stdout.flush()
-        acc = correct_cnt * 1.0 / total_cnt
-        ci  = 1.96 * math.sqrt( (acc * (1 - acc)) / total_cnt) #1.96-95%
-        if total_cnt == len(train_set):
-            print("\r train ACC/CI = %.4f/%.4f" % (acc, ci) )
-        else:
-            print("\r test ACC/CI = %.4f/%.4f" % (acc, ci) )
+    total_cnt, top1, top5 = 0, 0, 0
+    time_res = []
+    with torch.autograd.no_grad():
+        for batch_idx,  (img, lbl) in enumerate(test_loader):
+            #forward
+            var_image = torch.autograd.Variable(img).cuda()
+            var_label = torch.autograd.Variable(lbl).cuda()
+            start = time.time()
+            var_out = model(var_image)
+            end = time.time()
+            time_res.append(end-start)
+
+            total_cnt += var_image.data.size()[0]
+            _, pred_label = torch.max(var_out.data, 1) #top1
+            top1 += (pred_label == var_label.data).sum()
+            _, pred_label = torch.topk(var_out.data, 5, 1)#top5
+            pred_label = pred_label.t()
+            pred_label = pred_label.eq(var_label.data.view(1, -1).expand_as(pred_label))
+            top5 += pred_label.float().sum()
+
+            sys.stdout.write('\r testing process: = {}'.format(batch_idx+1))
+            sys.stdout.flush()
     
     param = sum(p.numel() for p in model.parameters() if p.requires_grad) #count params of model
+    """
+    param_size = 0
+    for name, param in model.named_parameters():
+        if param.requires_grad:
+            print(name,'---', param.size())
+            param_size = param_size + param.numel()
+    """
     print("\r Params of model: {}".format(count_bytes(param)) )
-    flops, _ = profile(model, inputs=(var_image,))
+    flops, params = profile(model, inputs=(var_image,))
     print("FLOPs(Floating Point Operations) of model = {}".format(count_bytes(flops)) )
+    #print("\r Params of model: {}".format(count_bytes(params)) )
     print("FPS(Frams Per Second) of model = %.2f"% (1.0/(np.sum(time_res)/len(time_res))) )
+    
+    acc = top1 * 1.0 / total_cnt
+    ci  = 1.96 * math.sqrt( (acc * (1 - acc)) / total_cnt) #1.96-95%
+    print("\r Top-1 ACC/CI = %.4f/%.4f" % (acc, ci) )
+    acc = top5 * 1.0 / total_cnt
+    ci  = 1.96 * math.sqrt( (acc * (1 - acc)) / total_cnt) #1.96-95%
+    print("\r Top-5 ACC/CI = %.4f/%.4f" % (acc, ci) )
 
 def main():
     Train()
-    Test()   
+    Test()
 
 if __name__ == '__main__':
     main()
