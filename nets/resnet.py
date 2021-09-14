@@ -21,6 +21,7 @@ from nets.pkgs.cbam import CBAMLayer
 from nets.pkgs.eca import ECA_layer
 from nets.pkgs.aa import AugmentedConv
 from nets.pkgs.sa import SALayer
+from nets.pkgs.ssa import SSALayer
 
 __all__ = ['ResNet', 'resnet18', 'resnet34', 'resnet50', 'resnet101',
            'resnet152', 'resnext50_32x4d', 'resnext101_32x8d',
@@ -79,7 +80,10 @@ class BasicBlock(nn.Module):
 
         #optional attentions
         #self.att = SELayer(planes, reduction=16)
-        self.att = SALayer(in_ch=planes, k=2, k_size=3)
+        #self.att = CBAMLayer(gate_channels=planes, reduction_ratio=16)
+        #self.att = ECA_layer(channel=planes, k_size=3)
+        #self.att = SALayer(in_ch=planes, k=2, k_size=3)
+        self.att = SSALayer(in_ch=planes, k=2, k_size=3)
         
 
     def forward(self, x: Tensor) -> Tensor:
@@ -140,7 +144,11 @@ class Bottleneck(nn.Module):
         self.stride = stride
 
         #optional attentions
-        #self.att = SELayer(planes * self.expansion, reduction=16)
+        #self.att = SELayer(planes, reduction=16)
+        #self.att = CBAMLayer(gate_channels=planes, reduction_ratio=16)
+        #self.att = ECA_layer(channel=planes, k_size=3)
+        #self.att = SALayer(in_ch=planes, k=2, k_size=3)
+        #self.att = SSALayer(in_ch=planes, k=2, k_size=3)
 
     def forward(self, x: Tensor) -> Tensor:
         identity = x
@@ -213,7 +221,7 @@ class ResNet(nn.Module):
         self.layer4 = self._make_layer(block, 512, layers[3], stride=2,
                                        dilate=replace_stride_with_dilation[2])
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
-        
+
         self.fc = nn.Linear(512 * block.expansion, num_classes)
         #self.fc = nn.Sequential(nn.Linear(512 * block.expansion, num_classes), nn.Sigmoid())
 

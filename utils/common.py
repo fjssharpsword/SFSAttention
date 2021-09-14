@@ -123,3 +123,39 @@ def transparent_back(img, gt=True):
                     color_1 = ( 0 , 255, 0, 255) #turn to green  and transparency 
                     img.putpixel(dot,color_1)
     return img
+
+if __name__ == "__main__":
+    #for debug  
+    A = torch.rand((8, 2048, 64*64))
+    B = torch.rand((8, 2048, 64*64)).permute(0, 2, 1)
+    start = time.time()
+    C = torch.bmm(A, B)
+    end = time.time()
+    time_elapsed = end - start
+    print(time_elapsed)
+    #print('Matrix multiplication completed in {:.0f}m {:.0f}s'.format(time_elapsed // 60 , time_elapsed % 60))
+    A = torch.rand((8, 2048,1))
+    B = torch.rand((8, 2048,1)).permute(0, 2, 1)
+    start = time.time()
+    C = torch.bmm(A, B)
+    end = time.time()
+    time_elapsed = end - start
+    print(time_elapsed)
+
+    A = torch.rand((8, 2048, 2048))
+    B = torch.rand((8, 2048, 1024)) 
+    start = time.time()
+    C = torch.bmm(A, B)
+    end = time.time()
+    time_elapsed = end - start
+    print(time_elapsed)
+
+    A_u = torch.rand((8, 2048, 1))
+    A_v = torch.rand((8, 2048, 1)).permute(0, 2, 1)
+    B = torch.rand((8, 2048, 1024)) 
+    start = time.time()
+    C = torch.bmm(A_v, B)
+    C = torch.bmm(A_u, C)
+    end = time.time()
+    time_elapsed = end - start
+    print(time_elapsed)

@@ -4,7 +4,7 @@ Self-attention.
 Author: Jason.Fang
 Update time: 16/08/2021
 """
-
+import time
 import torch
 from torch.autograd import Variable
 import torch.nn.functional as F
@@ -78,7 +78,11 @@ def constant_init(module):
 
 if __name__ == "__main__":
     #for debug  
-    x =  torch.rand(2, 512, 10, 10).cuda()
+    x =  torch.rand(8, 512, 32, 32).cuda()
     ssa = SALayer(in_ch=512, k=2, k_size=5).cuda()
+    start = time.time()
     out = ssa(x)
+    end = time.time()
+    time_elapsed = end - start
+    print(time_elapsed)
     print(out.shape)
