@@ -1,8 +1,8 @@
 # encoding: utf-8
 """
-Spectral Spatial-Attention.
+Spectral Norm for Self-attention.
 Author: Jason.Fang
-Update time: 16/09/2021
+Update time: 15/09/2021
 """
 import time
 import torch
@@ -16,13 +16,6 @@ class SSALayer(nn.Module):
     def __init__(self, Ip=10):
         super(SSALayer, self).__init__()
         self.Ip = Ip
-
-        #spatial-wise
-        avg_out = torch.mean(x, dim=1, keepdim=True)
-        max_out, _ = torch.max(x, dim=1, keepdim=True)
-
-        #channel-wise
-        self.avg_pool = nn.AdaptiveAvgPool2d(1)
 
     def _batch_power_iteration(self, W):
         """

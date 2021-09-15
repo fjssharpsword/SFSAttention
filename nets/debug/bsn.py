@@ -1,8 +1,8 @@
 # encoding: utf-8
 """
-Spectral Spatial-Attention.
+Batch Spectral Normalization (BSN).
 Author: Jason.Fang
-Update time: 16/09/2021
+Update time: 15/09/2021
 """
 import time
 import torch
@@ -11,18 +11,11 @@ import torch.nn.functional as F
 from torch import nn
 from torch import Tensor
 
-
-class SSALayer(nn.Module): 
-    def __init__(self, Ip=10):
-        super(SSALayer, self).__init__()
+class BSNLayer(nn.Module): 
+    def __init__(self, num_channels, Ip=10):
+        super(BSNLayer, self).__init__()
         self.Ip = Ip
-
-        #spatial-wise
-        avg_out = torch.mean(x, dim=1, keepdim=True)
-        max_out, _ = torch.max(x, dim=1, keepdim=True)
-
-        #channel-wise
-        self.avg_pool = nn.AdaptiveAvgPool2d(1)
+        self.nc = num_channels
 
     def _batch_power_iteration(self, W):
         """
@@ -46,6 +39,7 @@ class SSALayer(nn.Module):
     def forward(self, x):
 
         B, C, H, W = x.shape
+        assert self.nc == C
         w = x.view(B, C, H * W).permute(0, 2, 1)  # B * N * C, where N = H*W
 
         #spectral normalization
@@ -60,7 +54,7 @@ class SSALayer(nn.Module):
 if __name__ == "__main__":
     #for debug  
     x =  torch.rand(8, 512, 32, 32).cuda()
-    ssa = SSALayer().cuda()
+    ssa = BSNLayer(num_channels=512).cuda()
     start = time.time()
     out = ssa(x)
     end = time.time()

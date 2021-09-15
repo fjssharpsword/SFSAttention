@@ -106,7 +106,8 @@ def power_iteration_square(A, num_simulations):
         b_k1_norm = np.linalg.norm(b_k1)
         # re normalize the vector
         b_k = b_k1 / b_k1_norm
-    return b_k
+    e = np.dot(np.dot(b_k.T, A), b_k)
+    return b_k, e
 
 if __name__ == "__main__":
     """
@@ -138,7 +139,8 @@ if __name__ == "__main__":
     print(s.max())
     """
     A = torch.rand(100,100)
-    #b_k = power_iteration_square(A.numpy(), num_simulations=1000)
+    b_k, e = power_iteration_square(A.numpy(), num_simulations=10)
+    print(e)
     u, s, v = power_iteration(A)
     print(s)
     loss_func = torch.nn.MSELoss()

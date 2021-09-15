@@ -22,6 +22,7 @@ from nets.pkgs.eca import ECA_layer
 from nets.pkgs.aa import AugmentedConv
 from nets.pkgs.sa import SALayer
 from nets.pkgs.ssa import SSALayer
+#from nets.pkgs.bsn import BSNLayer 
 
 __all__ = ['ResNet', 'resnet18', 'resnet34', 'resnet50', 'resnet101',
            'resnet152', 'resnext50_32x4d', 'resnext101_32x8d',
@@ -83,9 +84,8 @@ class BasicBlock(nn.Module):
         #self.att = CBAMLayer(gate_channels=planes, reduction_ratio=16)
         #self.att = ECA_layer(channel=planes, k_size=3)
         #self.att = SALayer(in_ch=planes, k=2, k_size=3)
-        self.att = SSALayer(in_ch=planes, k=2, k_size=3)
+        self.att = SSALayer()
         
-
     def forward(self, x: Tensor) -> Tensor:
         identity = x
 
@@ -106,7 +106,6 @@ class BasicBlock(nn.Module):
         out = self.relu(out)
 
         return out
-
 
 class Bottleneck(nn.Module):
     # Bottleneck in torchvision places the stride for downsampling at 3x3 convolution(self.conv2)
@@ -130,7 +129,7 @@ class Bottleneck(nn.Module):
     ) -> None:
         super(Bottleneck, self).__init__()
         if norm_layer is None:
-            norm_layer = nn.BatchNorm2d
+            norm_layer = nn.BatchNorm2d 
         width = int(planes * (base_width / 64.)) * groups
         # Both self.conv2 and self.downsample layers downsample the input when stride != 1
         self.conv1 = conv1x1(inplanes, width)
