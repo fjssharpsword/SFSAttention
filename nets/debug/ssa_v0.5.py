@@ -17,6 +17,8 @@ class SSALayer(nn.Module):
         super(SSALayer, self).__init__()
 
         self.Ip = Ip
+        #channel-wise
+        #self.avg_pool = nn.AdaptiveAvgPool2d(1)
         #spatial-wise
         self.conv = nn.Conv2d(channels, 1, kernel_size=3, stride=1, padding=1, bias=False)
 
@@ -40,8 +42,7 @@ class SSALayer(nn.Module):
         return u, v #left vector, right vector
     
     def batch_forward(self, x):
-
-        #reducing redundancy of single feature map with channels.
+    
         B, C, H, W = x.shape
         w = x.view(B, C, H * W).permute(0, 2, 1)  # B * N * C, where N = H*W
 
@@ -53,6 +54,7 @@ class SSALayer(nn.Module):
 
         x = torch.add(z, x) # z + x
         return x
+
 
     def _power_iteration(self, W):
         """
@@ -71,37 +73,25 @@ class SSALayer(nn.Module):
         return u, v #left vector, right vector
 
     def forward(self, x):
-        
-        #reducing redundancy of batch feature maps without channels.
+
         B, C, H, W = x.shape
+        """
+        #channel-wise 
+        w_c = self.avg_pool(x).squeeze()# B * C
+        u, v = self._power_iteration(w_c)
+        w_c = torch.matmul(u, v.T).view(B, C, 1, 1) # B * C * 1 * 1
+        x = torch.add(x, w_c) # x * w_c.expand_as(x)
+        """
         #spatial-wise
+        #w_s, _ = torch.max(x, dim=1, keepdim=True) # B * 1 * H *W 
+        #w_s = torch.mean(x, dim=1, keepdim=True) 
         w_s = self.conv(x) # B * 1 * H * W 
-        #SVD for reducing redundancy of features
         w_s = w_s.squeeze().view(B, H*W) #B * N, where N= H *W 
         u, v = self._power_iteration(w_s)
-        #calculate the attentive score
         w_s = torch.matmul(u, v.T).view(B, 1, H, W) # B * 1 * H  * W
-        #redisual addition
         x = torch.add(x, w_s)
 
         return x
-       
-        """
-        #reducing redundancy of batch feature maps with channels.
-        B, C, H, W = x.shape
-        #spatial-wise
-        #SVD for reducing redundancy of features
-        w_s = x.view(B*C, H*W) #B*C, N, where N= H *W 
-        u, v = self._power_iteration(w_s)
-        #calculate the attentive score
-        w_s = torch.matmul(u, v.T).view(B, C, H, W) # B * C* H  * W
-        #redisual addition
-        x = torch.add(x, w_s)
-
-        return x
-        """
-        #return self.batch_forward(x) #single feature to reduce redundancy
-        
 
 if __name__ == "__main__":
     #for debug  

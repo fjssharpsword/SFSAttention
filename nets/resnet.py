@@ -22,7 +22,6 @@ from nets.pkgs.eca import ECA_layer
 from nets.pkgs.aa import AugmentedConv
 from nets.pkgs.sa import SALayer
 from nets.pkgs.ssa import SSALayer
-#from nets.pkgs.bsn import BSNLayer 
 
 __all__ = ['ResNet', 'resnet18', 'resnet34', 'resnet50', 'resnet101',
            'resnet152', 'resnext50_32x4d', 'resnext101_32x8d',
@@ -84,7 +83,7 @@ class BasicBlock(nn.Module):
         #self.att = CBAMLayer(gate_channels=planes, reduction_ratio=16)
         #self.att = ECA_layer(channel=planes, k_size=3)
         #self.att = SALayer(in_ch=planes, k=2, k_size=3)
-        self.att = SSALayer()
+        #self.att = SSALayer(channels=planes)
         
     def forward(self, x: Tensor) -> Tensor:
         identity = x
@@ -100,7 +99,7 @@ class BasicBlock(nn.Module):
             identity = self.downsample(x)
 
         #attention layer
-        out = self.att(out)
+        #out = self.att(out)
 
         out += identity
         out = self.relu(out)

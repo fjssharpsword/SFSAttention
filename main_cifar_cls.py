@@ -28,12 +28,14 @@ import seaborn as sns
 #define by myself
 from utils.common import count_bytes
 from nets.resnet import resnet18
+from nets.densenet import densenet121
 #config
 os.environ['CUDA_VISIBLE_DEVICES'] = "0,1,2,3,4,5,6,7"
 max_epoches = 100
 batch_size = 256
 CKPT_PATH = '/data/pycode/SFSAttention/ckpts/cifar100_resnet.pkl'
 #https://pytorch.org/tutorials/beginner/blitz/cifar10_tutorial.html
+classes = ('plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
 def Train():
     print('********************load data********************')
     root = '/data/tmpexec/cifar'
@@ -41,9 +43,10 @@ def Train():
         os.mkdir(root)
     # Normalize training set together with augmentation
     transform_train = transforms.Compose([
+        transforms.RandomCrop(32, padding=4),
         transforms.RandomHorizontalFlip(),
         transforms.ToTensor(),
-        transforms.Normalize(mean=[0.507, 0.487, 0.441], std=[0.267, 0.256, 0.276])
+        transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010))
     ])
     # if not exist, download mnist dataset
     train_set = dset.CIFAR100(root=root, train=True, transform=transform_train, download=True)
@@ -143,7 +146,7 @@ def Test():
     # Normalize test set same as training set without augmentation
     transform_test = transforms.Compose([
         transforms.ToTensor(),
-        transforms.Normalize(mean=[0.507, 0.487, 0.441], std=[0.267, 0.256, 0.276])
+        transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010))
     ])
     # if not exist, download mnist dataset
     test_set = dset.CIFAR100(root=root, train=False, transform=transform_test, download=True)
