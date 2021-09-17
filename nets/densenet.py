@@ -21,7 +21,7 @@ from nets.pkgs.cbam import CBAMLayer
 from nets.pkgs.eca import ECA_layer
 from nets.pkgs.aa import AugmentedConv
 from nets.pkgs.sa import SALayer
-from nets.pkgs.ssa import SSALayer
+from nets.pkgs.sna import SNALayer
 
 #https://github.com/pytorch/vision/blob/master/torchvision/models/densenet.py
 
@@ -70,7 +70,7 @@ class _DenseLayer(nn.Module):
         #self.att = CBAMLayer(gate_channels=growth_rate, reduction_ratio=16)
         #self.att = ECA_layer(channel=growth_rate, k_size=3)
         #self.att = SALayer(in_ch=growth_rate, k=2, k_size=3)
-        #self.att = SSALayer(channels=growth_rate)
+        #self.att = SNALayer(channels=growth_rate)
 
     def bn_function(self, inputs: List[Tensor]) -> Tensor:
         concated_features = torch.cat(inputs, 1)

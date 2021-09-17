@@ -33,9 +33,8 @@ from nets.densenet import densenet121
 os.environ['CUDA_VISIBLE_DEVICES'] = "0,1,2,3,4,5,6,7"
 max_epoches = 100
 batch_size = 256
-CKPT_PATH = '/data/pycode/SFSAttention/ckpts/cifar100_resnet.pkl'
+CKPT_PATH = '/data/pycode/SFSAttention/ckpts/cifar100_resnet_sna.pkl'
 #https://pytorch.org/tutorials/beginner/blitz/cifar10_tutorial.html
-classes = ('plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
 def Train():
     print('********************load data********************')
     root = '/data/tmpexec/cifar'
@@ -46,20 +45,25 @@ def Train():
         transforms.RandomCrop(32, padding=4),
         transforms.RandomHorizontalFlip(),
         transforms.ToTensor(),
-        transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010))
+        transforms.Normalize((0.5070, 0.4865, 0.4409), (0.2673, 0.25643, 0.2761))
+    ])
+    transform_test = transforms.Compose([
+        transforms.ToTensor(),
+        transforms.Normalize((0.5070, 0.4865, 0.4409), (0.2673, 0.25643, 0.2761))
     ])
     # if not exist, download mnist dataset
-    train_set = dset.CIFAR100(root=root, train=True, transform=transform_train, download=True)
-    train_size = int(0.8 * len(train_set))#8:2
-    val_size = len(train_set) - train_size
-    train_dataset, val_dataset = torch.utils.data.random_split(train_set, [train_size, val_size])
+    train_set = dset.CIFAR100(root=root, train=True, transform=transform_train, download=False)
+    #train_size = int(0.8 * len(train_set))#8:2
+    #val_size = len(train_set) - train_size
+    #train_dataset, val_dataset = torch.utils.data.random_split(train_set, [train_size, val_size])
+    test_set = dset.CIFAR100(root=root, train=False, transform=transform_test, download=False)
 
     train_loader = torch.utils.data.DataLoader(
-                    dataset=train_dataset,
+                    dataset=train_set,
                     batch_size=batch_size,
                     shuffle=True, num_workers=1)
     val_loader = torch.utils.data.DataLoader(
-                    dataset=val_dataset,
+                    dataset=test_set,
                     batch_size=batch_size,
                     shuffle=False, num_workers=1)
 
@@ -75,8 +79,10 @@ def Train():
         print("=> Loaded well-trained checkpoint from: " + CKPT_PATH)
     model = nn.DataParallel(model).cuda()  # make model available multi GPU cores training    
     torch.backends.cudnn.benchmark = True  # improve train speed slightly
-    optimizer_model = optim.Adam(model.parameters(), lr=1e-3, betas=(0.9, 0.999), eps=1e-08, weight_decay=1e-5)
-    lr_scheduler_model = lr_scheduler.StepLR(optimizer_model , step_size = 10, gamma = 1)
+    #optimizer_model = optim.Adam(model.parameters(), lr=1e-3, betas=(0.9, 0.999), eps=1e-08, weight_decay=1e-5)
+    #lr_scheduler_model = lr_scheduler.StepLR(optimizer_model , step_size = 10, gamma = 1)
+    optimizer_model = optim.SGD(model.parameters(), lr=0.1, momentum=0.9, weight_decay=5e-4)
+    lr_scheduler_model = lr_scheduler.MultiStepLR(optimizer_model, milestones=[60, 120, 160], gamma=0.2) #learning rate decay
     criterion = nn.CrossEntropyLoss().cuda()
     print('********************load model succeed!********************')
 
@@ -146,10 +152,10 @@ def Test():
     # Normalize test set same as training set without augmentation
     transform_test = transforms.Compose([
         transforms.ToTensor(),
-        transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010))
+        transforms.Normalize((0.5070, 0.4865, 0.4409), (0.2673, 0.25643, 0.2761))
     ])
     # if not exist, download mnist dataset
-    test_set = dset.CIFAR100(root=root, train=False, transform=transform_test, download=True)
+    test_set = dset.CIFAR100(root=root, train=False, transform=transform_test, download=False)
     test_loader = torch.utils.data.DataLoader(
                     dataset=test_set,
                     batch_size=batch_size,
@@ -190,7 +196,6 @@ def Test():
             sys.stdout.write('\r testing process: = {}'.format(batch_idx+1))
             sys.stdout.flush()
     
-    param = sum(p.numel() for p in model.parameters() if p.requires_grad) #count params of model
     """
     param_size = 0
     for name, param in model.named_parameters():
@@ -198,9 +203,10 @@ def Test():
             print(name,'---', param.size())
             param_size = param_size + param.numel()
     """
+    param = sum(p.numel() for p in model.parameters() if p.requires_grad) #count params of model
     print("\r Params of model: {}".format(count_bytes(param)) )
-    flops, params = profile(model, inputs=(var_image,))
-    print("FLOPs(Floating Point Operations) of model = {}".format(count_bytes(flops)) )
+    #flops, params = profile(model, inputs=(var_image,))
+    #print("FLOPs(Floating Point Operations) of model = {}".format(count_bytes(flops)) )
     #print("\r Params of model: {}".format(count_bytes(params)) )
     print("FPS(Frams Per Second) of model = %.2f"% (1.0/(np.sum(time_res)/len(time_res))) )
     

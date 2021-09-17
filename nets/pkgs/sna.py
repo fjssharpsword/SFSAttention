@@ -1,6 +1,6 @@
 # encoding: utf-8
 """
-Spectral Spatial-Attention.
+Spectral Norm Attention.
 Author: Jason.Fang
 Update time: 16/09/2021
 """
@@ -12,9 +12,9 @@ from torch import nn
 from torch import Tensor
 
 
-class SSALayer(nn.Module): 
+class SNALayer(nn.Module): 
     def __init__(self, channels, Ip=10):
-        super(SSALayer, self).__init__()
+        super(SNALayer, self).__init__()
 
         self.Ip = Ip
         #spatial-wise
@@ -71,7 +71,7 @@ class SSALayer(nn.Module):
         return u, v #left vector, right vector
 
     def forward(self, x):
-        
+        """
         #reducing redundancy of batch feature maps without channels.
         B, C, H, W = x.shape
         #spatial-wise
@@ -99,14 +99,14 @@ class SSALayer(nn.Module):
         x = torch.add(x, w_s)
 
         return x
-        """
+        
         #return self.batch_forward(x) #single feature to reduce redundancy
         
 
 if __name__ == "__main__":
     #for debug  
     x =  torch.rand(8, 512, 32, 32).cuda()
-    ssa = SSALayer(channels=512).cuda()
+    ssa = SNALayer(channels=512).cuda()
     start = time.time()
     out = ssa(x)
     end = time.time()
