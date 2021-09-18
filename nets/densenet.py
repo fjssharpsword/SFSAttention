@@ -51,7 +51,7 @@ class _DenseLayer(nn.Module):
 
         self.conv1: nn.Conv2d
         self.add_module('conv1', nn.Conv2d(num_input_features, bn_size * growth_rate, kernel_size=1, stride=1, bias=False))    
-        #self.add_module('conv1', AugmentedConv(in_channels=num_input_features, out_channels=bn_size * growth_rate, kernel_size=1, dk=40, dv=4, Nh=1, relative=False, stride=1, bias=False))
+        #self.add_module('conv1', AugmentedConv(in_channels=num_input_features, out_channels=bn_size * growth_rate, kernel_size=1, dk=40, dv=4, Nh=1, relative=False, stride=1))
 
         self.norm2: nn.BatchNorm2d
         self.add_module('norm2', nn.BatchNorm2d(bn_size * growth_rate))
@@ -60,7 +60,7 @@ class _DenseLayer(nn.Module):
 
         self.conv2: nn.Conv2d
         self.add_module('conv2', nn.Conv2d(bn_size * growth_rate, growth_rate, kernel_size=3, stride=1, padding=1, bias=False))
-        #self.add_module('conv2', AugmentedConv(in_channels=bn_size * growth_rate, out_channels=growth_rate, kernel_size=3, dk=40, dv=4, Nh=1, relative=False, stride=1, padding=1, bias=False))
+        #self.add_module('conv2', AugmentedConv(in_channels=bn_size * growth_rate, out_channels=growth_rate, kernel_size=3, dk=40, dv=4, Nh=1, relative=False, stride=1))
         
         self.drop_rate = float(drop_rate)
         self.memory_efficient = memory_efficient
@@ -70,7 +70,7 @@ class _DenseLayer(nn.Module):
         #self.att = CBAMLayer(gate_channels=growth_rate, reduction_ratio=16)
         #self.att = ECA_layer(channel=growth_rate, k_size=3)
         #self.att = SALayer(in_ch=growth_rate, k=2, k_size=3)
-        #self.att = SNALayer(channels=growth_rate)
+        self.att = SNALayer(channels=growth_rate)
 
     def bn_function(self, inputs: List[Tensor]) -> Tensor:
         concated_features = torch.cat(inputs, 1)
@@ -121,7 +121,7 @@ class _DenseLayer(nn.Module):
                                      training=self.training)
 
         #attention layer
-        #new_features = self.att(new_features)
+        new_features = self.att(new_features)
 
         return new_features
 
@@ -201,7 +201,7 @@ class DenseNet(nn.Module):
             ('conv0', nn.Conv2d(3, num_init_features, kernel_size=3, stride=1, padding=1, bias=False)), 
             ('norm0', nn.BatchNorm2d(num_init_features)),
             ('relu0', nn.ReLU(inplace=True)),
-            ('pool0', nn.MaxPool2d(kernel_size=3, stride=2, padding=1)),
+            #('pool0', nn.MaxPool2d(kernel_size=3, stride=2, padding=1)),
         ]))
 
         # Each denseblock

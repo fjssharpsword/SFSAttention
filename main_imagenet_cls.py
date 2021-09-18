@@ -1,8 +1,8 @@
 # encoding: utf-8
 """
-Training implementation for CIFAR100 dataset  
+Training implementation for ImageNet-1k dataset  
 Author: Jason.Fang
-Update time: 16/08/2021
+Update time: 18/09/2021
 """
 import re
 import sys
@@ -31,9 +31,9 @@ from nets.resnet import resnet18
 from nets.densenet import densenet121
 #config
 os.environ['CUDA_VISIBLE_DEVICES'] = "0,1,2,3,4,5,6,7"
-max_epoches = 100 #200
-batch_size = 256 #512
-CKPT_PATH = '/data/pycode/SFSAttention/ckpts/cifar100_densenet_sna.pkl'
+max_epoches = 100 
+batch_size = 256 
+CKPT_PATH = '/data/pycode/SFSAttention/ckpts/imagenet1k_resnet.pkl'
 #https://pytorch.org/tutorials/beginner/blitz/cifar10_tutorial.html
 def Train():
     print('********************load data********************')

@@ -40,7 +40,7 @@ class SNALayer(nn.Module):
         return u, v #left vector, right vector
     
     def batch_forward(self, x):
-        """
+
         #reducing redundancy of single feature map with channels.
         B, C, H, W = x.shape
         w = x.view(B, C, H * W).permute(0, 2, 1)  # B * N * C, where N = H*W
@@ -52,13 +52,6 @@ class SNALayer(nn.Module):
         z = z.permute(0, 2, 1).view(B, C, H, W)  # B * C * H * W
 
         x = torch.add(z, x) # z + x
-        return x
-        """
-        B, C, H, W = x.shape
-        w = self.conv(x).squeeze()# B * H * W 
-        u, v= self._batch_power_iteration(w)
-        w = torch.bmm(u, v.permute(0, 2, 1)).unsqueeze(1)  # B * 1* H * W
-        x = torch.add(w, x) 
         return x
 
     def _power_iteration(self, W):
@@ -78,11 +71,18 @@ class SNALayer(nn.Module):
         return u, v #left vector, right vector
 
     def forward(self, x):
-        """
+        
         #reducing redundancy of batch feature maps without channels.
         B, C, H, W = x.shape
         #spatial-wise
         w_s = self.conv(x) # B * 1 * H * W 
+
+        if self.eval():#test
+            u, v= self._batch_power_iteration(w_s.squeeze())# B *H * W
+            w = torch.bmm(u, v.permute(0, 2, 1)).unsqueeze(1)  # B * 1* H * W
+            x = torch.add(w, x) 
+            return x
+
         #SVD for reducing redundancy of features
         w_s = w_s.squeeze().view(B, H*W) #B * N, where N= H *W 
         u, v = self._power_iteration(w_s)
@@ -92,7 +92,7 @@ class SNALayer(nn.Module):
         x = torch.add(x, w_s)
 
         return x
-        """
+       
         """
         #reducing redundancy of batch feature maps with channels.
         B, C, H, W = x.shape
@@ -107,7 +107,6 @@ class SNALayer(nn.Module):
 
         return x
         """
-        return self.batch_forward(x)
 
 if __name__ == "__main__":
     #for debug  
