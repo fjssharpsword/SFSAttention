@@ -138,6 +138,7 @@ if __name__ == "__main__":
     u, s, v = torch.svd(x)
     print(s.max())
     """
+ 
     A = torch.rand(100,100)
     b_k, e = power_iteration_square(A.numpy(), num_simulations=10)
     print(e)

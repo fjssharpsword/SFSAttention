@@ -33,46 +33,40 @@ from nets.densenet import densenet121
 os.environ['CUDA_VISIBLE_DEVICES'] = "0,1,2,3,4,5,6,7"
 max_epoches = 100 
 batch_size = 256 
-CKPT_PATH = '/data/pycode/SFSAttention/ckpts/imagenet1k_resnet.pkl'
+CKPT_PATH = '/data/pycode/SFSAttention/ckpts/imagenet1k_resnet_sna.pkl'
+DATA_PATH = '/data/fjsdata/ImageNet/ILSVRC2012_data/'
 #https://pytorch.org/tutorials/beginner/blitz/cifar10_tutorial.html
 def Train():
     print('********************load data********************')
-    root = '/data/tmpexec/cifar'
-    if not os.path.exists(root):
-        os.mkdir(root)
     # Normalize training set together with augmentation
+    normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
     transform_train = transforms.Compose([
-        transforms.RandomCrop(32, padding=4),
+        transforms.RandomResizedCrop(224),
         transforms.RandomHorizontalFlip(),
         transforms.ToTensor(),
-        transforms.Normalize((0.5070, 0.4865, 0.4409), (0.2673, 0.25643, 0.2761))
+        normalize,
     ])
     transform_test = transforms.Compose([
+        transforms.Resize(256),
+        transforms.CenterCrop(224),
         transforms.ToTensor(),
-        transforms.Normalize((0.5070, 0.4865, 0.4409), (0.2673, 0.25643, 0.2761))
+        normalize,
     ])
-    # if not exist, download mnist dataset
-    train_set = dset.CIFAR100(root=root, train=True, transform=transform_train, download=False)
-    #train_size = int(0.8 * len(train_set))#8:2
-    #val_size = len(train_set) - train_size
-    #train_dataset, val_dataset = torch.utils.data.random_split(train_set, [train_size, val_size])
-    test_set = dset.CIFAR100(root=root, train=False, transform=transform_test, download=False)
-
     train_loader = torch.utils.data.DataLoader(
-                    dataset=train_set,
+                    dset.ImageFolder(DATA_PATH+'train/', transform_train),
                     batch_size=batch_size,
-                    shuffle=True, num_workers=1)
+                    shuffle=True, num_workers=8)
     val_loader = torch.utils.data.DataLoader(
-                    dataset=test_set,
+                    dset.ImageFolder(DATA_PATH+'val/', transform_test),
                     batch_size=batch_size,
-                    shuffle=False, num_workers=1)
+                    shuffle=False, num_workers=8)
 
     print ('==>>> total trainning batch number: {}'.format(len(train_loader)))
     print ('==>>> total validation batch number: {}'.format(len(val_loader)))
     print('********************load data succeed!********************')
 
     print('********************load model********************')
-    model = densenet121(pretrained=False, num_classes=100)
+    model = resnet18(pretrained=False, num_classes=1000)
     if os.path.exists(CKPT_PATH):
         checkpoint = torch.load(CKPT_PATH)
         model.load_state_dict(checkpoint) #strict=False
@@ -81,8 +75,8 @@ def Train():
     torch.backends.cudnn.benchmark = True  # improve train speed slightly
     #optimizer_model = optim.Adam(model.parameters(), lr=lr=1e-3, betas=(0.9, 0.999), eps=1e-08, weight_decay=1e-5) 
     #lr_scheduler_model = lr_scheduler.StepLR(optimizer_model , step_size = 10, gamma = 1)
-    optimizer_model = optim.SGD(model.parameters(), lr=0.1, momentum=0.9, weight_decay=5e-4) #lr=0.1
-    lr_scheduler_model = lr_scheduler.MultiStepLR(optimizer_model, milestones=[60, 120, 160], gamma=0.2) #learning rate decay
+    optimizer_model = optim.SGD(model.parameters(), lr=0.1, momentum=0.9, weight_decay=1e-4) #lr=0.1
+    lr_scheduler_model = lr_scheduler.MultiStepLR(optimizer_model, milestones=[30, 60, 90], gamma=0.2) #learning rate decay
     criterion = nn.CrossEntropyLoss().cuda()
     print('********************load model succeed!********************')
 
@@ -146,25 +140,22 @@ def Train():
 
 def Test():
     print('********************load data********************')
-    root = '/data/tmpexec/cifar'
-    if not os.path.exists(root):
-        os.mkdir(root)
-    # Normalize test set same as training set without augmentation
+    normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
     transform_test = transforms.Compose([
+        transforms.Scale(256),
+        transforms.CenterCrop(224),
         transforms.ToTensor(),
-        transforms.Normalize((0.5070, 0.4865, 0.4409), (0.2673, 0.25643, 0.2761))
+        normalize,
     ])
-    # if not exist, download mnist dataset
-    test_set = dset.CIFAR100(root=root, train=False, transform=transform_test, download=False)
     test_loader = torch.utils.data.DataLoader(
-                    dataset=test_set,
+                    dset.ImageFolder(DATA_PATH+'val/', transform_test),
                     batch_size=batch_size,
-                    shuffle=False, num_workers=1)
-    print ('==>>> total testing batch number: {}'.format(len(test_loader)))
+                    shuffle=False, num_workers=8)
+    print ('==>>> total validation batch number: {}'.format(len(test_loader)))
     print('********************load data succeed!********************')
 
     print('********************load model********************')
-    model = densenet121(pretrained=False, num_classes=100).cuda()
+    model = resnet18(pretrained=False, num_classes=1000).cuda()
     if os.path.exists(CKPT_PATH):
         checkpoint = torch.load(CKPT_PATH)
         model.load_state_dict(checkpoint) #strict=False

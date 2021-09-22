@@ -33,7 +33,7 @@ from nets.densenet import densenet121
 os.environ['CUDA_VISIBLE_DEVICES'] = "0,1,2,3,4,5,6,7"
 max_epoches = 100 #200
 batch_size = 256 #512
-CKPT_PATH = '/data/pycode/SFSAttention/ckpts/cifar100_densenet_sna.pkl'
+CKPT_PATH = '/data/pycode/SFSAttention/ckpts/cifar100_resnet.pkl'
 #https://pytorch.org/tutorials/beginner/blitz/cifar10_tutorial.html
 def Train():
     print('********************load data********************')
@@ -45,11 +45,11 @@ def Train():
         transforms.RandomCrop(32, padding=4),
         transforms.RandomHorizontalFlip(),
         transforms.ToTensor(),
-        transforms.Normalize((0.5070, 0.4865, 0.4409), (0.2673, 0.25643, 0.2761))
+        transforms.Normalize((0.5070, 0.4865, 0.4409), (0.2673, 0.2564, 0.2761))
     ])
     transform_test = transforms.Compose([
         transforms.ToTensor(),
-        transforms.Normalize((0.5070, 0.4865, 0.4409), (0.2673, 0.25643, 0.2761))
+        transforms.Normalize((0.5070, 0.4865, 0.4409), (0.2673, 0.2564, 0.2761))
     ])
     # if not exist, download mnist dataset
     train_set = dset.CIFAR100(root=root, train=True, transform=transform_train, download=False)
@@ -72,7 +72,7 @@ def Train():
     print('********************load data succeed!********************')
 
     print('********************load model********************')
-    model = densenet121(pretrained=False, num_classes=100)
+    model = resnet18(pretrained=False, num_classes=100)
     if os.path.exists(CKPT_PATH):
         checkpoint = torch.load(CKPT_PATH)
         model.load_state_dict(checkpoint) #strict=False
@@ -143,6 +143,7 @@ def Train():
         print('Training epoch: {} completed in {:.0f}m {:.0f}s'.format(epoch+1, time_elapsed // 60 , time_elapsed % 60))
         #log_writer.add_scalars('CrossEntropyLoss/CIFAR100-ResNet-SFConv', {'Train':np.mean(loss_train), 'Test':np.mean(loss_test)}, epoch+1)
     #log_writer.close() #shut up the tensorboard
+        
 
 def Test():
     print('********************load data********************')
@@ -152,7 +153,7 @@ def Test():
     # Normalize test set same as training set without augmentation
     transform_test = transforms.Compose([
         transforms.ToTensor(),
-        transforms.Normalize((0.5070, 0.4865, 0.4409), (0.2673, 0.25643, 0.2761))
+        transforms.Normalize((0.5070, 0.4865, 0.4409), (0.2673, 0.2564, 0.2761))
     ])
     # if not exist, download mnist dataset
     test_set = dset.CIFAR100(root=root, train=False, transform=transform_test, download=False)
@@ -164,7 +165,7 @@ def Test():
     print('********************load data succeed!********************')
 
     print('********************load model********************')
-    model = densenet121(pretrained=False, num_classes=100).cuda()
+    model = resnet18(pretrained=False, num_classes=100).cuda()
     if os.path.exists(CKPT_PATH):
         checkpoint = torch.load(CKPT_PATH)
         model.load_state_dict(checkpoint) #strict=False
@@ -218,7 +219,7 @@ def Test():
     print("\r Top-5 ACC/CI = %.4f/%.4f" % (acc, ci) )
 
 def main():
-    Train()
+    #Train()
     Test()
 
 if __name__ == '__main__':
