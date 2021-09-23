@@ -33,7 +33,7 @@ from nets.densenet import densenet121
 os.environ['CUDA_VISIBLE_DEVICES'] = "0,1,2,3,4,5,6,7"
 max_epoches = 100 
 batch_size = 256 
-CKPT_PATH = '/data/pycode/SFSAttention/ckpts/imagenet1k_resnet_sna.pkl'
+CKPT_PATH = '/data/pycode/SFSAttention/ckpts/imagenet1k_resnet_cbam.pkl'
 DATA_PATH = '/data/fjsdata/ImageNet/ILSVRC2012_data/'
 #https://pytorch.org/tutorials/beginner/blitz/cifar10_tutorial.html
 def Train():

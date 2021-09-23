@@ -19,6 +19,7 @@ class SNALayer(nn.Module):
         self.Ip = Ip
         #spatial-wise
         #self.conv = nn.Conv2d(channels, 1, kernel_size=3, stride=1, padding=1, bias=False)
+        self.register_buffer('gv', torch.FloatTensor()) #global singular vector
 
     def _batch_power_iteration(self, W):
         """
@@ -43,7 +44,12 @@ class SNALayer(nn.Module):
         """
         power iteration for max_singular_value
         """
-        v = torch.FloatTensor(W.size(1), 1).normal_(0, 1).cuda()
+        if self.gv.nelement()== 0:
+            v = torch.FloatTensor(W.size(1), 1).normal_(0, 1).cuda()
+            self.gv = v
+        else:
+            v = self.gv
+
         W_s = torch.matmul(W.T, W)
         for _ in range(self.Ip):
             v_t = v
