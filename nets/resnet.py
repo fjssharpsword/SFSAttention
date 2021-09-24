@@ -80,10 +80,10 @@ class BasicBlock(nn.Module):
 
         #optional attentions
         #self.att = SELayer(planes, reduction=16)
-        self.att = CBAMLayer(gate_channels=planes, reduction_ratio=16)
+        #self.att = CBAMLayer(gate_channels=planes, reduction_ratio=16)
         #self.att = ECA_layer(channel=planes, k_size=3)
         #self.att = SALayer(in_ch=planes, k=2, k_size=3)
-        #self.att = SNALayer(channels=planes)
+        self.att = SNALayer(channels=planes)
         
     def forward(self, x: Tensor) -> Tensor:
         identity = x
@@ -146,7 +146,7 @@ class Bottleneck(nn.Module):
         #self.att = CBAMLayer(gate_channels=planes, reduction_ratio=16)
         #self.att = ECA_layer(channel=planes, k_size=3)
         #self.att = SALayer(in_ch=planes, k=2, k_size=3)
-        #self.att = SSALayer(in_ch=planes, k=2, k_size=3)
+        #self.att = SNALayer(channels=planes)
 
     def forward(self, x: Tensor) -> Tensor:
         identity = x

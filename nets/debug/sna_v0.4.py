@@ -51,9 +51,8 @@ class SNALayer(nn.Module):
             v = v/torch.norm(v)
 
         u = torch.matmul(W, v)
-        #u = u/torch.norm(u)
-        s = torch.norm(u)
-        u = u/s
+        #s = torch.norm(u)
+        #u = u/s
         
         return u, v #left vector, right vector
 
