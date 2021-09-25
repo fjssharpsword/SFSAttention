@@ -31,9 +31,9 @@ from nets.resnet import resnet18
 from nets.densenet import densenet121
 #config
 os.environ['CUDA_VISIBLE_DEVICES'] = "0,1,2,3,4,5,6,7"
-max_epoches = 100 #100
-batch_size = 256 #256
-CKPT_PATH = '/data/pycode/SFSAttention/ckpts/cifar100_resnet_sna.pkl'
+max_epoches = 200 #200
+batch_size = 512 #512-64
+CKPT_PATH = '/data/pycode/SFSAttention/ckpts/cifar100_resnet.pkl'
 #https://pytorch.org/tutorials/beginner/blitz/cifar10_tutorial.html
 def Train():
     print('********************load data********************')

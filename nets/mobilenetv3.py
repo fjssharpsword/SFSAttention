@@ -13,6 +13,13 @@ from torch import nn, Tensor
 from torch.nn import functional as F
 from typing import Any, Callable, Dict, List, Optional, Sequence
 from torch.utils.model_zoo import load_url as load_state_dict_from_url
+#pkgs
+from nets.pkgs.se import SELayer
+from nets.pkgs.cbam import CBAMLayer
+from nets.pkgs.eca import ECA_layer
+from nets.pkgs.aa import AugmentedConv
+from nets.pkgs.sa import SALayer
+from nets.pkgs.sna import SNALayer
 
 __all__ = ["MobileNetV3", "mobilenet_v3_large", "mobilenet_v3_small"]
 
@@ -179,8 +186,8 @@ class MobileNetV3(nn.Module):
 
         # building first layer
         firstconv_output_channels = inverted_residual_setting[0].input_channels
-        layers.append(ConvBNActivation(1, firstconv_output_channels, kernel_size=3, stride=2, norm_layer=norm_layer,
-                                       activation_layer=nn.Hardswish)) #adjust input channels
+        layers.append(ConvBNActivation(3, firstconv_output_channels, kernel_size=3, stride=2, norm_layer=norm_layer,
+                                       activation_layer=nn.Hardswish)) #cifar(stride=1),imagenet(stride=2)
 
         # building inverted residual blocks
         for cnf in inverted_residual_setting:

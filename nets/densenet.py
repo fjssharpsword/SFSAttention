@@ -66,11 +66,12 @@ class _DenseLayer(nn.Module):
         self.memory_efficient = memory_efficient
 
         #optional attentions
-        #self.att = SELayer(growth_rate, reduction=16)
-        #self.att = CBAMLayer(gate_channels=growth_rate, reduction_ratio=16)
-        #self.att = ECA_layer(channel=growth_rate, k_size=3)
-        #self.att = SALayer(in_ch=growth_rate, k=2, k_size=3)
-        self.att = SNALayer(channels=growth_rate)
+        self.attlayer: SELayer
+        self.add_module('attlayer', SELayer(growth_rate, reduction=16))
+        #self.add_module('attlayer', CBAMLayer(gate_channels=growth_rate, reduction_ratio=16))
+        #self.add_module('attlayer', ECA_layer(channel=growth_rate, k_size=3))
+        #self.add_module('attlayer', SALayer(in_ch=growth_rate, k=2, k_size=3))
+        #self.add_module('attlayer', SNALayer(channels=growth_rate))
 
     def bn_function(self, inputs: List[Tensor]) -> Tensor:
         concated_features = torch.cat(inputs, 1)
@@ -121,7 +122,7 @@ class _DenseLayer(nn.Module):
                                      training=self.training)
 
         #attention layer
-        new_features = self.att(new_features)
+        new_features = self.attlayer(new_features)
 
         return new_features
 
@@ -155,7 +156,6 @@ class _DenseBlock(nn.ModuleDict):
             new_features = layer(features)
             features.append(new_features)
         return torch.cat(features, 1)
-
 
 class _Transition(nn.Sequential):
     def __init__(self, num_input_features: int, num_output_features: int) -> None:
@@ -197,11 +197,11 @@ class DenseNet(nn.Module):
 
         # First convolution
         self.features = nn.Sequential(OrderedDict([
-            #('conv0', nn.Conv2d(3, num_init_features, kernel_size=7, stride=2, padding=3, bias=False)), 
-            ('conv0', nn.Conv2d(3, num_init_features, kernel_size=3, stride=1, padding=1, bias=False)), 
+            #('conv0', nn.Conv2d(3, num_init_features, kernel_size=7, stride=2, padding=3, bias=False)), #imagenet
+            ('conv0', nn.Conv2d(3, num_init_features, kernel_size=3, stride=1, padding=1, bias=False)), #cifar
             ('norm0', nn.BatchNorm2d(num_init_features)),
             ('relu0', nn.ReLU(inplace=True)),
-            #('pool0', nn.MaxPool2d(kernel_size=3, stride=2, padding=1)),
+            #('pool0', nn.MaxPool2d(kernel_size=3, stride=2, padding=1)), #imagenet
         ]))
 
         # Each denseblock
@@ -235,9 +235,11 @@ class DenseNet(nn.Module):
                 nn.init.kaiming_normal_(m.weight)
             elif isinstance(m, nn.BatchNorm2d):
                 nn.init.constant_(m.weight, 1)
-                nn.init.constant_(m.bias, 0)
+                if m.bias is not None:
+                    nn.init.constant_(m.bias, 0)
             elif isinstance(m, nn.Linear):
-                nn.init.constant_(m.bias, 0)
+                if m.bias is not None:
+                    nn.init.constant_(m.bias, 0)
 
     def forward(self, x: Tensor) -> Tensor:
         features = self.features(x)

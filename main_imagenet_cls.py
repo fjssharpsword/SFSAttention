@@ -31,8 +31,8 @@ from nets.resnet import resnet18
 from nets.densenet import densenet121
 #config
 os.environ['CUDA_VISIBLE_DEVICES'] = "0,1,2,3,4,5,6,7"
-max_epoches = 100 
-batch_size = 256 
+max_epoches = 200 #100
+batch_size = 128#512 #256
 CKPT_PATH = '/data/pycode/SFSAttention/ckpts/imagenet1k_resnet_cbam.pkl'
 DATA_PATH = '/data/fjsdata/ImageNet/ILSVRC2012_data/'
 #https://pytorch.org/tutorials/beginner/blitz/cifar10_tutorial.html
@@ -142,7 +142,7 @@ def Test():
     print('********************load data********************')
     normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
     transform_test = transforms.Compose([
-        transforms.Scale(256),
+        transforms.Resize(256),
         transforms.CenterCrop(224),
         transforms.ToTensor(),
         normalize,
@@ -209,7 +209,7 @@ def Test():
     print("\r Top-5 ACC/CI = %.4f/%.4f" % (acc, ci) )
 
 def main():
-    Train()
+    #Train()
     Test()
 
 if __name__ == '__main__':

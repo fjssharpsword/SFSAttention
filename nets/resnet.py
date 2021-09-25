@@ -83,7 +83,7 @@ class BasicBlock(nn.Module):
         #self.att = CBAMLayer(gate_channels=planes, reduction_ratio=16)
         #self.att = ECA_layer(channel=planes, k_size=3)
         #self.att = SALayer(in_ch=planes, k=2, k_size=3)
-        self.att = SNALayer(channels=planes)
+        #self.att = SNALayer(channels=planes)
         
     def forward(self, x: Tensor) -> Tensor:
         identity = x
@@ -99,7 +99,7 @@ class BasicBlock(nn.Module):
             identity = self.downsample(x)
 
         #attention layer
-        out = self.att(out)
+        #out = self.att(out)
 
         out += identity
         out = self.relu(out)
@@ -141,13 +141,6 @@ class Bottleneck(nn.Module):
         self.downsample = downsample
         self.stride = stride
 
-        #optional attentions
-        #self.att = SELayer(planes, reduction=16)
-        #self.att = CBAMLayer(gate_channels=planes, reduction_ratio=16)
-        #self.att = ECA_layer(channel=planes, k_size=3)
-        #self.att = SALayer(in_ch=planes, k=2, k_size=3)
-        #self.att = SNALayer(channels=planes)
-
     def forward(self, x: Tensor) -> Tensor:
         identity = x
 
@@ -161,9 +154,6 @@ class Bottleneck(nn.Module):
 
         out = self.conv3(out)
         out = self.bn3(out)
-
-        #attention layer
-        #out = self.att(out)
 
         if self.downsample is not None:
             identity = self.downsample(x)
@@ -203,13 +193,13 @@ class ResNet(nn.Module):
         self.groups = groups
         self.base_width = width_per_group
 
-        self.conv1 = nn.Conv2d(3, self.inplanes, kernel_size=7, stride=2, padding=3, bias=False)#imagenet-1k
-        #self.conv1 = nn.Conv2d(3, self.inplanes, kernel_size=3, stride=1, padding=1, bias=False)#cifar100
+        #self.conv1 = nn.Conv2d(3, self.inplanes, kernel_size=7, stride=2, padding=3, bias=False)#imagenet-1k
+        self.conv1 = nn.Conv2d(3, self.inplanes, kernel_size=3, stride=1, padding=1, bias=False)#cifar100
 
         self.bn1 = norm_layer(self.inplanes)
         self.relu = nn.ReLU(inplace=True)
 
-        self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
+        #self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)#unused for cifar100
 
         self.layer1 = self._make_layer(block, 64, layers[0])
         self.layer2 = self._make_layer(block, 128, layers[1], stride=2,
@@ -270,7 +260,7 @@ class ResNet(nn.Module):
         x = self.conv1(x)
         x = self.bn1(x)
         x = self.relu(x)
-        x = self.maxpool(x)
+        #x = self.maxpool(x)#unused for cifar100
 
         x = self.layer1(x)
         x = self.layer2(x)

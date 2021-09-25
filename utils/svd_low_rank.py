@@ -42,20 +42,39 @@ def svd_compression(img, k):
     return res_image
 
 def plot_svd_compression():
-    IMG_PATH = '/data/fjsdata/ImageNet/ILSVRC2012_data/val/n02129165/ILSVRC2012_val_00003788.JPEG'
+    #IMG_PATH = '/data/fjsdata/ImageNet/ILSVRC2012_data/val/n02129165/ILSVRC2012_val_00003788.JPEG'
+    IMG_PATH = '/data/fjsdata/Vin-CXR/train_val_jpg/afb6230703512afc370f236e8fe98806.jpeg'
     img = cv2.imread(IMG_PATH, cv2.IMREAD_GRAYSCALE)
 
-    fig, axes = plt.subplots(1,3, constrained_layout=True, figsize=(9,3))
+    fig, axes = plt.subplots(1,4, constrained_layout=True, figsize=(8,2))
 
     #origin image
     axes[0].imshow(img, aspect="auto",cmap='gray')
     axes[0].axis('off')
     axes[0].set_title('Origin Image')
+    #explained variance
+    _, Sigma, _ = np.linalg.svd(img)
+    var_sigma = np.round(Sigma**2/np.sum(Sigma**2), decimals=3)
+    var_sigma = var_sigma[np.nonzero(var_sigma)]
+    sns.barplot(x=list(range(1,len(var_sigma)+1)), y=var_sigma, color="limegreen", ax =axes[1] )
+    axes[1].set_ylabel('Explained variance (%)')
+    axes[1].set_xlabel('Number of non-zero SVs')
+    for ind, label in enumerate(axes[1].xaxis.get_ticklabels()):
+        if ind == 0: label.set_visible(True)
+        elif (ind+1) % 5 == 0:   # every 4th label is kept
+            label.set_visible(True)
+        else:
+            label.set_visible(False)
     #k=1
     img_com = svd_compression(img, k=1)
-    axes[1].imshow(img_com, aspect="auto",cmap='gray')
-    axes[1].axis('off')
-    axes[1].set_title('Rank 1')
+    axes[2].imshow(img_com, aspect="auto",cmap='gray')
+    axes[2].axis('off')
+    axes[2].set_title('Rank 1')
+    #k=1
+    img_com = svd_compression(img, k=10)
+    axes[3].imshow(img_com, aspect="auto",cmap='gray')
+    axes[3].axis('off')
+    axes[3].set_title('Rank 10')
     """
     #k=1
     u, s, v = power_iteration(torch.FloatTensor(img))
@@ -73,19 +92,7 @@ def plot_svd_compression():
     axes[2].axis('off')
     axes[2].set_title('Overlay Image')
     """
-    #explained variance
-    _, Sigma, _ = np.linalg.svd(img)
-    var_sigma = np.round(Sigma**2/np.sum(Sigma**2), decimals=3)
-    var_sigma = var_sigma[np.nonzero(var_sigma)]
-    sns.barplot(x=list(range(1,len(var_sigma)+1)), y=var_sigma, color="limegreen", ax =axes[2] )
-    axes[2].set_ylabel('Explained variance (%)')
-    axes[2].set_xlabel('Number of non-zero SVs')
-    for ind, label in enumerate(axes[2].xaxis.get_ticklabels()):
-        if ind == 0: label.set_visible(True)
-        elif (ind+1) % 8 == 0:   # every 4th label is kept
-            label.set_visible(True)
-        else:
-            label.set_visible(False)
+    
     #save
     fig.savefig('/data/pycode/SFSAttention/imgs/svd_com.png', dpi=300, bbox_inches='tight')
 

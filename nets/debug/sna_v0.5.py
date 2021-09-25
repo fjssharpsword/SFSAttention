@@ -18,7 +18,7 @@ class SNALayer(nn.Module):
 
         self.Ip = Ip
         #spatial-wise
-        #self.conv = nn.Conv2d(channels, 1, kernel_size=3, stride=1, padding=1, bias=False)
+        self.conv = nn.Conv2d(channels, 1, kernel_size=3, stride=1, padding=1, bias=False)
         self.softmax = nn.Softmax(dim=-1)
 
     def _batch_power_iteration(self, W):
@@ -64,9 +64,9 @@ class SNALayer(nn.Module):
         #reducing redundancy of batch feature maps without channels.
         B, C, H, W = x.shape
         #spatial-wise
-        w, _ = torch.max(x, dim=1, keepdim=True)# B * 1 * H * W
+        #w, _ = torch.max(x, dim=1, keepdim=True)# B * 1 * H * W
+        w = self.conv(x) # B * 1 * H * W 
         #w = torch.mean(x, dim=1, keepdim=True) # B * 1 * H * W
-        #w = self.conv(x) # B * 1 * H * W 
         #SVD for reducing redundancy of features
         w = w.squeeze().view(B, H*W) #B * N, where N= H *W 
         u, v = self._power_iteration(w)
