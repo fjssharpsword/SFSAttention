@@ -82,7 +82,7 @@ class BasicBlock(nn.Module):
         #self.att = SELayer(planes, reduction=16)
         #self.att = CBAMLayer(gate_channels=planes, reduction_ratio=16)
         #self.att = ECA_layer(channel=planes, k_size=3)
-        #self.att = SALayer(in_ch=planes, k=2, k_size=3)
+        self.att = SALayer(in_ch=planes, k=2, k_size=3)
         #self.att = SNALayer(channels=planes)
         
     def forward(self, x: Tensor) -> Tensor:
@@ -99,7 +99,7 @@ class BasicBlock(nn.Module):
             identity = self.downsample(x)
 
         #attention layer
-        #out = self.att(out)
+        out = self.att(out)
 
         out += identity
         out = self.relu(out)

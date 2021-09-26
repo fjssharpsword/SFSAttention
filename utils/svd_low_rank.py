@@ -42,39 +42,69 @@ def svd_compression(img, k):
     return res_image
 
 def plot_svd_compression():
-    #IMG_PATH = '/data/fjsdata/ImageNet/ILSVRC2012_data/val/n02129165/ILSVRC2012_val_00003788.JPEG'
-    IMG_PATH = '/data/fjsdata/Vin-CXR/train_val_jpg/afb6230703512afc370f236e8fe98806.jpeg'
-    img = cv2.imread(IMG_PATH, cv2.IMREAD_GRAYSCALE)
+    NATURAL_IMG_PATH = '/data/fjsdata/ImageNet/ILSVRC2012_data/val/n02129165/ILSVRC2012_val_00003788.JPEG'
+    MEDICAL_IMG_PATH = '/data/fjsdata/Vin-CXR/train_val_jpg/afb6230703512afc370f236e8fe98806.jpeg'
+    natural_img = cv2.imread(NATURAL_IMG_PATH, cv2.IMREAD_GRAYSCALE)
+    medical_img = cv2.imread(MEDICAL_IMG_PATH, cv2.IMREAD_GRAYSCALE)
 
-    fig, axes = plt.subplots(1,4, constrained_layout=True, figsize=(8,2))
+    fig, axes = plt.subplots(2,4, constrained_layout=True, figsize=(12,6))
 
-    #origin image
-    axes[0].imshow(img, aspect="auto",cmap='gray')
-    axes[0].axis('off')
-    axes[0].set_title('Origin Image')
+    #natural image
+    axes[0,0].imshow(natural_img, aspect="auto",cmap='gray')
+    axes[0,0].axis('off')
+    axes[0,0].set_title('Image')
     #explained variance
-    _, Sigma, _ = np.linalg.svd(img)
+    _, Sigma, _ = np.linalg.svd(natural_img)
     var_sigma = np.round(Sigma**2/np.sum(Sigma**2), decimals=3)
     var_sigma = var_sigma[np.nonzero(var_sigma)]
-    sns.barplot(x=list(range(1,len(var_sigma)+1)), y=var_sigma, color="limegreen", ax =axes[1] )
-    axes[1].set_ylabel('Explained variance (%)')
-    axes[1].set_xlabel('Number of non-zero SVs')
-    for ind, label in enumerate(axes[1].xaxis.get_ticklabels()):
+    sns.barplot(x=list(range(1,len(var_sigma)+1)), y=var_sigma, color="limegreen", ax =axes[0,1] )
+    axes[0,1].set_ylabel('Explained variance (%)')
+    axes[0,1].set_xlabel('Number of non-zero SVs')
+    for ind, label in enumerate(axes[0,1].xaxis.get_ticklabels()):
         if ind == 0: label.set_visible(True)
         elif (ind+1) % 5 == 0:   # every 4th label is kept
             label.set_visible(True)
         else:
             label.set_visible(False)
     #k=1
-    img_com = svd_compression(img, k=1)
-    axes[2].imshow(img_com, aspect="auto",cmap='gray')
-    axes[2].axis('off')
-    axes[2].set_title('Rank 1')
+    img_com = svd_compression(natural_img, k=1)
+    axes[0,2].imshow(img_com, aspect="auto",cmap='gray')
+    axes[0,2].axis('off')
+    axes[0,2].set_title('Spectral Norm')
     #k=1
-    img_com = svd_compression(img, k=10)
-    axes[3].imshow(img_com, aspect="auto",cmap='gray')
-    axes[3].axis('off')
-    axes[3].set_title('Rank 10')
+    img_com = svd_compression(natural_img, k=len(var_sigma))
+    axes[0,3].imshow(img_com, aspect="auto",cmap='gray')
+    axes[0,3].axis('off')
+    axes[0,3].set_title('Non-zero SVs')
+
+
+    #medical image
+    axes[1,0].imshow(medical_img, aspect="auto",cmap='gray')
+    axes[1,0].axis('off')
+    axes[1,0].set_title('Image')
+    #explained variance
+    _, Sigma, _ = np.linalg.svd(medical_img)
+    var_sigma = np.round(Sigma**2/np.sum(Sigma**2), decimals=3)
+    var_sigma = var_sigma[np.nonzero(var_sigma)]
+    sns.barplot(x=list(range(1,len(var_sigma)+1)), y=var_sigma, color="limegreen", ax =axes[1,1] )
+    axes[1,1].set_ylabel('Explained variance (%)')
+    axes[1,1].set_xlabel('Number of non-zero SVs')
+    for ind, label in enumerate(axes[1,1].xaxis.get_ticklabels()):
+        if ind == 0: label.set_visible(True)
+        elif (ind+1) % 5 == 0:   # every 4th label is kept
+            label.set_visible(True)
+        else:
+            label.set_visible(False)
+    #k=1
+    img_com = svd_compression(medical_img, k=1)
+    axes[1,2].imshow(img_com, aspect="auto",cmap='gray')
+    axes[1,2].axis('off')
+    axes[1,2].set_title('Spectral Norm')
+    #k=1
+    img_com = svd_compression(medical_img, k=len(var_sigma))
+    axes[1,3].imshow(img_com, aspect="auto",cmap='gray')
+    axes[1,3].axis('off')
+    axes[1,3].set_title('Non-zero SVs')
     """
     #k=1
     u, s, v = power_iteration(torch.FloatTensor(img))
