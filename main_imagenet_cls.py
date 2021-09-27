@@ -32,8 +32,8 @@ from nets.densenet import densenet121
 #config
 os.environ['CUDA_VISIBLE_DEVICES'] = "0,1,2,3,4,5,6,7"
 max_epoches = 100
-batch_size = 256
-CKPT_PATH = '/data/pycode/SFSAttention/ckpts/imagenet1k_resnet_cbam.pkl'
+batch_size = 128#256
+CKPT_PATH = '/data/pycode/SFSAttention/ckpts/imagenet1k_resnet_aa.pkl'
 DATA_PATH = '/data/fjsdata/ImageNet/ILSVRC2012_data/'
 #https://pytorch.org/tutorials/beginner/blitz/cifar10_tutorial.html
 def Train():
@@ -193,14 +193,14 @@ def Test():
         if param.requires_grad:
             print(name,'---', param.size())
             param_size = param_size + param.numel()
-    """
+    
     param = sum(p.numel() for p in model.parameters() if p.requires_grad) #count params of model
     print("\r Params of model: {}".format(count_bytes(param)) )
-    #flops, params = profile(model, inputs=(var_image,))
-    #print("FLOPs(Floating Point Operations) of model = {}".format(count_bytes(flops)) )
-    #print("\r Params of model: {}".format(count_bytes(params)) )
+    flops, params = profile(model, inputs=(var_image,))
+    print("FLOPs(Floating Point Operations) of model = {}".format(count_bytes(flops)) )
+    print("\r Params of model: {}".format(count_bytes(params)) )
     print("FPS(Frams Per Second) of model = %.2f"% (1.0/(np.sum(time_res)/len(time_res))) )
-    
+    """
     acc = top1 * 1.0 / total_cnt
     ci  = 1.96 * math.sqrt( (acc * (1 - acc)) / total_cnt) #1.96-95%
     print("\r Top-1 ACC/CI = %.4f/%.4f" % (acc, ci) )
@@ -209,7 +209,7 @@ def Test():
     print("\r Top-5 ACC/CI = %.4f/%.4f" % (acc, ci) )
 
 def main():
-    #Train()
+    Train()
     Test()
 
 if __name__ == '__main__':

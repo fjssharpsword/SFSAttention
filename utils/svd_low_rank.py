@@ -1,3 +1,4 @@
+import os
 import numpy as np
 from numpy.linalg import norm
 import cv2
@@ -52,17 +53,19 @@ def plot_svd_compression():
     #natural image
     axes[0,0].imshow(natural_img, aspect="auto",cmap='gray')
     axes[0,0].axis('off')
-    axes[0,0].set_title('Image')
+    axes[0,0].set_title('Natural Image (280, 415)')
     #explained variance
     _, Sigma, _ = np.linalg.svd(natural_img)
     var_sigma = np.round(Sigma**2/np.sum(Sigma**2), decimals=3)
     var_sigma = var_sigma[np.nonzero(var_sigma)]
     sns.barplot(x=list(range(1,len(var_sigma)+1)), y=var_sigma, color="limegreen", ax =axes[0,1] )
     axes[0,1].set_ylabel('Explained variance (%)')
-    axes[0,1].set_xlabel('Number of non-zero SVs')
+    axes[0,1].set_xlabel('Singular value')
+    axes[0,1].set_title('Singular degree')
     for ind, label in enumerate(axes[0,1].xaxis.get_ticklabels()):
         if ind == 0: label.set_visible(True)
-        elif (ind+1) % 5 == 0:   # every 4th label is kept
+        elif ind == len(var_sigma)-1: label.set_visible(True)
+        elif (ind+1) % 5 == 0:   # every 5th label is kept
             label.set_visible(True)
         else:
             label.set_visible(False)
@@ -70,28 +73,29 @@ def plot_svd_compression():
     img_com = svd_compression(natural_img, k=1)
     axes[0,2].imshow(img_com, aspect="auto",cmap='gray')
     axes[0,2].axis('off')
-    axes[0,2].set_title('Spectral Norm')
+    axes[0,2].set_title('Spectral norm')
     #k=1
     img_com = svd_compression(natural_img, k=len(var_sigma))
     axes[0,3].imshow(img_com, aspect="auto",cmap='gray')
     axes[0,3].axis('off')
-    axes[0,3].set_title('Non-zero SVs')
-
+    axes[0,3].set_title('Singular values')
 
     #medical image
     axes[1,0].imshow(medical_img, aspect="auto",cmap='gray')
     axes[1,0].axis('off')
-    axes[1,0].set_title('Image')
+    axes[1,0].set_title('Medical Image (3072, 2540)')
     #explained variance
     _, Sigma, _ = np.linalg.svd(medical_img)
     var_sigma = np.round(Sigma**2/np.sum(Sigma**2), decimals=3)
     var_sigma = var_sigma[np.nonzero(var_sigma)]
     sns.barplot(x=list(range(1,len(var_sigma)+1)), y=var_sigma, color="limegreen", ax =axes[1,1] )
     axes[1,1].set_ylabel('Explained variance (%)')
-    axes[1,1].set_xlabel('Number of non-zero SVs')
+    axes[1,1].set_xlabel('Singular value')
+    axes[1,1].set_title('Singular degree')
     for ind, label in enumerate(axes[1,1].xaxis.get_ticklabels()):
         if ind == 0: label.set_visible(True)
-        elif (ind+1) % 5 == 0:   # every 4th label is kept
+        elif ind == len(var_sigma)-1: label.set_visible(True)
+        elif (ind+1) % 2 == 0:   # every 2th label is kept
             label.set_visible(True)
         else:
             label.set_visible(False)
@@ -99,7 +103,7 @@ def plot_svd_compression():
     img_com = svd_compression(medical_img, k=1)
     axes[1,2].imshow(img_com, aspect="auto",cmap='gray')
     axes[1,2].axis('off')
-    axes[1,2].set_title('Spectral Norm')
+    axes[1,2].set_title('Spectral norm')
     #k=1
     img_com = svd_compression(medical_img, k=len(var_sigma))
     axes[1,3].imshow(img_com, aspect="auto",cmap='gray')
@@ -126,6 +130,67 @@ def plot_svd_compression():
     #save
     fig.savefig('/data/pycode/SFSAttention/imgs/svd_com.png', dpi=300, bbox_inches='tight')
 
+def plot_svd_batch():
+    
+    fig, axes = plt.subplots(1,2, constrained_layout=True)
+    #natural image
+    NATURAL_IMG_PATH = '/data/fjsdata/ImageNet/ILSVRC2012_data/'
+    transform_test = transforms.Compose([
+        transforms.Resize(64),
+        transforms.CenterCrop(56),
+        transforms.ToTensor()
+    ])
+    nat_loader = torch.utils.data.DataLoader(
+                    dset.ImageFolder(NATURAL_IMG_PATH+'val/', transform_test),
+                    batch_size=256, shuffle=False, num_workers=0)
+    for batch_idx, (img, lbl) in enumerate(nat_loader):
+        img = torch.mean(img, dim=1, keepdim=True).squeeze()
+        img = img.view(img.size(0), -1)
+        _, Sigma, _ = np.linalg.svd(img.numpy())
+        var_sigma = np.round(Sigma**2/np.sum(Sigma**2), decimals=3)
+        var_sigma = var_sigma[np.nonzero(var_sigma)]
+        sns.barplot(x=list(range(1,len(var_sigma)+1)), y=var_sigma, color="limegreen", ax =axes[0] )
+        axes[0].set_ylabel('Explained variance (%)')
+        axes[0].set_xlabel('Rank')
+        axes[0].set_title('Natural images')
+        for ind, label in enumerate(axes[0].xaxis.get_ticklabels()):
+            if ind == 0: label.set_visible(True)
+            elif ind == len(var_sigma)-1: label.set_visible(True)
+            elif (ind+1) % 5 == 0:   # every 5th label is kept
+                label.set_visible(True)
+            else:
+                label.set_visible(False)
+        break
+
+    #medical image
+    MEDICAL_IMG_PATH = '/data/fjsdata/Vin-CXR/train_val_jpg/'
+    batch_img = torch.FloatTensor()
+    for _, _, fs in os.walk(MEDICAL_IMG_PATH):
+        for f in fs:
+            if batch_img.size(0) == 256: break
+            img = os.path.join(MEDICAL_IMG_PATH, f)
+            img = cv2.imread(img, cv2.IMREAD_GRAYSCALE)
+            img = cv2.resize(img,(56,56))
+            batch_img = torch.cat((batch_img, torch.Tensor(img).unsqueeze(0)), 0)
+    batch_img = batch_img.view(batch_img.size(0), -1)
+    _, Sigma, _ = np.linalg.svd(batch_img.numpy())
+    var_sigma = np.round(Sigma**2/np.sum(Sigma**2), decimals=3)
+    var_sigma = var_sigma[np.nonzero(var_sigma)]
+    sns.barplot(x=list(range(1,len(var_sigma)+1)), y=var_sigma, color="limegreen", ax =axes[1] )
+    axes[1].set_ylabel('Explained variance (%)')
+    axes[1].set_xlabel('Rank')
+    axes[1].set_title('Medical images')
+    for ind, label in enumerate(axes[1].xaxis.get_ticklabels()):
+        if ind == 0: label.set_visible(True)
+        elif ind == len(var_sigma)-1: label.set_visible(True)
+        elif (ind+1) % 5 == 0:   # every 5th label is kept
+            label.set_visible(True)
+        else:
+            label.set_visible(False)
+
+    #save
+    fig.savefig('/data/pycode/SFSAttention/imgs/batch_svd.png', dpi=300, bbox_inches='tight')
+
 if __name__ == "__main__":
     """
     W = torch.rand(100,200)
@@ -134,4 +199,5 @@ if __name__ == "__main__":
     U, S, V = torch.svd(W)
     print(S.max())
     """
-    plot_svd_compression()
+    #plot_svd_compression()
+    plot_svd_batch()

@@ -23,6 +23,7 @@ from torch.optim import lr_scheduler
 import matplotlib.pyplot as plt
 import math
 from thop import profile
+from torchstat import stat
 from tensorboardX import SummaryWriter
 import seaborn as sns
 #define by myself
@@ -31,9 +32,9 @@ from nets.resnet import resnet18
 from nets.densenet import densenet121
 #config
 os.environ['CUDA_VISIBLE_DEVICES'] = "0,1,2,3,4,5,6,7"
-max_epoches = 200 #100
-batch_size = 512 #256
-CKPT_PATH = '/data/pycode/SFSAttention/ckpts/cifar100_resnet_sa.pkl'
+max_epoches = 200 
+batch_size = 512
+CKPT_PATH = '/data/pycode/SFSAttention/ckpts/cifar100_resnet.pkl'
 #https://pytorch.org/tutorials/beginner/blitz/cifar10_tutorial.html
 def Train():
     print('********************load data********************')
@@ -172,7 +173,7 @@ def Test():
         print("=> Loaded well-trained checkpoint from: " + CKPT_PATH)
     model.eval()#turn to test mode
     print('********************load model succeed!********************')
-
+  
     print('********************begin Testing!********************')
     total_cnt, top1, top5 = 0, 0, 0
     time_res = []
@@ -204,12 +205,13 @@ def Test():
             print(name,'---', param.size())
             param_size = param_size + param.numel()
     """
-    param = sum(p.numel() for p in model.parameters() if p.requires_grad) #count params of model
-    print("\r Params of model: {}".format(count_bytes(param)) )
-    flops, params = profile(model, inputs=(var_image,))
-    print("FLOPs(Floating Point Operations) of model = {}".format(count_bytes(flops)) )
-    print("\r Params of model: {}".format(count_bytes(params)) )
-    print("FPS(Frams Per Second) of model = %.2f"% (1.0/(np.sum(time_res)/len(time_res))) )
+    #param = sum(p.numel() for p in model.parameters() if p.requires_grad) #count params of model
+    #print("\r Params of model: {}".format(count_bytes(param)) )
+    #flops, params = profile(model, inputs=(var_image,))
+    #print("FLOPs(Floating Point Operations) of model = {}".format(count_bytes(flops)) )
+    #print("\r Params of model: {}".format(count_bytes(params)) )
+    #print("FPS(Frams Per Second) of model = %.2f"% (1.0/(np.sum(time_res)/len(time_res))) )
+    #print(stat(model.cpu(), (3,244,244)))
     
     acc = top1 * 1.0 / total_cnt
     ci  = 1.96 * math.sqrt( (acc * (1 - acc)) / total_cnt) #1.96-95%

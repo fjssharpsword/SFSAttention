@@ -44,7 +44,8 @@ class SNALayer(nn.Module):
         """
         power iteration for max_singular_value
         """
-        v = torch.FloatTensor(W.size(1), 1).normal_(0, 1).cuda()
+        v = torch.FloatTensor(W.size(1), 1).normal_(0, 1)
+        if W.is_cuda: v=v.cuda()
         W_s = torch.matmul(W.T, W)
         for _ in range(self.Ip):
             v_t = v

@@ -66,11 +66,11 @@ class _DenseLayer(nn.Module):
         self.memory_efficient = memory_efficient
 
         #optional attentions
-        self.attlayer: SELayer
-        self.add_module('attlayer', SELayer(growth_rate, reduction=16))
+        self.attlayer: SALayer
+        #self.add_module('attlayer', SELayer(growth_rate, reduction=16))
         #self.add_module('attlayer', CBAMLayer(gate_channels=growth_rate, reduction_ratio=16))
         #self.add_module('attlayer', ECA_layer(channel=growth_rate, k_size=3))
-        #self.add_module('attlayer', SALayer(in_ch=growth_rate, k=2, k_size=3))
+        self.add_module('attlayer', SALayer(in_ch=growth_rate, k=2, k_size=3))
         #self.add_module('attlayer', SNALayer(channels=growth_rate))
 
     def bn_function(self, inputs: List[Tensor]) -> Tensor:
