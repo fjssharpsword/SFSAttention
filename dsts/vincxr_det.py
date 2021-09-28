@@ -1,10 +1,3 @@
-# encoding: utf-8
-"""
-Processing VIN-CXR dataset for object detection.
-Author: Jason.Fang
-Update time: 12/08/2021
-"""
-
 import torch
 from torch.utils.data import Dataset
 from torch.utils.data import DataLoader
@@ -68,7 +61,16 @@ class DatasetGenerator(Dataset):
         self.image_dir = path_to_img_dir
         self.total_csv_annotations = total_csv_annotations
         self.total_keys = list(total_csv_annotations.keys())
-
+        """
+        #first split trainset and testset
+        train_size = int(0.8 * len(self.total_keys))#8:2
+        train_keys = random.sample(self.total_keys, train_size)
+        test_keys = list(set(self.total_keys).difference(set(train_keys)))
+        with open("/data/pycode/SFConv/dsts/trKeys.txt", "wb") as fp:   #Pickling
+            pickle.dump(train_keys, fp)
+        with open("/data/pycode/SFConv/dsts/teKeys.txt", "wb") as fp:   #Pickling
+            pickle.dump(test_keys, fp)
+        """
         #0 is background
         self.classname_to_id = {'Aortic enlargement':1, 'Atelectasis':2, 'Calcification':3, 'Cardiomegaly':4,
     		   	   'Consolidation':5, 'ILD':6, 'Infiltration':7, 'Lung Opacity':8, 'Nodule/Mass':9,
@@ -142,17 +144,29 @@ class DatasetGenerator(Dataset):
 
 def collate_fn(batch):
     return tuple(zip(*batch))
+"""
+def get_box_dataloader_VIN_None(batch_size, shuffle, num_workers):
+    vin_csv_file = '/data/pycode/LungCT3D/data_cxr2d/train.csv'
+    vin_image_dir = '/data/fjsdata/Vin-CXR/train_val_jpg/'
+    dataset_box = DatasetGenerator(path_to_img_dir=vin_image_dir, path_to_dataset_file=vin_csv_file)
 
+    train_size = int(0.8 * len(dataset_box))#8:2
+    test_size = len(dataset_box) - train_size
+    train_dataset, test_dataset = torch.utils.data.random_split(dataset_box, [train_size, test_size])
+    data_loader_box_train = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=shuffle, num_workers=num_workers, pin_memory=True, collate_fn=collate_fn)
+    data_loader_box_test = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=shuffle, num_workers=num_workers, pin_memory=True, collate_fn=collate_fn)
 
+    return data_loader_box_train, data_loader_box_test
+"""
 def get_box_dataloader_VIN(batch_size, shuffle, num_workers):
-    vin_csv_file = '/data/pycode/ReConv/dsts/train.csv'
+    vin_csv_file = '/data/pycode/SFConv/dsts/train.csv'
     vin_image_dir = '/data/fjsdata/Vin-CXR/train_val_jpg/'
   
     if shuffle==True: 
-        with open("/data/pycode/ReConv/dsts/trKeys.txt", "rb") as fp:   # Unpickling
+        with open("/data/pycode/SFConv/dsts/trKeys.txt", "rb") as fp:   # Unpickling
             key_subset = pickle.load(fp)
     else:
-        with open("/data/pycode/ReConv/dsts/teKeys.txt", "rb") as fp:   # Unpickling
+        with open("/data/pycode/SFConv/dsts/teKeys.txt", "rb") as fp:   # Unpickling
             key_subset = pickle.load(fp)
 
     dataset_box = DatasetGenerator(path_to_img_dir=vin_image_dir, path_to_dataset_file=vin_csv_file, bin_keys=key_subset)

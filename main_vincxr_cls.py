@@ -1,8 +1,8 @@
 # encoding: utf-8
 """
-Training implementation for ImageNet-1k dataset  
+Training implementation for CIFAR100 dataset  
 Author: Jason.Fang
-Update time: 18/09/2021
+Update time: 16/08/2021
 """
 import re
 import sys
@@ -23,67 +23,45 @@ from torch.optim import lr_scheduler
 import matplotlib.pyplot as plt
 import math
 from thop import profile
-from torchstat import stat
 from tensorboardX import SummaryWriter
 import seaborn as sns
 #define by myself
-from utils.common import count_bytes
+from utils.common import count_bytes, compute_AUCs
 from nets.resnet import resnet18
 from nets.densenet import densenet121
+from dsts.vincxr_cls import get_box_dataloader_VIN
 #config
 os.environ['CUDA_VISIBLE_DEVICES'] = "0,1,2,3,4,5,6,7"
-max_epoches = 100
-batch_size = 128#256
-CKPT_PATH = '/data/pycode/SFSAttention/ckpts/imagenet1k_resnet_aa.pkl'
-DATA_PATH = '/data/fjsdata/ImageNet/ILSVRC2012_data/'
-#https://pytorch.org/tutorials/beginner/blitz/cifar10_tutorial.html
+max_epoches = 50
+BATCH_SIZE = 256
+CLASS_NAMES = ['No finding', 'Aortic enlargement', 'Atelectasis', 'Calcification','Cardiomegaly', 'Consolidation', 'ILD', 'Infiltration', \
+               'Lung Opacity', 'Nodule/Mass', 'Other lesion', 'Pleural effusion', 'Pleural thickening', 'Pneumothorax', 'Pulmonary fibrosis']
+CKPT_PATH = '/data/pycode/SFConv/ckpts/vincxr_cls_resnet.pkl'
+
 def Train():
     print('********************load data********************')
-    # Normalize training set together with augmentation
-    normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-    transform_train = transforms.Compose([
-        transforms.RandomResizedCrop(224),
-        transforms.RandomHorizontalFlip(),
-        transforms.ToTensor(),
-        normalize,
-    ])
-    transform_test = transforms.Compose([
-        transforms.Resize(256),
-        transforms.CenterCrop(224),
-        transforms.ToTensor(),
-        normalize,
-    ])
-    train_loader = torch.utils.data.DataLoader(
-                    dset.ImageFolder(DATA_PATH+'train/', transform_train),
-                    batch_size=batch_size,
-                    shuffle=True, num_workers=8)
-    val_loader = torch.utils.data.DataLoader(
-                    dset.ImageFolder(DATA_PATH+'val/', transform_test),
-                    batch_size=batch_size,
-                    shuffle=False, num_workers=8)
-
+    train_loader = get_box_dataloader_VIN(batch_size=BATCH_SIZE, shuffle=True, num_workers=8)
+    test_loader = get_box_dataloader_VIN(batch_size=BATCH_SIZE, shuffle=False, num_workers=8)
     print ('==>>> total trainning batch number: {}'.format(len(train_loader)))
-    print ('==>>> total validation batch number: {}'.format(len(val_loader)))
+    print ('==>>> total test batch number: {}'.format(len(test_loader)))
     print('********************load data succeed!********************')
 
     print('********************load model********************')
-    model = resnet18(pretrained=False, num_classes=1000)
+    model = resnet18(pretrained=False, num_classes=len(CLASS_NAMES))
     if os.path.exists(CKPT_PATH):
         checkpoint = torch.load(CKPT_PATH)
         model.load_state_dict(checkpoint) #strict=False
         print("=> Loaded well-trained checkpoint from: " + CKPT_PATH)
     model = nn.DataParallel(model).cuda()  # make model available multi GPU cores training    
     torch.backends.cudnn.benchmark = True  # improve train speed slightly
-    #optimizer_model = optim.Adam(model.parameters(), lr=lr=1e-3, betas=(0.9, 0.999), eps=1e-08, weight_decay=1e-5) 
-    #lr_scheduler_model = lr_scheduler.StepLR(optimizer_model , step_size = 10, gamma = 1)
-    optimizer_model = optim.SGD(model.parameters(), lr=0.1, momentum=0.9, weight_decay=1e-4) #lr=0.1
-    lr_scheduler_model = lr_scheduler.MultiStepLR(optimizer_model, milestones=[30, 60, 90], gamma=0.2) #learning rate decay
-    criterion = nn.CrossEntropyLoss().cuda()
+    optimizer_model = optim.Adam(model.parameters(), lr=0.01, betas=(0.9, 0.999), eps=1e-08, weight_decay=1e-4)
+    lr_scheduler_model = lr_scheduler.StepLR(optimizer_model , step_size = 10, gamma = 1)
+    criterion = nn.BCELoss().cuda() #nn.CrossEntropyLoss().cuda()
     print('********************load model succeed!********************')
 
     print('********************begin training!********************')
-    #log_writer = SummaryWriter('/data/tmpexec/tensorboard-log') #--port 10002, start tensorboard
-    acc_min = 0.50 #float('inf')
+    log_writer = SummaryWriter('/data/tmpexec/tensorboard-log') #--port 10002, start tensorboard
+    acc_min = 0.50
     for epoch in range(max_epoches):
         since = time.time()
         print('Epoch {}/{}'.format(epoch+1 , max_epoches))
@@ -100,6 +78,7 @@ def Train():
                 optimizer_model.zero_grad()
                 loss_tensor = criterion.forward(var_out, var_label) 
                 loss_tensor.backward()
+                weightdecay(model, coef=1E-4) #weightdecay for factorized_conv
                 optimizer_model.step()
                 #show 
                 loss_train.append(loss_tensor.item())
@@ -111,22 +90,22 @@ def Train():
         #test
         model.eval()
         loss_test = []
-        total_cnt, correct_cnt = 0, 0
+        gt = torch.FloatTensor()
+        pred = torch.FloatTensor()
         with torch.autograd.no_grad():
-            for batch_idx,  (img, lbl) in enumerate(val_loader):
+            for batch_idx,  (img, lbl) in enumerate(test_loader):
                 #forward
                 var_image = torch.autograd.Variable(img).cuda()
                 var_label = torch.autograd.Variable(lbl).cuda()
                 var_out = model(var_image)
                 loss_tensor = criterion.forward(var_out, var_label)
                 loss_test.append(loss_tensor.item())
-                _, pred_label = torch.max(var_out.data, 1)
-                total_cnt += var_image.data.size()[0]
-                correct_cnt += (pred_label == var_label.data).sum()
+                gt = torch.cat((gt, lbl), 0)
+                pred = torch.cat((pred, var_out.data.cpu()), 0)
                 sys.stdout.write('\r testing process: = {}'.format(batch_idx+1))
                 sys.stdout.flush()
-        acc = correct_cnt * 1.0 / total_cnt
-        print("\r Eopch: %5d val loss = %.6f, ACC = %.6f" % (epoch + 1, np.mean(loss_test), acc) )
+        acc = np.mean(compute_AUCs(gt, pred, len(CLASS_NAMES)))
+        print("\r Eopch: %5d val loss = %.6f, ACC = %.6f" % (epoch + 1, np.mean(loss_test), acc))
 
         # save checkpoint
         if acc_min < acc:
@@ -136,37 +115,28 @@ def Train():
 
         time_elapsed = time.time() - since
         print('Training epoch: {} completed in {:.0f}m {:.0f}s'.format(epoch+1, time_elapsed // 60 , time_elapsed % 60))
-        #log_writer.add_scalars('CrossEntropyLoss/CIFAR100-ResNet-SFConv', {'Train':np.mean(loss_train), 'Test':np.mean(loss_test)}, epoch+1)
-    #log_writer.close() #shut up the tensorboard
+        log_writer.add_scalars('BCELoss/VINCXR-CLS-ResNet', {'Train':np.mean(loss_train), 'Test':np.mean(loss_test)}, epoch+1)
+    log_writer.close() #shut up the tensorboard
 
 def Test():
     print('********************load data********************')
-    normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-    transform_test = transforms.Compose([
-        transforms.Resize(256),
-        transforms.CenterCrop(224),
-        transforms.ToTensor(),
-        normalize,
-    ])
-    test_loader = torch.utils.data.DataLoader(
-                    dset.ImageFolder(DATA_PATH+'val/', transform_test),
-                    batch_size=batch_size,
-                    shuffle=False, num_workers=8)
-    print ('==>>> total validation batch number: {}'.format(len(test_loader)))
+    test_loader = get_box_dataloader_VIN(batch_size=32, shuffle=False, num_workers=1)
+    print ('==>>> total test batch number: {}'.format(len(test_loader)))
     print('********************load data succeed!********************')
 
     print('********************load model********************')
-    model = resnet18(pretrained=False, num_classes=1000).cuda()
+    model = resnet18(pretrained=False, num_classes=len(CLASS_NAMES)).cuda()
     if os.path.exists(CKPT_PATH):
         checkpoint = torch.load(CKPT_PATH)
         model.load_state_dict(checkpoint) #strict=False
         print("=> Loaded well-trained checkpoint from: " + CKPT_PATH)
     model.eval()#turn to test mode
     print('********************load model succeed!********************')
-    
+
     print('********************begin Testing!********************')
-    total_cnt, top1, top5 = 0, 0, 0
     time_res = []
+    gt = torch.FloatTensor()
+    pred = torch.FloatTensor()
     with torch.autograd.no_grad():
         for batch_idx,  (img, lbl) in enumerate(test_loader):
             #forward
@@ -177,40 +147,22 @@ def Test():
             end = time.time()
             time_res.append(end-start)
 
-            total_cnt += var_image.data.size()[0]
-            _, pred_label = torch.max(var_out.data, 1) #top1
-            top1 += (pred_label == var_label.data).sum()
-            _, pred_label = torch.topk(var_out.data, 5, 1)#top5
-            pred_label = pred_label.t()
-            pred_label = pred_label.eq(var_label.data.view(1, -1).expand_as(pred_label))
-            top5 += pred_label.float().sum()
+            gt = torch.cat((gt, lbl), 0)
+            pred = torch.cat((pred, var_out.data.cpu()), 0)
 
             sys.stdout.write('\r testing process: = {}'.format(batch_idx+1))
             sys.stdout.flush()
-    """
-    param_size = 0
-    for name, param in model.named_parameters():
-        if param.requires_grad:
-            print(name,'---', param.size())
-            param_size = param_size + param.numel()
     
-    param = sum(p.numel() for p in model.parameters() if p.requires_grad) #count params of model
-    print("\r Params of model: {}".format(count_bytes(param)) )
-    #flops, params = profile(model, inputs=(var_image,))
-    #print("FLOPs(Floating Point Operations) of model = {}".format(count_bytes(flops)) )
-    #print("\r Params of model: {}".format(count_bytes(params)) )
+    #param = sum(p.numel() for p in model.parameters() if p.requires_grad) #count params of model
+    #print("\r Params of model: {}".format(count_bytes(param)) )
     #print("FPS(Frams Per Second) of model = %.2f"% (1.0/(np.sum(time_res)/len(time_res))) )
-    print(stat(model.cpu(), (3,244,244)))
-    """
-    acc = top1 * 1.0 / total_cnt
-    ci  = 1.96 * math.sqrt( (acc * (1 - acc)) / total_cnt) #1.96-95%
-    print("\r Top-1 ACC/CI = %.4f/%.4f" % (acc, ci) )
-    acc = top5 * 1.0 / total_cnt
-    ci  = 1.96 * math.sqrt( (acc * (1 - acc)) / total_cnt) #1.96-95%
-    print("\r Top-5 ACC/CI = %.4f/%.4f" % (acc, ci) )
+    AUROCs = compute_AUCs(gt, pred, len(CLASS_NAMES))
+    for i in range(len(CLASS_NAMES)):
+        print('The AUROC of {} is {:.4f}'.format(CLASS_NAMES[i], AUROCs[i]))
+    print('The average AUROC is {:.4f}'.format(np.mean(AUROCs)))
 
 def main():
-    #Train()
+    Train()
     Test()
 
 if __name__ == '__main__':
