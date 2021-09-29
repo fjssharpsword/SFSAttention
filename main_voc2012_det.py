@@ -41,7 +41,7 @@ from nets.densenet import densenet121
 #config
 os.environ['CUDA_VISIBLE_DEVICES'] = "7"
 MAX_EPOCHS = 100
-BATCH_SIZE = 1#256
+BATCH_SIZE = 2#256
 root = '/data/fjsdata/VOC2012/'
 VOC_CLASSES = ['background','aeroplane', 'bicycle', 'bird', 'boat','bottle', 'bus', 'car', 'cat', 'chair', 'cow',
                'diningtable', 'dog', 'horse', 'motorbike', 'person','pottedplant', 'sheep', 'sofa', 'train', 'tvmonitor']
@@ -50,7 +50,7 @@ def collate_fn(batch):
     return tuple(zip(*batch))
 def Train():
     print('********************load data********************')
-    trans = transforms.Compose([transforms.Resize((224,224)),transforms.ToTensor()])
+    trans = transforms.Compose([transforms.Resize((604,604)),transforms.ToTensor()])
     train_set = dset.VOCDetection(root=root, year='2012', image_set='train', transform=trans, download=False)
     train_loader = torch.utils.data.DataLoader(
                     dataset=train_set,
@@ -64,7 +64,7 @@ def Train():
     backbone = nn.Sequential(resnet.conv1, resnet.bn1,resnet.relu, resnet.maxpool,resnet.layer1,resnet.layer2,resnet.layer3,resnet.layer4)
     #backbone = densenet121(pretrained=False, num_classes=NUM_CLASSES).features.cuda()
     backbone.out_channels = 512 #resnet18=512,  densenet121=1024
-    anchor_generator = AnchorGenerator(sizes=((32, 64, 128, 256),),aspect_ratios=((0.5, 1.0, 2.0),))
+    anchor_generator = AnchorGenerator(sizes=((32, 64, 128, 256, 512),),aspect_ratios=((0.5, 1.0, 2.0),))
     roi_pooler = torchvision.ops.MultiScaleRoIAlign(featmap_names=['0'],output_size=7,sampling_ratio=2)
     model = FasterRCNN(backbone, num_classes=len(VOC_CLASSES), rpn_anchor_generator=anchor_generator, box_roi_pool=roi_pooler).cuda()
     
@@ -74,8 +74,8 @@ def Train():
         print("=> Loaded well-trained checkpoint from: " + CKPT_PATH)
     #model = nn.DataParallel(model).cuda()  # make model available multi GPU cores training    
     torch.backends.cudnn.benchmark = True  # improve train speed slightly
-    optimizer_model = optim.SGD(model.parameters(), lr=0.1, momentum=0.9, weight_decay=1e-4) #lr=0.1
-    lr_scheduler_model = lr_scheduler.MultiStepLR(optimizer_model, milestones=[30, 60, 90], gamma=0.2) #learning rate decay
+    optimizer_model = optim.Adam(model.parameters(), lr=0.01, betas=(0.9, 0.999), eps=1e-08, weight_decay=1e-4)
+    lr_scheduler_model = lr_scheduler.StepLR(optimizer_model , step_size = 10, gamma = 1)
     print('********************load model succeed!********************')
 
     print('********************begin training!********************')
@@ -106,13 +106,16 @@ def Train():
             loss_min = np.mean(train_loss)
             torch.save(model.state_dict(), CKPT_PATH) #Saving checkpoint
             print(' Epoch: {} model has been already save!'.format(epoch+1))
+
+        if (epoch+1) % 10 == 0:
+            Test()
        
         time_elapsed = time.time() - since
         print('Training epoch: {} completed in {:.0f}m {:.0f}s'.format(epoch+1, time_elapsed // 60 , time_elapsed % 60))
 
 def Test():
     print('********************load data********************')
-    trans = transforms.Compose([transforms.Resize((224,224)),transforms.ToTensor()])
+    trans = transforms.Compose([transforms.Resize((604,604)),transforms.ToTensor()])
     test_set = dset.VOCDetection(root=root, year='2012', image_set='val', transform=trans, download=False)
     test_loader = torch.utils.data.DataLoader(
                     dataset=test_set,
@@ -126,7 +129,7 @@ def Test():
     backbone = nn.Sequential(resnet.conv1, resnet.bn1,resnet.relu, resnet.maxpool,resnet.layer1,resnet.layer2,resnet.layer3,resnet.layer4)
     #backbone = densenet121(pretrained=False, num_classes=NUM_CLASSES).features.cuda()
     backbone.out_channels = 512 #resnet18=512,  densenet121=1024
-    anchor_generator = AnchorGenerator(sizes=((32, 64, 128, 256),),aspect_ratios=((0.5, 1.0, 2.0),))
+    anchor_generator = AnchorGenerator(sizes=((32, 64, 128, 256, 512),),aspect_ratios=((0.5, 1.0, 2.0),))
     roi_pooler = torchvision.ops.MultiScaleRoIAlign(featmap_names=['0'],output_size=7,sampling_ratio=2)
     model = FasterRCNN(backbone, num_classes=len(VOC_CLASSES), rpn_anchor_generator=anchor_generator, box_roi_pool=roi_pooler).cuda()
     
@@ -162,7 +165,7 @@ def Test():
                         if gt_lbl[m] == pred_lbl[n]:
                             iou = compute_iou(gt_box[m], pred_box[n])
                             if iou_max < iou: iou_max =  iou
-                    if iou_max > 0.5: #0.75, hit
+                    if iou_max > 0.50: #0.75, hit
                         mAP[0].append(1)
                         mAP[gt_lbl[m].item()].append(1)
                     else:
@@ -171,17 +174,15 @@ def Test():
 
             sys.stdout.write('\r testing process: = {}'.format(batch_idx+1))
             sys.stdout.flush()
-    avg_map = []
+
     for i in range(len(VOC_CLASSES)):
         print('The mAP of {} is {:.4f}'.format(VOC_CLASSES[i], np.mean(mAP[i])))
-        avg_map.append(np.mean(mAP[i]))
-    print('Average mAP is {:.4f}'.format(np.mean(avg_map)))
     #param = sum(p.numel() for p in model.parameters() if p.requires_grad) #count params of model
     #print("\r Params of model: {}".format(count_bytes(param)) )
     #print("FPS(Frams Per Second) of model = %.2f"% (1.0/(np.sum(time_res)/len(time_res))) )
 
 def main():
-    #Train()
+    Train()
     Test()
 
 if __name__ == '__main__':
