@@ -79,9 +79,9 @@ class BasicBlock(nn.Module):
         self.stride = stride
 
         #optional attentions
-        #self.att = SELayer(planes, reduction=16)
-        #self.att = ECA_layer(channel=planes, k_size=3)
-        #self.att = SNALayer(channels=planes)
+        #self.attlayer = SELayer(planes, reduction=16)
+        #self.attlayer = ECA_layer(channel=planes, k_size=3)
+        #self.attlayer = SNALayer(channels=planes)
         
     def forward(self, x: Tensor) -> Tensor:
         identity = x
@@ -97,7 +97,7 @@ class BasicBlock(nn.Module):
             identity = self.downsample(x)
 
         #attention layer
-        #out = self.att(out)
+        #out = self.attlayer(out)
 
         out += identity
         out = self.relu(out)
@@ -209,6 +209,8 @@ class ResNet(nn.Module):
 
         self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)#unused for cifar100
 
+        self.attlayer = SNALayer(channels=self.inplanes) #attention layer
+
         self.layer1 = self._make_layer(block, 64, layers[0])
         self.layer2 = self._make_layer(block, 128, layers[1], stride=2,
                                        dilate=replace_stride_with_dilation[0])
@@ -269,6 +271,8 @@ class ResNet(nn.Module):
         x = self.bn1(x)
         x = self.relu(x)
         x = self.maxpool(x)#unused for cifar100
+
+        x = self.attlayer(x) #attention layer
 
         x = self.layer1(x)
         x = self.layer2(x)

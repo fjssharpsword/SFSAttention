@@ -27,7 +27,7 @@ from tensorboardX import SummaryWriter
 import seaborn as sns
 #define by myself
 from utils.common import count_bytes, compute_AUCs
-from nets.resnet import resnet18
+from nets.resnet_cls import resnet18
 from nets.densenet import densenet121
 from dsts.vincxr_cls import get_box_dataloader_VIN
 #config

@@ -35,13 +35,13 @@ import torch.nn.functional as F
 #define by myself
 from utils.common import compute_iou, count_bytes
 from utils.voc2coco import voc2coco_target
-from nets.resnet import resnet18
+from nets.resnet_det import resnet18
 from nets.densenet import densenet121
 
 #config
-os.environ['CUDA_VISIBLE_DEVICES'] = "7"
+os.environ['CUDA_VISIBLE_DEVICES'] = "6"
 MAX_EPOCHS = 100
-BATCH_SIZE = 2#256
+BATCH_SIZE = 1#8
 root = '/data/fjsdata/VOC2012/'
 VOC_CLASSES = ['background','aeroplane', 'bicycle', 'bird', 'boat','bottle', 'bus', 'car', 'cat', 'chair', 'cow',
                'diningtable', 'dog', 'horse', 'motorbike', 'person','pottedplant', 'sheep', 'sofa', 'train', 'tvmonitor']
