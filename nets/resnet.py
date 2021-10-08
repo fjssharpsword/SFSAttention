@@ -139,12 +139,10 @@ class Bottleneck(nn.Module):
         self.downsample = downsample
         self.stride = stride
 
-        #optional attentions
-        #self.att = SELayer(planes * self.expansion, reduction=16)
-        #self.att = CBAMLayer(gate_channels=planes * self.expansion, reduction_ratio=16)
-        #self.att = ECA_layer(channel=planes * self.expansion, k_size=3)
-        #self.att = SALayer(in_ch=planes * self.expansion, k=2, k_size=3)
-        #self.att = SNALayer(channels=planes * self.expansion)
+        #attention layer
+        #self.attlayer = SELayer(planes * self.expansion, reduction=16)
+        #self.attlayer = ECA_layer(channel=planes * self.expansion, k_size=3)
+        #self.attlayer = SNALayer(channels=planes * self.expansion)
 
     def forward(self, x: Tensor) -> Tensor:
         identity = x
@@ -164,7 +162,7 @@ class Bottleneck(nn.Module):
             identity = self.downsample(x)
 
         #attention layer
-        #out = self.att(out)
+        #out = self.attlayer(out)
 
         out += identity
         out = self.relu(out)
@@ -209,7 +207,7 @@ class ResNet(nn.Module):
 
         self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)#unused for cifar100
 
-        self.attlayer = SNALayer(channels=self.inplanes) #attention layer
+        #self.attlayer = SNALayer(channels=self.inplanes) #attention layer
 
         self.layer1 = self._make_layer(block, 64, layers[0])
         self.layer2 = self._make_layer(block, 128, layers[1], stride=2,
@@ -272,7 +270,7 @@ class ResNet(nn.Module):
         x = self.relu(x)
         x = self.maxpool(x)#unused for cifar100
 
-        x = self.attlayer(x) #attention layer
+        #x = self.attlayer(x) #attention layer
 
         x = self.layer1(x)
         x = self.layer2(x)

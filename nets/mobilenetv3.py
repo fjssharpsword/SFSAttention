@@ -85,7 +85,9 @@ class ConvBNActivation(nn.Sequential):
         super().__init__(
             nn.Conv2d(in_planes, out_planes, kernel_size, stride, padding, dilation=dilation, groups=groups, bias=False),
             norm_layer(out_planes),
-            activation_layer(inplace=True)
+            activation_layer(inplace=True),
+            #SELayer(out_planes, reduction=16),
+            #ECA_layer(channel=out_planes, k_size=3),
         )
         self.out_channels = out_planes
 
@@ -200,13 +202,16 @@ class MobileNetV3(nn.Module):
                                        norm_layer=norm_layer, activation_layer=nn.Hardswish))
 
         self.features = nn.Sequential(*layers)
+
+        #self.attlayer = SNALayer(channels=lastconv_output_channels) #attention layer
+
         self.avgpool = nn.AdaptiveAvgPool2d(1)
         self.classifier = nn.Sequential(
             nn.Linear(lastconv_output_channels, last_channel),
             nn.Hardswish(inplace=True),
             nn.Dropout(p=0.2, inplace=True),
             nn.Linear(last_channel, num_classes),
-            nn.Sigmoid(), #for bceloss
+            #nn.Sigmoid(), #for bceloss
         )
 
         for m in self.modules():
@@ -216,13 +221,17 @@ class MobileNetV3(nn.Module):
                     nn.init.zeros_(m.bias)
             elif isinstance(m, (nn.BatchNorm2d, nn.GroupNorm)):
                 nn.init.ones_(m.weight)
-                nn.init.zeros_(m.bias)
+                if m.bias is not None:
+                    nn.init.zeros_(m.bias)
             elif isinstance(m, nn.Linear):
                 nn.init.normal_(m.weight, 0, 0.01)
-                nn.init.zeros_(m.bias)
+                if m.bias is not None:
+                    nn.init.zeros_(m.bias)
 
     def _forward_impl(self, x: Tensor) -> Tensor:
         x = self.features(x)
+
+        #x = self.attlayer(x) #attention layer
 
         x = self.avgpool(x)
         x = torch.flatten(x, 1)

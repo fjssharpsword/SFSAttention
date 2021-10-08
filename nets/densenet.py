@@ -66,11 +66,9 @@ class _DenseLayer(nn.Module):
         self.memory_efficient = memory_efficient
 
         #optional attentions
-        self.attlayer: SALayer
+        #self.attlayer: SNALayer
         #self.add_module('attlayer', SELayer(growth_rate, reduction=16))
-        #self.add_module('attlayer', CBAMLayer(gate_channels=growth_rate, reduction_ratio=16))
         #self.add_module('attlayer', ECA_layer(channel=growth_rate, k_size=3))
-        self.add_module('attlayer', SALayer(in_ch=growth_rate, k=2, k_size=3))
         #self.add_module('attlayer', SNALayer(channels=growth_rate))
 
     def bn_function(self, inputs: List[Tensor]) -> Tensor:
@@ -122,7 +120,7 @@ class _DenseLayer(nn.Module):
                                      training=self.training)
 
         #attention layer
-        new_features = self.attlayer(new_features)
+        #new_features = self.attlayer(new_features)
 
         return new_features
 
@@ -197,11 +195,11 @@ class DenseNet(nn.Module):
 
         # First convolution
         self.features = nn.Sequential(OrderedDict([
-            #('conv0', nn.Conv2d(3, num_init_features, kernel_size=7, stride=2, padding=3, bias=False)), #imagenet
-            ('conv0', nn.Conv2d(3, num_init_features, kernel_size=3, stride=1, padding=1, bias=False)), #cifar
+            ('conv0', nn.Conv2d(3, num_init_features, kernel_size=7, stride=2, padding=3, bias=False)), #imagenet
+            #('conv0', nn.Conv2d(3, num_init_features, kernel_size=3, stride=1, padding=1, bias=False)), #cifar
             ('norm0', nn.BatchNorm2d(num_init_features)),
             ('relu0', nn.ReLU(inplace=True)),
-            #('pool0', nn.MaxPool2d(kernel_size=3, stride=2, padding=1)), #imagenet
+            ('pool0', nn.MaxPool2d(kernel_size=3, stride=2, padding=1)), #imagenet
         ]))
 
         # Each denseblock
@@ -229,6 +227,9 @@ class DenseNet(nn.Module):
         # Linear layer
         self.classifier = nn.Linear(num_features, num_classes)
 
+        #attention layer
+        self.attlayer = SNALayer(channels=num_features)
+
         # Official init from torch repo.
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
@@ -243,6 +244,9 @@ class DenseNet(nn.Module):
 
     def forward(self, x: Tensor) -> Tensor:
         features = self.features(x)
+
+        features = self.attlayer(features) #attention layer
+        
         out = F.relu(features, inplace=True)
         out = F.adaptive_avg_pool2d(out, (1, 1))
         out = torch.flatten(out, 1)

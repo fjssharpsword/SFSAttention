@@ -28,13 +28,13 @@ from tensorboardX import SummaryWriter
 import seaborn as sns
 #define by myself
 from utils.common import count_bytes
-from nets.resnet_cls import resnet18
+from nets.resnet import resnet50
 from nets.densenet import densenet121
 #config
 os.environ['CUDA_VISIBLE_DEVICES'] = "0,1,2,3,4,5,6,7"
 max_epoches = 100
-batch_size = 256 #128#256
-CKPT_PATH = '/data/pycode/SFSAttention/ckpts/imagenet1k_resnet_sna.pkl'
+batch_size = 128
+CKPT_PATH = '/data/pycode/SFSAttention/ckpts/imagenet1k_resnet.pkl'
 DATA_PATH = '/data/fjsdata/ImageNet/ILSVRC2012_data/'
 #https://pytorch.org/tutorials/beginner/blitz/cifar10_tutorial.html
 def Train():
@@ -67,7 +67,7 @@ def Train():
     print('********************load data succeed!********************')
 
     print('********************load model********************')
-    model = resnet18(pretrained=False, num_classes=1000)
+    model = resnet50(pretrained=False, num_classes=1000)
     if os.path.exists(CKPT_PATH):
         checkpoint = torch.load(CKPT_PATH)
         model.load_state_dict(checkpoint) #strict=False
@@ -108,31 +108,32 @@ def Train():
         lr_scheduler_model.step()  #about lr and gamma
         print("\r Eopch: %5d train loss = %.6f" % (epoch + 1, np.mean(loss_train) ))
 
-        #test
-        model.eval()
-        loss_test = []
-        total_cnt, correct_cnt = 0, 0
-        with torch.autograd.no_grad():
-            for batch_idx,  (img, lbl) in enumerate(val_loader):
-                #forward
-                var_image = torch.autograd.Variable(img).cuda()
-                var_label = torch.autograd.Variable(lbl).cuda()
-                var_out = model(var_image)
-                loss_tensor = criterion.forward(var_out, var_label)
-                loss_test.append(loss_tensor.item())
-                _, pred_label = torch.max(var_out.data, 1)
-                total_cnt += var_image.data.size()[0]
-                correct_cnt += (pred_label == var_label.data).sum()
-                sys.stdout.write('\r testing process: = {}'.format(batch_idx+1))
-                sys.stdout.flush()
-        acc = correct_cnt * 1.0 / total_cnt
-        print("\r Eopch: %5d val loss = %.6f, ACC = %.6f" % (epoch + 1, np.mean(loss_test), acc) )
+        if (epoch+1) % 10 == 0:
+            #test
+            model.eval()
+            loss_test = []
+            total_cnt, correct_cnt = 0, 0
+            with torch.autograd.no_grad():
+                for batch_idx,  (img, lbl) in enumerate(val_loader):
+                    #forward
+                    var_image = torch.autograd.Variable(img).cuda()
+                    var_label = torch.autograd.Variable(lbl).cuda()
+                    var_out = model(var_image)
+                    loss_tensor = criterion.forward(var_out, var_label)
+                    loss_test.append(loss_tensor.item())
+                    _, pred_label = torch.max(var_out.data, 1)
+                    total_cnt += var_image.data.size()[0]
+                    correct_cnt += (pred_label == var_label.data).sum()
+                    sys.stdout.write('\r testing process: = {}'.format(batch_idx+1))
+                    sys.stdout.flush()
+            acc = correct_cnt * 1.0 / total_cnt
+            print("\r Eopch: %5d val loss = %.6f, ACC = %.6f" % (epoch + 1, np.mean(loss_test), acc) )
 
-        # save checkpoint
-        if acc_min < acc:
-            acc_min = acc
-            torch.save(model.module.state_dict(), CKPT_PATH) #Saving torch.nn.DataParallel Models
-            print(' Epoch: {} model has been already save!'.format(epoch + 1))
+            # save checkpoint
+            if acc_min < acc:
+                acc_min = acc
+                torch.save(model.module.state_dict(), CKPT_PATH) #Saving torch.nn.DataParallel Models
+                print(' Epoch: {} model has been already save!'.format(epoch + 1))
 
         time_elapsed = time.time() - since
         print('Training epoch: {} completed in {:.0f}m {:.0f}s'.format(epoch+1, time_elapsed // 60 , time_elapsed % 60))
@@ -156,7 +157,7 @@ def Test():
     print('********************load data succeed!********************')
 
     print('********************load model********************')
-    model = resnet18(pretrained=False, num_classes=1000).cuda()
+    model = resnet50(pretrained=False, num_classes=1000).cuda()
     if os.path.exists(CKPT_PATH):
         checkpoint = torch.load(CKPT_PATH)
         model.load_state_dict(checkpoint) #strict=False
@@ -199,7 +200,7 @@ def Test():
     #flops, params = profile(model, inputs=(var_image,))
     #print("FLOPs(Floating Point Operations) of model = {}".format(count_bytes(flops)) )
     #print("\r Params of model: {}".format(count_bytes(params)) )
-    #print("FPS(Frams Per Second) of model = %.2f"% (1.0/(np.sum(time_res)/len(time_res))) )
+    print("FPS(Frams Per Second) of model = %.2f"% (1.0/(np.sum(time_res)/len(time_res))) )
     print(stat(model.cpu(), (3,244,244)))
     """
     acc = top1 * 1.0 / total_cnt
