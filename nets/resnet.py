@@ -207,7 +207,7 @@ class ResNet(nn.Module):
 
         self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)#unused for cifar100
 
-        #self.attlayer = SNALayer(channels=self.inplanes) #attention layer
+        self.attlayer = SNALayer(channels=self.inplanes) #attention layer
 
         self.layer1 = self._make_layer(block, 64, layers[0])
         self.layer2 = self._make_layer(block, 128, layers[1], stride=2,
@@ -270,7 +270,7 @@ class ResNet(nn.Module):
         x = self.relu(x)
         x = self.maxpool(x)#unused for cifar100
 
-        #x = self.attlayer(x) #attention layer
+        x = self.attlayer(x) #attention layer
 
         x = self.layer1(x)
         x = self.layer2(x)

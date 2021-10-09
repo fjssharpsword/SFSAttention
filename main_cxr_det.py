@@ -30,7 +30,7 @@ import seaborn as sns
 #define by myself
 from utils.common import compute_iou, count_bytes
 from dsts.vincxr_det import get_box_dataloader_VIN
-from nets.resnet import resnet18
+from nets.resnet import resnet50
 from nets.densenet import densenet121
 
 #config
@@ -40,7 +40,7 @@ CLASS_NAMES = ['No finding', 'Aortic enlargement', 'Atelectasis', 'Calcification
 BATCH_SIZE = 2
 MAX_EPOCHS = 20
 NUM_CLASSES =  len(CLASS_NAMES)
-CKPT_PATH = '/data/pycode/SFSAttention/ckpts/vincxr_det_resnet.pkl'
+CKPT_PATH = '/data/pycode/SFSAttention/ckpts/vincxr_det_densenet.pkl'
 
 def Train():
     print('********************load data********************')
@@ -49,10 +49,10 @@ def Train():
     print('********************load data succeed!********************')
 
     print('********************load model********************')
-    resnet = resnet18(pretrained=False, num_classes=NUM_CLASSES).cuda()
-    backbone = nn.Sequential(resnet.conv1, resnet.bn1,resnet.relu, resnet.maxpool,resnet.layer1,resnet.layer2,resnet.layer3,resnet.layer4)
-    #backbone = densenet121(pretrained=False, num_classes=NUM_CLASSES).features.cuda()
-    backbone.out_channels = 512 #resnet18=512,  densenet121=1024
+    #resnet = resnet50(pretrained=False, num_classes=NUM_CLASSES).cuda()
+    #backbone = nn.Sequential(resnet.conv1, resnet.bn1,resnet.relu, resnet.maxpool,resnet.layer1,resnet.layer2,resnet.layer3,resnet.layer4)
+    backbone = densenet121(pretrained=False, num_classes=NUM_CLASSES).features.cuda()
+    backbone.out_channels = 1024 #resnet18=512,  densenet121=1024
     anchor_generator = AnchorGenerator(sizes=((32, 64, 128, 256),),aspect_ratios=((0.5, 1.0, 2.0),))
     roi_pooler = torchvision.ops.MultiScaleRoIAlign(featmap_names=['0'],output_size=7,sampling_ratio=2)
     model = FasterRCNN(backbone, num_classes=NUM_CLASSES, rpn_anchor_generator=anchor_generator, box_roi_pool=roi_pooler).cuda()
@@ -83,7 +83,6 @@ def Train():
                 loss_dict  = model(images,targets)   # Returns losses and detections
                 loss_tensor = sum(loss for loss in loss_dict.values())
                 loss_tensor.backward()
-                weightdecay(model, coef=1E-4) #weightdecay for factorized_conv
                 optimizer_model.step()##update parameters
                 sys.stdout.write('\r Epoch: {} / Step: {} : train loss = {}'.format(epoch+1, batch_idx+1, float('%0.6f'%loss_tensor.item())))
                 sys.stdout.flush()
@@ -106,10 +105,10 @@ def Test():
     print('********************load data succeed!********************')
 
     print('********************load model********************')
-    resnet = resnet18(pretrained=False, num_classes=NUM_CLASSES).cuda()
-    backbone = nn.Sequential(resnet.conv1, resnet.bn1,resnet.relu, resnet.maxpool,resnet.layer1,resnet.layer2,resnet.layer3,resnet.layer4)
-    #backbone = densenet121(pretrained=False, num_classes=NUM_CLASSES).features.cuda()
-    backbone.out_channels = 512 #resnet18=512,  densenet121=1024
+    #resnet = resnet50(pretrained=False, num_classes=NUM_CLASSES).cuda()
+    #backbone = nn.Sequential(resnet.conv1, resnet.bn1,resnet.relu, resnet.maxpool,resnet.layer1,resnet.layer2,resnet.layer3,resnet.layer4)
+    backbone = densenet121(pretrained=False, num_classes=NUM_CLASSES).features.cuda()
+    backbone.out_channels = 1024 #resnet18=512,  densenet121=1024
     anchor_generator = AnchorGenerator(sizes=((32, 64, 128, 256),),aspect_ratios=((0.5, 1.0, 2.0),))
     roi_pooler = torchvision.ops.MultiScaleRoIAlign(featmap_names=['0'],output_size=7,sampling_ratio=2)
     model = FasterRCNN(backbone, num_classes=NUM_CLASSES, rpn_anchor_generator=anchor_generator, box_roi_pool=roi_pooler).cuda()

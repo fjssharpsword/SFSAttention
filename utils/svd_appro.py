@@ -48,7 +48,7 @@ def plot_svd_compression():
     natural_img = cv2.imread(NATURAL_IMG_PATH, cv2.IMREAD_GRAYSCALE)
     medical_img = cv2.imread(MEDICAL_IMG_PATH, cv2.IMREAD_GRAYSCALE)
 
-    fig, axes = plt.subplots(2,3, constrained_layout=True)#figsize=(6,9)
+    fig, axes = plt.subplots(2,5, constrained_layout=True, figsize=(15,6))#
 
     #natural image
     axes[0,0].imshow(natural_img, aspect="auto",cmap='gray')
@@ -77,13 +77,37 @@ def plot_svd_compression():
     axes[0,1].axis('off')
     axes[0,1].set_title('(b)')#'Spectral norm'
     #non-zero singular values
-    _, Sigma, _ = np.linalg.svd(natural_img)
-    var_sigma = np.round(Sigma**2/np.sum(Sigma**2), decimals=3)
-    var_sigma = var_sigma[np.nonzero(var_sigma)]
-    img_com = svd_compression(natural_img, k=len(var_sigma))
+    #_, Sigma, _ = np.linalg.svd(natural_img)
+    #var_sigma = np.round(Sigma**2/np.sum(Sigma**2), decimals=3)
+    #var_sigma = var_sigma[np.nonzero(var_sigma)]
+    #img_com = svd_compression(natural_img, k=len(var_sigma))
+    img_com = svd_compression(natural_img, k=30)
     axes[0,2].imshow(img_com, aspect="auto",cmap='gray')
     axes[0,2].axis('off')
     axes[0,2].set_title('(c)') #'Singular values'
+    #explained variance
+    _, Sigma, _ = np.linalg.svd(natural_img)
+    var_sigma = np.round(Sigma**2/np.sum(Sigma**2), decimals=3)
+    cum_sum = np.cumsum(var_sigma)[0:50]
+    axes[0,3].plot(np.arange(len(cum_sum)), cum_sum,'g-')
+    non_zero_point = var_sigma[np.nonzero(var_sigma)]
+    idx = len(non_zero_point)
+    axes[0,3].plot(np.arange(len(cum_sum))[idx], cum_sum[idx],'ro')
+    axes[0,3].axhline(y=cum_sum[idx], xmin=0, xmax=len(non_zero_point)/len(cum_sum), color='b', linestyle='--')
+    axes[0,3].axvline(x=np.arange(len(cum_sum))[idx], ymin=0, ymax=cum_sum[idx], color='b', linestyle='--')
+    #axes[0,3].set_ylabel('Explained variance')
+    #axes[0,3].set_xlabel('Dimensions')
+    axes[0,3].set_title('(d)')
+    axes[0,3].grid(b=True, ls=':')
+
+    #batch_svd
+    nat_sd = [0.92, 0.86, 0.86, 0.84, 0.81]
+    x_axis = [1,2,3,4,5]
+    axes[0,4].plot(x_axis, np.array(nat_sd),'go-')
+    axes[0,4].set_xticks(x_axis)
+    axes[0,4].set_xticklabels(['2', '4', '8', '16', '32'])
+    axes[0,4].set_title('(e)')
+    axes[0,4].grid(b=True, ls=':')
 
     #medical image
     axes[1,0].imshow(medical_img, aspect="auto",cmap='gray')
@@ -112,10 +136,11 @@ def plot_svd_compression():
     axes[1,1].axis('off')
     #axes[1,1].set_title('Spectral norm')
     #k=1
-    _, Sigma, _ = np.linalg.svd(medical_img)
-    var_sigma = np.round(Sigma**2/np.sum(Sigma**2), decimals=3)
-    var_sigma = var_sigma[np.nonzero(var_sigma)]
-    img_com = svd_compression(medical_img, k=len(var_sigma))
+    #_, Sigma, _ = np.linalg.svd(medical_img)
+    #var_sigma = np.round(Sigma**2/np.sum(Sigma**2), decimals=3)
+    #var_sigma = var_sigma[np.nonzero(var_sigma)]
+    #img_com = svd_compression(medical_img, k=len(var_sigma))
+    img_com = svd_compression(medical_img, k=30)
     axes[1,2].imshow(img_com, aspect="auto",cmap='gray')
     axes[1,2].axis('off')
     #axes[1,2].set_title('Non-zero SVs')
@@ -136,12 +161,34 @@ def plot_svd_compression():
     axes[2].axis('off')
     axes[2].set_title('Overlay Image')
     """
-    
+    #explained variance
+    _, Sigma, _ = np.linalg.svd(medical_img)
+    var_sigma = np.round(Sigma**2/np.sum(Sigma**2), decimals=3)
+    cum_sum = np.cumsum(var_sigma)[0:50]
+    axes[1,3].plot(np.arange(len(cum_sum)), cum_sum,'g-')
+    non_zero_point = var_sigma[np.nonzero(var_sigma)]
+    idx = len(non_zero_point)
+    axes[1,3].plot(np.arange(len(cum_sum))[idx], cum_sum[idx],'ro')
+    axes[1,3].axhline(y=cum_sum[idx], xmin=0, xmax=len(non_zero_point)/len(cum_sum), color='b', linestyle='--')
+    axes[1,3].axvline(x=np.arange(len(cum_sum))[idx], ymin=0, ymax=cum_sum[idx], color='b', linestyle='--')
+    #axes[1,3].set_ylabel('Explained variance')
+    #axes[1,3].set_xlabel('Dimensions')
+    #axes[1,3].set_title('(d)')
+    axes[1,3].grid(b=True, ls=':')
+
+    #batch_svd
+    med_sd = [0.98, 0.94, 0.93, 0.93, 0.90]
+    x_axis = [1,2,3,4,5]
+    axes[1,4].plot(x_axis, np.array(med_sd),'go-')
+    axes[1,4].set_xticks(x_axis)
+    axes[1,4].set_xticklabels(['2', '4', '8', '16', '32'])
+    axes[1,4].grid(b=True, ls=':')
+
     #save
     fig.savefig('/data/pycode/SFSAttention/imgs/img_com.png', dpi=300, bbox_inches='tight')
 
 def plot_svd_batch():
-    
+    """
     NATURAL_IMG_PATH = '/data/fjsdata/ImageNet/ILSVRC2012_data/' #natural image
     MEDICAL_IMG_PATH = '/data/fjsdata/Vin-CXR/train_val_jpg/'#medical image
     transform_test = transforms.Compose([
@@ -151,7 +198,7 @@ def plot_svd_batch():
     ])
     #calculate singular degree
     nat_sd, med_sd = [], []
-    for bs in [8, 16, 32, 64]:
+    for bs in [2, 4, 8, 16, 32]:
         #natural image
         nat_loader = torch.utils.data.DataLoader(
                         dset.ImageFolder(NATURAL_IMG_PATH+'val/', transform_test),
@@ -162,7 +209,8 @@ def plot_svd_batch():
             _, Sigma, _ = np.linalg.svd(img.numpy())
             var_sigma = np.round(Sigma**2/np.sum(Sigma**2), decimals=3)
             var_sigma = var_sigma[np.nonzero(var_sigma)]
-            sd = "{:.2}".format(bs/len(var_sigma)) #condition number
+            #sd = "{:.2}".format(bs/len(var_sigma)) #condition number
+            sd = "{:.2}".format(var_sigma.max()) #spectral norm
             nat_sd.append(sd)
             break
         #medical image
@@ -178,13 +226,107 @@ def plot_svd_batch():
         _, Sigma, _ = np.linalg.svd(batch_img.numpy())
         var_sigma = np.round(Sigma**2/np.sum(Sigma**2), decimals=3)
         var_sigma = var_sigma[np.nonzero(var_sigma)]
-        sd = "{:.2}".format(bs/len(var_sigma))
+        #sd = "{:.2}".format(bs/len(var_sigma))
+        sd = "{:.2}".format(var_sigma.max()) #spectral norm
         med_sd.append(sd)
-        
+    """
     #plot 
-    fig, axes = plt.subplots(1,2, constrained_layout=True)
+    nat_sd = [0.92, 0.86, 0.86, 0.84, 0.81]
+    med_sd = [0.98, 0.94, 0.93, 0.93, 0.90]
+    fig, axe = plt.subplots(1)
+    x_axis = [1,2,3,4,5]
+    axe.plot(x_axis, np.array(nat_sd),'go-',label='Natural images')
+    axe.plot(x_axis, np.array(med_sd),'b^-',label='Medical images')
+    axe.set_xticks(x_axis)
+    axe.set_xticklabels(['2', '4', '8', '16', '32'])
+    axe.set_ylabel('Spectral norm')
+    axe.set_xlabel('Batch size')
+    axe.set_title('Explained variance ratio')
+    axe.grid(b=True, ls=':')
+    axe.legend()
     #save
     fig.savefig('/data/pycode/SFSAttention/imgs/batch_svd.png', dpi=300, bbox_inches='tight')
+
+def plot_svd_compression2():
+    NATURAL_IMG_PATH = '/data/fjsdata/ImageNet/ILSVRC2012_data/val/n02129165/ILSVRC2012_val_00003788.JPEG'
+    MEDICAL_IMG_PATH = '/data/fjsdata/Vin-CXR/train_val_jpg/afb6230703512afc370f236e8fe98806.jpeg'
+    natural_img = cv2.imread(NATURAL_IMG_PATH, cv2.IMREAD_GRAYSCALE)
+    medical_img = cv2.imread(MEDICAL_IMG_PATH, cv2.IMREAD_GRAYSCALE)
+
+    plt.figure(figsize=(15, 6))#constrained_layout=True
+
+    ax1 = plt.subplot2grid((2, 5), (0, 0))
+    ax1.imshow(natural_img, aspect="auto",cmap='gray')
+    ax1.axis('off')
+    ax1.set_title('(a)')#Natural Image (280, 415)
+    ax2 = plt.subplot2grid((2, 5), (1, 0))
+    ax2.imshow(medical_img, aspect="auto",cmap='gray')
+    ax2.axis('off')
+
+    ax3 = plt.subplot2grid((2, 5), (0, 1))
+    img_com = svd_compression(natural_img, k=1)
+    ax3.imshow(img_com, aspect="auto",cmap='gray')
+    ax3.axis('off')
+    ax3.set_title('(b)')#'Spectral norm'
+    ax4 = plt.subplot2grid((2, 5), (1, 1))
+    img_com = svd_compression(medical_img, k=1)
+    ax4.imshow(img_com, aspect="auto",cmap='gray')
+    ax4.axis('off')
+
+    ax5 = plt.subplot2grid((2, 5), (0, 2))
+    img_com = svd_compression(natural_img, k=30)
+    ax5.imshow(img_com, aspect="auto",cmap='gray')
+    ax5.axis('off')
+    ax5.set_title('(c)') #'Singular values'
+    ax6 = plt.subplot2grid((2, 5), (1, 2))
+    img_com = svd_compression(medical_img, k=30)
+    ax6.imshow(img_com, aspect="auto",cmap='gray')
+    ax6.axis('off')
+
+    ax7 = plt.subplot2grid((2, 5), (0, 3))
+    _, Sigma, _ = np.linalg.svd(natural_img)
+    var_sigma = np.round(Sigma**2/np.sum(Sigma**2), decimals=3)
+    cum_sum = np.cumsum(var_sigma)[0:50]
+    ax7.plot(np.arange(len(cum_sum)), cum_sum,'g-')
+    non_zero_point = var_sigma[np.nonzero(var_sigma)]
+    idx = len(non_zero_point)
+    ax7.plot(np.arange(len(cum_sum))[idx], cum_sum[idx],'ro')
+    ax7.axhline(y=cum_sum[idx], xmin=0, xmax=len(non_zero_point)/len(cum_sum), color='b', linestyle='--')
+    ax7.axvline(x=np.arange(len(cum_sum))[idx], ymin=0, ymax=cum_sum[idx], color='b', linestyle='--')
+    ax7.set_ylabel('Explained variance')
+    ax7.set_title('(d)')
+    ax7.grid(b=True, ls=':')
+    ax8 = plt.subplot2grid((2, 5), (1, 3))
+    _, Sigma, _ = np.linalg.svd(medical_img)
+    var_sigma = np.round(Sigma**2/np.sum(Sigma**2), decimals=3)
+    cum_sum = np.cumsum(var_sigma)[0:50]
+    ax8.plot(np.arange(len(cum_sum)), cum_sum,'g-')
+    non_zero_point = var_sigma[np.nonzero(var_sigma)]
+    idx = len(non_zero_point)
+    ax8.plot(np.arange(len(cum_sum))[idx], cum_sum[idx],'ro')
+    ax8.axhline(y=cum_sum[idx], xmin=0, xmax=len(non_zero_point)/len(cum_sum), color='b', linestyle='--')
+    ax8.axvline(x=np.arange(len(cum_sum))[idx], ymin=0, ymax=cum_sum[idx], color='b', linestyle='--')
+    ax8.set_ylabel('Explained variance')
+    ax8.grid(b=True, ls=':')
+
+    ax9 = plt.subplot2grid((2, 5), (0, 4), rowspan=2)
+    nat_sd = [0.92, 0.86, 0.86, 0.84, 0.81]
+    med_sd = [0.98, 0.94, 0.93, 0.93, 0.90]
+    x_axis = [1,2,3,4,5]
+    ax9.plot(x_axis, np.array(nat_sd),'go-',label='Natural images')
+    ax9.plot(x_axis, np.array(med_sd),'b^-',label='Medical images')
+    ax9.set_xticks(x_axis)
+    ax9.set_xticklabels(['2', '4', '8', '16', '32'])
+    #ax9.set_ylabel('Spectral norm')
+    #ax9.set_xlabel('Batch size')
+    #ax9.set_title('Explained variance ratio')
+    ax9.set_title('(e)')
+    ax9.grid(b=True, ls=':')
+    ax9.legend()
+
+    #save
+    plt.tight_layout()
+    plt.savefig('/data/pycode/SFSAttention/imgs/svd.png', dpi=300, bbox_inches='tight')
 
 if __name__ == "__main__":
     """
@@ -194,5 +336,6 @@ if __name__ == "__main__":
     U, S, V = torch.svd(W)
     print(S.max())
     """
-    #plot_svd_compression()
-    plot_svd_batch()
+    plot_svd_compression()
+    #plot_svd_batch()
+    #plot_svd_compression2()

@@ -228,7 +228,7 @@ class DenseNet(nn.Module):
         self.classifier = nn.Linear(num_features, num_classes)
 
         #attention layer
-        self.attlayer = SNALayer(channels=num_features)
+        #self.attlayer = SNALayer(channels=num_features)
 
         # Official init from torch repo.
         for m in self.modules():
@@ -245,7 +245,7 @@ class DenseNet(nn.Module):
     def forward(self, x: Tensor) -> Tensor:
         features = self.features(x)
 
-        features = self.attlayer(features) #attention layer
+        #features = self.attlayer(features) #attention layer
         
         out = F.relu(features, inplace=True)
         out = F.adaptive_avg_pool2d(out, (1, 1))
