@@ -64,21 +64,27 @@ class SNALayer(nn.Module):
         B, C, H, W = x.shape
         #if self.training is False: return x #for test
 
-        #reducing redundancy of batch feature maps 
-        w, _ = torch.max(x, dim=1, keepdim=True)# B * 1 * H * W
+        #reducing redundancy of batch feature maps without 
+        #w, _ = torch.max(x, dim=1, keepdim=True)# B * 1 * H * W
         #w = torch.mean(x, dim=1, keepdim=True) # B * 1 * H * W
         #w = self.conv(x) # B * 1 * H * W 
-
         #SVD for reducing redundancy of features
-        w = w.squeeze().view(B, H*W) #B * N, where N= H *W 
-        u, v = self._power_iteration(w)
-        
+        #w = w.squeeze().view(B, H*W) #B * N, where N= H *W 
+        #u, v = self._power_iteration(w)
         #calculate the attentive score
-        w = torch.matmul(u, v.T)#B * N, where N= H *W 
-        w = self.softmax(w).view(B, 1, H, W) # B * 1 * H  * W
+        #w = torch.matmul(u, v.T)#B * N, where N= H *W 
+        #w = self.softmax(w).view(B, 1, H, W) # B * 1 * H  * W
 
+        w = x.view(B, C, H * W).permute(0, 2, 1) # B * N * C, where N = H*W
+        u, v = self._batch_power_iteration(w)
+        w = torch.bmm(u, v.permute(0, 2, 1))  
+        #w = self.softmax(w)
+        #w = w.permute(0, 2, 1).view(B, C, H, W)  # B * C * H * W
+        w, _ = torch.max(w, dim=-1, keepdim=True)# B * N * 1 
+        w = w.squeeze().view(B, 1, H, W) # B * 1 * H  * W
+        
         #redisual addition
-        x = torch.add(x, w.expand_as(x)) #x* w.expand_as(x)
+        x = torch.add(x, w.expand_as(x)) # x* w.expand_as(x)
 
         return x
 

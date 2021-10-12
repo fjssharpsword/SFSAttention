@@ -88,6 +88,7 @@ class ConvBNActivation(nn.Sequential):
             activation_layer(inplace=True),
             #SELayer(out_planes, reduction=16),
             #ECA_layer(channel=out_planes, k_size=3),
+            #SNALayer(channels=out_planes),
         )
         self.out_channels = out_planes
 
@@ -337,7 +338,7 @@ def mobilenet_v3_small(pretrained: bool = False, progress: bool = True, **kwargs
 if __name__ == "__main__":
     #for debug  
     x =  torch.rand(8, 1, 256, 256).cuda()
-    model = mobilenet_v3_large(pretrained=False, num_classes=6).cuda() 
+    model = mobilenet_v3_small(pretrained=False, num_classes=6).cuda() 
     start = time.time()
     out = model(x)
     end = time.time()

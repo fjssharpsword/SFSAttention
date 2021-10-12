@@ -36,7 +36,7 @@ max_epoches = 50
 BATCH_SIZE = 256
 CLASS_NAMES = ['No finding', 'Aortic enlargement', 'Atelectasis', 'Calcification','Cardiomegaly', 'Consolidation', 'ILD', 'Infiltration', \
                'Lung Opacity', 'Nodule/Mass', 'Other lesion', 'Pleural effusion', 'Pleural thickening', 'Pneumothorax', 'Pulmonary fibrosis']
-CKPT_PATH = '/data/pycode/SFConv/ckpts/vincxr_cls_resnet.pkl'
+CKPT_PATH = '/data/pycode/SFConv/ckpts/vincxr_cls_densenet.pkl'
 
 def Train():
     print('********************load data********************')
@@ -60,7 +60,7 @@ def Train():
     print('********************load model succeed!********************')
 
     print('********************begin training!********************')
-    log_writer = SummaryWriter('/data/tmpexec/tensorboard-log') #--port 10002, start tensorboard
+    #log_writer = SummaryWriter('/data/tmpexec/tensorboard-log') #--port 10002, start tensorboard
     acc_min = 0.50
     for epoch in range(max_epoches):
         since = time.time()
@@ -115,8 +115,8 @@ def Train():
 
         time_elapsed = time.time() - since
         print('Training epoch: {} completed in {:.0f}m {:.0f}s'.format(epoch+1, time_elapsed // 60 , time_elapsed % 60))
-        log_writer.add_scalars('BCELoss/VINCXR-CLS-ResNet', {'Train':np.mean(loss_train), 'Test':np.mean(loss_test)}, epoch+1)
-    log_writer.close() #shut up the tensorboard
+        #log_writer.add_scalars('BCELoss/VINCXR-CLS-ResNet', {'Train':np.mean(loss_train), 'Test':np.mean(loss_test)}, epoch+1)
+    #log_writer.close() #shut up the tensorboard
 
 def Test():
     print('********************load data********************')

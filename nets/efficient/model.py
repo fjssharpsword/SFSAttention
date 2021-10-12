@@ -21,6 +21,8 @@ from .utils import (
     MemoryEfficientSwish,
     calculate_output_image_size
 )
+#define by myself
+from nets.pkgs.sna import SNALayer
 
 
 VALID_MODELS = (
@@ -86,6 +88,8 @@ class MBConvBlock(nn.Module):
         self._bn2 = nn.BatchNorm2d(num_features=final_oup, momentum=self._bn_mom, eps=self._bn_eps)
         self._swish = MemoryEfficientSwish()
 
+        #self.attlayer = SNALayer(channels=oup) #attention layer
+
     def forward(self, inputs, drop_connect_rate=None):
         """MBConvBlock's forward function.
         Args:
@@ -103,6 +107,9 @@ class MBConvBlock(nn.Module):
             x = self._swish(x)
 
         x = self._depthwise_conv(x)
+
+        #x = self.attlayer(x) #attention layer
+
         x = self._bn1(x)
         x = self._swish(x)
 
@@ -210,6 +217,8 @@ class EfficientNet(nn.Module):
         # set activation to memory efficient swish by default
         self._swish = MemoryEfficientSwish()
 
+        #self.attlayer = SNALayer(channels=out_channels) #attention layer
+
     def set_swish(self, memory_efficient=True):
         """Sets swish function as memory efficient (for training) or standard (for export).
         Args:
@@ -297,6 +306,9 @@ class EfficientNet(nn.Module):
         """
         # Convolution layers
         x = self.extract_features(inputs)
+
+        #x = self.attlayer(x) #attention layer
+
         # Pooling and final linear layer
         x = self._avg_pooling(x)
         if self._global_params.include_top:

@@ -28,13 +28,15 @@ from tensorboardX import SummaryWriter
 import seaborn as sns
 #define by myself
 from utils.common import count_bytes
-from nets.resnet import resnet18
+from nets.resnet import resnet18, resnet50
 from nets.densenet import densenet121
+from nets.mobilenetv3 import mobilenet_v3_small
+from nets.efficient.model import EfficientNet
 #config
 os.environ['CUDA_VISIBLE_DEVICES'] = "0,1,2,3,4,5,6,7"
 max_epoches = 200 
-batch_size = 512
-CKPT_PATH = '/data/pycode/SFSAttention/ckpts/cifar100_resnet_sna.pkl'
+batch_size = 16#128 #[16*8, 32*8, 64*8, 128*8]
+CKPT_PATH = '/data/pycode/SFSAttention/ckpts/cifar100_densenet.pkl'
 #https://pytorch.org/tutorials/beginner/blitz/cifar10_tutorial.html
 def Train():
     print('********************load data********************')
@@ -73,7 +75,8 @@ def Train():
     print('********************load data succeed!********************')
 
     print('********************load model********************')
-    model = resnet18(pretrained=False, num_classes=100)
+    model = densenet121(pretrained=False, num_classes=100)
+    #model = EfficientNet.from_name('efficientnet-b0', in_channels=3, num_classes=100)
     if os.path.exists(CKPT_PATH):
         checkpoint = torch.load(CKPT_PATH)
         model.load_state_dict(checkpoint) #strict=False
@@ -166,7 +169,8 @@ def Test():
     print('********************load data succeed!********************')
 
     print('********************load model********************')
-    model = resnet18(pretrained=False, num_classes=100).cuda()
+    model = densenet121(pretrained=False, num_classes=100).cuda()
+    #model = EfficientNet.from_name('efficientnet-b0', in_channels=3, num_classes=100).cuda()
     if os.path.exists(CKPT_PATH):
         checkpoint = torch.load(CKPT_PATH)
         model.load_state_dict(checkpoint) #strict=False
@@ -205,13 +209,13 @@ def Test():
             print(name,'---', param.size())
             param_size = param_size + param.numel()
     """
-    #param = sum(p.numel() for p in model.parameters() if p.requires_grad) #count params of model
-    #print("\r Params of model: {}".format(count_bytes(param)) )
+    param = sum(p.numel() for p in model.parameters() if p.requires_grad) #count params of model
+    print("\r Params of model: {}".format(count_bytes(param)) )
     #flops, params = profile(model, inputs=(var_image,))
     #print("FLOPs(Floating Point Operations) of model = {}".format(count_bytes(flops)) )
     #print("\r Params of model: {}".format(count_bytes(params)) )
-    #print("FPS(Frams Per Second) of model = %.2f"% (1.0/(np.sum(time_res)/len(time_res))) )
-    #print(stat(model.cpu(), (3,244,244)))
+    print("FPS(Frams Per Second) of model = %.2f"% (1.0/(np.sum(time_res)/len(time_res))) )
+    print(stat(model.cpu(), (3,244,244)))
     
     acc = top1 * 1.0 / total_cnt
     ci  = 1.96 * math.sqrt( (acc * (1 - acc)) / total_cnt) #1.96-95%
@@ -221,7 +225,7 @@ def Test():
     print("\r Top-5 ACC/CI = %.4f/%.4f" % (acc, ci) )
 
 def main():
-    Train()
+    #Train()
     Test()
 
 if __name__ == '__main__':
