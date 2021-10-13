@@ -101,11 +101,11 @@ def plot_svd_compression():
     axes[0,3].grid(b=True, ls=':')
 
     #batch_svd
-    nat_sd = [0.92, 0.86, 0.86, 0.84, 0.81]
+    nat_sd = [0.86, 0.84, 0.81, 0.83, 0.79]
     x_axis = [1,2,3,4,5]
     axes[0,4].plot(x_axis, np.array(nat_sd),'go-')
     axes[0,4].set_xticks(x_axis)
-    axes[0,4].set_xticklabels(['2', '4', '8', '16', '32'])
+    axes[0,4].set_xticklabels(['8', '16', '32', '64', '128'])
     axes[0,4].set_title('(e)')
     axes[0,4].grid(b=True, ls=':')
 
@@ -177,18 +177,18 @@ def plot_svd_compression():
     axes[1,3].grid(b=True, ls=':')
 
     #batch_svd
-    med_sd = [0.98, 0.94, 0.93, 0.93, 0.90]
+    med_sd = [0.95, 0.93, 0.93, 0.92, 0.90]
     x_axis = [1,2,3,4,5]
     axes[1,4].plot(x_axis, np.array(med_sd),'go-')
     axes[1,4].set_xticks(x_axis)
-    axes[1,4].set_xticklabels(['2', '4', '8', '16', '32'])
+    axes[1,4].set_xticklabels(['8', '16', '32', '64', '128'])
     axes[1,4].grid(b=True, ls=':')
 
     #save
     fig.savefig('/data/pycode/SFSAttention/imgs/img_com.png', dpi=300, bbox_inches='tight')
 
-def plot_svd_batch():
-    """
+def calculate_batch_SN():
+    
     NATURAL_IMG_PATH = '/data/fjsdata/ImageNet/ILSVRC2012_data/' #natural image
     MEDICAL_IMG_PATH = '/data/fjsdata/Vin-CXR/train_val_jpg/'#medical image
     transform_test = transforms.Compose([
@@ -198,7 +198,7 @@ def plot_svd_batch():
     ])
     #calculate singular degree
     nat_sd, med_sd = [], []
-    for bs in [2, 4, 8, 16, 32]:
+    for bs in [8, 16, 32, 64, 128]:
         #natural image
         nat_loader = torch.utils.data.DataLoader(
                         dset.ImageFolder(NATURAL_IMG_PATH+'val/', transform_test),
@@ -229,10 +229,12 @@ def plot_svd_batch():
         #sd = "{:.2}".format(bs/len(var_sigma))
         sd = "{:.2}".format(var_sigma.max()) #spectral norm
         med_sd.append(sd)
+    print(nat_sd)
+    print(med_sd)
     """
     #plot 
-    nat_sd = [0.92, 0.86, 0.86, 0.84, 0.81]
-    med_sd = [0.98, 0.94, 0.93, 0.93, 0.90]
+    nat_sd = [0.92, 0.86, 0.86, 0.84, 0.81] #['0.86', '0.84', '0.81', '0.83', '0.86']
+    med_sd = [0.98, 0.94, 0.93, 0.93, 0.90] #['0.94', '0.94', '0.94', '0.94', '0.93']
     fig, axe = plt.subplots(1)
     x_axis = [1,2,3,4,5]
     axe.plot(x_axis, np.array(nat_sd),'go-',label='Natural images')
@@ -246,6 +248,7 @@ def plot_svd_batch():
     axe.legend()
     #save
     fig.savefig('/data/pycode/SFSAttention/imgs/batch_svd.png', dpi=300, bbox_inches='tight')
+    """
 
 def plot_svd_compression2():
     NATURAL_IMG_PATH = '/data/fjsdata/ImageNet/ILSVRC2012_data/val/n02129165/ILSVRC2012_val_00003788.JPEG'
@@ -337,5 +340,5 @@ if __name__ == "__main__":
     print(S.max())
     """
     plot_svd_compression()
-    #plot_svd_batch()
+    #calculate_batch_SN()
     #plot_svd_compression2()

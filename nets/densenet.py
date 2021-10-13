@@ -66,10 +66,10 @@ class _DenseLayer(nn.Module):
         self.memory_efficient = memory_efficient
 
         #optional attentions
-        #self.attlayer: SNALayer
+        self.attlayer: SNALayer
         #self.add_module('attlayer', SELayer(growth_rate, reduction=16))
         #self.add_module('attlayer', ECA_layer(channel=growth_rate, k_size=3))
-        #self.add_module('attlayer', SNALayer(channels=growth_rate))
+        self.add_module('attlayer', SNALayer(channels=growth_rate))
 
     def bn_function(self, inputs: List[Tensor]) -> Tensor:
         concated_features = torch.cat(inputs, 1)
@@ -120,7 +120,7 @@ class _DenseLayer(nn.Module):
                                      training=self.training)
 
         #attention layer
-        #new_features = self.attlayer(new_features)
+        new_features = self.attlayer(new_features)
 
         return new_features
 
