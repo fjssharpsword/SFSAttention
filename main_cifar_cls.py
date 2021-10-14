@@ -36,7 +36,8 @@ from nets.efficient.model import EfficientNet
 os.environ['CUDA_VISIBLE_DEVICES'] = "0,1,2,3,4,5,6,7"
 max_epoches = 200 
 batch_size = 128 #[8*8, 16*8, 32*8, 64*8, 128*8]
-CKPT_PATH = '/data/pycode/SFSAttention/ckpts/cifar100_resnet_16.pkl'
+CKPT_PATH = '/data/pycode/SFSAttention/ckpts/cifar100_densenet_sna_16.pkl'
+#nohup python main_cifar_cls.py > logs/cifar100_densenet_sna_16.log 2>&1 &
 #https://pytorch.org/tutorials/beginner/blitz/cifar10_tutorial.html
 def Train():
     print('********************load data********************')
@@ -75,7 +76,7 @@ def Train():
     print('********************load data succeed!********************')
 
     print('********************load model********************')
-    model = resnet18(pretrained=False, num_classes=100)
+    model = densenet121(pretrained=False, num_classes=100)
     #model = EfficientNet.from_name('efficientnet-b0', in_channels=3, num_classes=100)
     if os.path.exists(CKPT_PATH):
         checkpoint = torch.load(CKPT_PATH)
@@ -169,7 +170,7 @@ def Test():
     print('********************load data succeed!********************')
 
     print('********************load model********************')
-    model = resnet18(pretrained=False, num_classes=100).cuda()
+    model = densenet121(pretrained=False, num_classes=100).cuda()
     #model = EfficientNet.from_name('efficientnet-b0', in_channels=3, num_classes=100).cuda()
     if os.path.exists(CKPT_PATH):
         checkpoint = torch.load(CKPT_PATH)
