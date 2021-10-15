@@ -66,10 +66,10 @@ class _DenseLayer(nn.Module):
         self.memory_efficient = memory_efficient
 
         #optional attentions
-        self.attlayer: SNALayer
+        #self.attlayer: SNALayer
         #self.add_module('attlayer', SELayer(growth_rate, reduction=16))
         #self.add_module('attlayer', ECA_layer(channel=growth_rate, k_size=3))
-        self.add_module('attlayer', SNALayer(channels=growth_rate))
+        #self.add_module('attlayer', SNALayer(channels=growth_rate))
 
     def bn_function(self, inputs: List[Tensor]) -> Tensor:
         concated_features = torch.cat(inputs, 1)
@@ -120,7 +120,7 @@ class _DenseLayer(nn.Module):
                                      training=self.training)
 
         #attention layer
-        new_features = self.attlayer(new_features)
+        #new_features = self.attlayer(new_features)
 
         return new_features
 
@@ -200,6 +200,7 @@ class DenseNet(nn.Module):
             ('norm0', nn.BatchNorm2d(num_init_features)),
             ('relu0', nn.ReLU(inplace=True)),
             #('pool0', nn.MaxPool2d(kernel_size=3, stride=2, padding=1)), #imagenet
+            ('attlayer', SNALayer(channels=num_init_features)),#attention layer
         ]))
 
         # Each denseblock
@@ -227,9 +228,6 @@ class DenseNet(nn.Module):
         # Linear layer
         self.classifier = nn.Linear(num_features, num_classes)
 
-        #attention layer
-        #self.attlayer = SNALayer(channels=num_features)
-
         # Official init from torch repo.
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
@@ -243,10 +241,7 @@ class DenseNet(nn.Module):
                     nn.init.constant_(m.bias, 0)
 
     def forward(self, x: Tensor) -> Tensor:
-        features = self.features(x)
-
-        #features = self.attlayer(features) #attention layer
-        
+        features = self.features(x)   
         out = F.relu(features, inplace=True)
         out = F.adaptive_avg_pool2d(out, (1, 1))
         out = torch.flatten(out, 1)

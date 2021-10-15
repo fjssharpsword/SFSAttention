@@ -160,6 +160,9 @@ def Test():
     for i in range(len(CLASS_NAMES)):
         print('The AUROC of {} is {:.4f}'.format(CLASS_NAMES[i], AUROCs[i]))
     print('The average AUROC is {:.4f}'.format(np.mean(AUROCs)))
+    #save
+    np.save('/data/pycode/SFSAttention/logs/resnet_sna_gt.npy',gt.numpy()) #np.load()
+    np.save('/data/pycode/SFSAttention/logs/resnet_sna_pd.npy',pred.numpy())
 
 def main():
     Train()

@@ -34,10 +34,10 @@ from nets.mobilenetv3 import mobilenet_v3_small
 from nets.efficient.model import EfficientNet
 #config
 os.environ['CUDA_VISIBLE_DEVICES'] = "0,1,2,3,4,5,6,7"
-max_epoches = 200 
-batch_size = 128 #[8*8, 16*8, 32*8, 64*8, 128*8]
-CKPT_PATH = '/data/pycode/SFSAttention/ckpts/cifar100_densenet_sna_16.pkl'
-#nohup python main_cifar_cls.py > logs/cifar100_densenet_sna_16.log 2>&1 &
+max_epoches = 100 #200
+batch_size = 64 #[8*8, 16*8, 32*8, 64*8, 128*8]
+CKPT_PATH = '/data/pycode/SFSAttention/ckpts/cifar100_densenet_sna_8.pkl'
+#nohup python main_cifar_cls.py > logs/cifar100_densenet_sna_8.log 2>&1 &
 #https://pytorch.org/tutorials/beginner/blitz/cifar10_tutorial.html
 def Train():
     print('********************load data********************')
@@ -226,7 +226,7 @@ def Test():
     print("\r Top-5 ACC/CI = %.4f/%.4f" % (acc, ci) )
 
 def main():
-    Train()
+    #Train()
     Test()
 
 if __name__ == '__main__':

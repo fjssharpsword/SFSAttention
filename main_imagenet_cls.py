@@ -32,10 +32,10 @@ from nets.resnet import resnet50
 from nets.densenet import densenet121
 #config
 os.environ['CUDA_VISIBLE_DEVICES'] = "0,1,2,3,4,5,6,7"
-max_epoches = 100
-batch_size = 64 #128
-CKPT_PATH = '/data/pycode/SFSAttention/ckpts/imagenet1k_resnet_sna.pkl' 
-#nohup python main_imagenet_cls.py > logs/imagenet1k_resnet_sna.log 2>&1 &
+max_epoches = 150 #100
+batch_size = 256 #128
+CKPT_PATH = '/data/pycode/SFSAttention/ckpts/imagenet1k_resnet_sna_32.pkl' 
+#nohup python main_imagenet_cls.py > logs/imagenet1k_resnet_sna_32.log 2>&1 &
 DATA_PATH = '/data/fjsdata/ImageNet/ILSVRC2012_data/'
 #https://pytorch.org/tutorials/beginner/blitz/cifar10_tutorial.html
 def Train():
@@ -109,7 +109,7 @@ def Train():
         lr_scheduler_model.step()  #about lr and gamma
         print("\r Eopch: %5d train loss = %.6f" % (epoch + 1, np.mean(loss_train) ))
 
-        if (epoch+1) % 10 == 0:
+        if (epoch+1) % 5 == 0:
             #test
             model.eval()
             loss_test = []
@@ -195,7 +195,6 @@ def Test():
         if param.requires_grad:
             print(name,'---', param.size())
             param_size = param_size + param.numel()
-    
     param = sum(p.numel() for p in model.parameters() if p.requires_grad) #count params of model
     print("\r Params of model: {}".format(count_bytes(param)) )
     #flops, params = profile(model, inputs=(var_image,))

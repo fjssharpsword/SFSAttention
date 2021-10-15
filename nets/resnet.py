@@ -142,7 +142,7 @@ class Bottleneck(nn.Module):
         #attention layer
         #self.attlayer = SELayer(planes * self.expansion, reduction=16)
         #self.attlayer = ECA_layer(channel=planes * self.expansion, k_size=3)
-        self.attlayer = SNALayer(channels=planes * self.expansion)
+        #self.attlayer = SNALayer(channels=planes * self.expansion)
 
     def forward(self, x: Tensor) -> Tensor:
         identity = x
@@ -162,7 +162,7 @@ class Bottleneck(nn.Module):
             identity = self.downsample(x)
 
         #attention layer
-        out = self.attlayer(out)
+        #out = self.attlayer(out)
 
         out += identity
         out = self.relu(out)
