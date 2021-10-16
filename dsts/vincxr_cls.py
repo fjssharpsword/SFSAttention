@@ -89,7 +89,7 @@ class DatasetGenerator(Dataset):
         self.label_list = label_list
         
     def _transform_tensor(self, img):
-        transform_seq = transforms.Compose([transforms.Resize((256,256)),transforms.ToTensor()])
+        transform_seq = transforms.Compose([transforms.Resize((224,224)),transforms.ToTensor()])
         return transform_seq(img)
 
     def __getitem__(self, index):
@@ -101,8 +101,8 @@ class DatasetGenerator(Dataset):
         """
         #show samples
         #print(pd.value_counts(self.label_list))
-        for i in range(len(self.CLASS_NAMES)):
-            print('The number of {} is {}'.format(self.CLASS_NAMES[i], np.array(self.label_list)[:,i].sum()))
+        #for i in range(len(self.CLASS_NAMES)):
+        #    print('The number of {} is {}'.format(self.CLASS_NAMES[i], np.array(self.label_list)[:,i].sum()))
         #image
         key = self.image_list[index]
         img_path = self.image_dir + key + '.jpeg'
@@ -118,18 +118,18 @@ class DatasetGenerator(Dataset):
         return len(self.image_list)
 
 def get_box_dataloader_VIN(batch_size, shuffle, num_workers):
-    vin_csv_file = '/data/pycode/SFConv/dsts/train.csv'
+    vin_csv_file = '/data/pycode/SFSAttention/dsts/train.csv'
     vin_image_dir = '/data/fjsdata/Vin-CXR/train_val_jpg/'
   
     if shuffle==True: 
-        with open("/data/pycode//SFConv/dsts/trKeys.txt", "rb") as fp:   # Unpickling
+        with open("/data/pycode/SFSAttention/dsts/trKeys.txt", "rb") as fp:   # Unpickling
             key_subset = pickle.load(fp)
-        with open("/data/pycode//SFConv/dsts/trKeys_normal.txt", "rb") as fp:   # Unpickling
+        with open("/data/pycode/SFSAttention/dsts/trKeys_normal.txt", "rb") as fp:   # Unpickling
             key_subset_normal = pickle.load(fp)
     else:
-        with open("/data/pycode//SFConv/dsts/teKeys.txt", "rb") as fp:   # Unpickling
+        with open("/data/pycode/SFSAttention/dsts/teKeys.txt", "rb") as fp:   # Unpickling
             key_subset = pickle.load(fp)
-        with open("/data/pycode//SFConv/dsts/teKeys_normal.txt", "rb") as fp:   # Unpickling
+        with open("/data/pycode/SFSAttention/dsts/teKeys_normal.txt", "rb") as fp:   # Unpickling
             key_subset_normal = pickle.load(fp)
 
     dataset_box = DatasetGenerator(path_to_img_dir=vin_image_dir, path_to_dataset_file=vin_csv_file, bin_keys=key_subset+key_subset_normal)

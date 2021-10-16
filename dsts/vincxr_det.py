@@ -77,7 +77,7 @@ class DatasetGenerator(Dataset):
                	   'Other lesion':10, 'Pleural effusion':11, 'Pleural thickening':12, 'Pneumothorax':13, 'Pulmonary fibrosis':14}
 
     def _transform_tensor(self, img):
-        transform_seq = transforms.Compose([transforms.Resize((256,256)),transforms.ToTensor()])
+        transform_seq = transforms.Compose([transforms.Resize((224,224)),transforms.ToTensor()])
         return transform_seq(img)
 
     # COCO： [x1,y1,w,h] 
@@ -122,15 +122,15 @@ class DatasetGenerator(Dataset):
         target["image_id"] = torch.as_tensor(index, dtype=torch.int64)
         target["iscrowd"] = torch.zeros((len(shapes),), dtype=torch.int64)
         boxes, labels, masks, areas = [],  [],  [],  []
-        x_scale = 256/width
-        y_scale = 256/height
+        x_scale = 224/width
+        y_scale = 224/height
         for shape in shapes:
             label = shape[0]
             points = shape[3:]
             points = [points[0]*x_scale, points[1]*y_scale, points[2]*x_scale, points[3]*y_scale] #resize box coordinates to (256,256)
             boxes.append(self._get_box(points))
             labels.append(int(self.classname_to_id[str(label)]))
-            masks.append(self._get_seg(points, 256, 256))
+            masks.append(self._get_seg(points, 224, 224))
             areas.append(self._get_area(points))
         target["boxes"] = torch.as_tensor(boxes, dtype=torch.float32)
         target["labels"] = torch.as_tensor(labels, dtype=torch.int64) 
@@ -159,14 +159,14 @@ def get_box_dataloader_VIN_None(batch_size, shuffle, num_workers):
     return data_loader_box_train, data_loader_box_test
 """
 def get_box_dataloader_VIN(batch_size, shuffle, num_workers):
-    vin_csv_file = '/data/pycode/SFConv/dsts/train.csv'
+    vin_csv_file = '/data/pycode/SFSAttention/dsts/train.csv'
     vin_image_dir = '/data/fjsdata/Vin-CXR/train_val_jpg/'
   
     if shuffle==True: 
-        with open("/data/pycode/SFConv/dsts/trKeys.txt", "rb") as fp:   # Unpickling
+        with open("/data/pycode/SFSAttention/dsts/trKeys.txt", "rb") as fp:   # Unpickling
             key_subset = pickle.load(fp)
     else:
-        with open("/data/pycode/SFConv/dsts/teKeys.txt", "rb") as fp:   # Unpickling
+        with open("/data/pycode/SFSAttention/dsts/teKeys.txt", "rb") as fp:   # Unpickling
             key_subset = pickle.load(fp)
 
     dataset_box = DatasetGenerator(path_to_img_dir=vin_image_dir, path_to_dataset_file=vin_csv_file, bin_keys=key_subset)

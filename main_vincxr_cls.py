@@ -27,17 +27,17 @@ from tensorboardX import SummaryWriter
 import seaborn as sns
 #define by myself
 from utils.common import count_bytes, compute_AUCs
-from nets.resnet_cls import resnet18
+from nets.resnet import resnet18
 from nets.densenet import densenet121
 from dsts.vincxr_cls import get_box_dataloader_VIN
 #config
 os.environ['CUDA_VISIBLE_DEVICES'] = "0,1,2,3,4,5,6,7"
-max_epoches = 50
-BATCH_SIZE = 256
+max_epoches = 50 #30
+BATCH_SIZE = 32 #256 #32*8
 CLASS_NAMES = ['No finding', 'Aortic enlargement', 'Atelectasis', 'Calcification','Cardiomegaly', 'Consolidation', 'ILD', 'Infiltration', \
                'Lung Opacity', 'Nodule/Mass', 'Other lesion', 'Pleural effusion', 'Pleural thickening', 'Pneumothorax', 'Pulmonary fibrosis']
-CKPT_PATH = '/data/pycode/SFConv/ckpts/vincxr_cls_densenet.pkl'
-
+CKPT_PATH = '/data/pycode/SFSAttention/ckpts/vincxr_cls_densenet_aa.pkl'
+#nohup python main_vincxr_cls.py > logs/vincxr_cls_densenet_aa.log 2>&1 &
 def Train():
     print('********************load data********************')
     train_loader = get_box_dataloader_VIN(batch_size=BATCH_SIZE, shuffle=True, num_workers=8)
@@ -47,7 +47,7 @@ def Train():
     print('********************load data succeed!********************')
 
     print('********************load model********************')
-    model = resnet18(pretrained=False, num_classes=len(CLASS_NAMES))
+    model = densenet121(pretrained=False, num_classes=len(CLASS_NAMES))
     if os.path.exists(CKPT_PATH):
         checkpoint = torch.load(CKPT_PATH)
         model.load_state_dict(checkpoint) #strict=False
@@ -78,7 +78,6 @@ def Train():
                 optimizer_model.zero_grad()
                 loss_tensor = criterion.forward(var_out, var_label) 
                 loss_tensor.backward()
-                weightdecay(model, coef=1E-4) #weightdecay for factorized_conv
                 optimizer_model.step()
                 #show 
                 loss_train.append(loss_tensor.item())
@@ -120,12 +119,12 @@ def Train():
 
 def Test():
     print('********************load data********************')
-    test_loader = get_box_dataloader_VIN(batch_size=32, shuffle=False, num_workers=1)
+    test_loader = get_box_dataloader_VIN(batch_size=32, shuffle=False, num_workers=8)
     print ('==>>> total test batch number: {}'.format(len(test_loader)))
     print('********************load data succeed!********************')
 
     print('********************load model********************')
-    model = resnet18(pretrained=False, num_classes=len(CLASS_NAMES)).cuda()
+    model = densenet121(pretrained=False, num_classes=len(CLASS_NAMES)).cuda()
     if os.path.exists(CKPT_PATH):
         checkpoint = torch.load(CKPT_PATH)
         model.load_state_dict(checkpoint) #strict=False
@@ -161,8 +160,8 @@ def Test():
         print('The AUROC of {} is {:.4f}'.format(CLASS_NAMES[i], AUROCs[i]))
     print('The average AUROC is {:.4f}'.format(np.mean(AUROCs)))
     #save
-    np.save('/data/pycode/SFSAttention/logs/resnet_sna_gt.npy',gt.numpy()) #np.load()
-    np.save('/data/pycode/SFSAttention/logs/resnet_sna_pd.npy',pred.numpy())
+    np.save('/data/pycode/SFSAttention/logs/cxr_cls/densenet_aa_gt.npy',gt.numpy()) #np.load()
+    np.save('/data/pycode/SFSAttention/logs/cxr_cls/densenet_aa_pd.npy',pred.numpy())
 
 def main():
     Train()
