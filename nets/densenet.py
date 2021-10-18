@@ -66,7 +66,7 @@ class _DenseLayer(nn.Module):
         self.memory_efficient = memory_efficient
 
         #optional attentions
-        self.attlayer: ECA_layer
+        #self.attlayer: ECA_layer
         #self.add_module('attlayer', SELayer(growth_rate, reduction=16))
         self.add_module('attlayer', ECA_layer(channel=growth_rate, k_size=3))
         #self.add_module('attlayer', SNALayer(channels=growth_rate))
@@ -195,6 +195,7 @@ class DenseNet(nn.Module):
 
         # First convolution
         self.features = nn.Sequential(OrderedDict([
+            #('attlayer', SNALayer(channels=3)),#attention layer
             ('conv0', nn.Conv2d(3, num_init_features, kernel_size=7, stride=2, padding=3, bias=False)), #imagenet
             #('conv0', nn.Conv2d(3, num_init_features, kernel_size=3, stride=1, padding=1, bias=False)), #cifar
             ('norm0', nn.BatchNorm2d(num_init_features)),

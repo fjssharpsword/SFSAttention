@@ -33,11 +33,11 @@ from dsts.vincxr_cls import get_box_dataloader_VIN
 #config
 os.environ['CUDA_VISIBLE_DEVICES'] = "0,1,2,3,4,5,6,7"
 max_epoches = 50 #30
-BATCH_SIZE = 32 #256 #32*8
+BATCH_SIZE = 256 #32*8
 CLASS_NAMES = ['No finding', 'Aortic enlargement', 'Atelectasis', 'Calcification','Cardiomegaly', 'Consolidation', 'ILD', 'Infiltration', \
                'Lung Opacity', 'Nodule/Mass', 'Other lesion', 'Pleural effusion', 'Pleural thickening', 'Pneumothorax', 'Pulmonary fibrosis']
-CKPT_PATH = '/data/pycode/SFSAttention/ckpts/vincxr_cls_densenet_aa.pkl'
-#nohup python main_vincxr_cls.py > logs/vincxr_cls_densenet_aa.log 2>&1 &
+CKPT_PATH = '/data/pycode/SFSAttention/ckpts/vincxr_cls_densenet_eca.pkl'
+#nohup python main_vincxr_cls.py > logs/vincxr_cls_densenet_eca.log 2>&1 &
 def Train():
     print('********************load data********************')
     train_loader = get_box_dataloader_VIN(batch_size=BATCH_SIZE, shuffle=True, num_workers=8)
@@ -160,8 +160,8 @@ def Test():
         print('The AUROC of {} is {:.4f}'.format(CLASS_NAMES[i], AUROCs[i]))
     print('The average AUROC is {:.4f}'.format(np.mean(AUROCs)))
     #save
-    np.save('/data/pycode/SFSAttention/logs/cxr_cls/densenet_aa_gt.npy',gt.numpy()) #np.load()
-    np.save('/data/pycode/SFSAttention/logs/cxr_cls/densenet_aa_pd.npy',pred.numpy())
+    np.save('/data/pycode/SFSAttention/logs/cxr_cls/densenet_eca_gt.npy',gt.numpy()) #np.load()
+    np.save('/data/pycode/SFSAttention/logs/cxr_cls/densenet_eca_pd.npy',pred.numpy())
 
 def main():
     Train()
