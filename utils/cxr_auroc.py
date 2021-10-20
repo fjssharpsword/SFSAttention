@@ -44,7 +44,7 @@ def vis_auroc():
     model_names=['DenseNet-121', 'DenseNet-121+SE', 'DenseNet-121+ECA', 'DenseNet-121+AA', 'DenseNet-121+SNA(Ours)']
     root = '/data/pycode/SFSAttention/logs/cxr_cls/'
 
-    fig, axes = plt.subplots(3,5, constrained_layout=True, figsize=(15,9))
+    fig, axes = plt.subplots(3,5, constrained_layout=True, figsize=(20,9))
     color_name =['b','y','c','g','r'] #color ref: https://www.cnblogs.com/darkknightzh/p/6117528.html
 
     for i in range(len(class_names)):

@@ -1,6 +1,6 @@
 # encoding: utf-8
 """
-Training implementation for CIFAR100 dataset  
+Training implementation for VIN-CXR dataset  
 Author: Jason.Fang
 Update time: 16/08/2021
 """
@@ -36,8 +36,8 @@ max_epoches = 50 #30
 BATCH_SIZE = 256 #32*8
 CLASS_NAMES = ['No finding', 'Aortic enlargement', 'Atelectasis', 'Calcification','Cardiomegaly', 'Consolidation', 'ILD', 'Infiltration', \
                'Lung Opacity', 'Nodule/Mass', 'Other lesion', 'Pleural effusion', 'Pleural thickening', 'Pneumothorax', 'Pulmonary fibrosis']
-CKPT_PATH = '/data/pycode/SFSAttention/ckpts/vincxr_cls_densenet_eca.pkl'
-#nohup python main_vincxr_cls.py > logs/vincxr_cls_densenet_eca.log 2>&1 &
+CKPT_PATH = '/data/pycode/SFSAttention/ckpts/vincxr_cls_densenet_sna_1.pkl'
+#nohup python main_vincxr_cls.py > logs/vincxr_cls_densenet_sna_1.log 2>&1 &
 def Train():
     print('********************load data********************')
     train_loader = get_box_dataloader_VIN(batch_size=BATCH_SIZE, shuffle=True, num_workers=8)
@@ -160,8 +160,8 @@ def Test():
         print('The AUROC of {} is {:.4f}'.format(CLASS_NAMES[i], AUROCs[i]))
     print('The average AUROC is {:.4f}'.format(np.mean(AUROCs)))
     #save
-    np.save('/data/pycode/SFSAttention/logs/cxr_cls/densenet_eca_gt.npy',gt.numpy()) #np.load()
-    np.save('/data/pycode/SFSAttention/logs/cxr_cls/densenet_eca_pd.npy',pred.numpy())
+    np.save('/data/pycode/SFSAttention/logs/cxr_cls/densenet_sna_gt_1.npy',gt.numpy()) #np.load()
+    np.save('/data/pycode/SFSAttention/logs/cxr_cls/densenet_sna_pd_1.npy',pred.numpy())
 
 def main():
     Train()
