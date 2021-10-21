@@ -30,18 +30,18 @@ import seaborn as sns
 #define by myself
 from utils.common import compute_iou, count_bytes
 from dsts.vincxr_det import get_box_dataloader_VIN
-from nets.resnet import resnet50
+from nets.resnet import resnet18
 from nets.densenet import densenet121
 
 #config
-os.environ['CUDA_VISIBLE_DEVICES'] = "7"
+os.environ['CUDA_VISIBLE_DEVICES'] = "5"
 CLASS_NAMES = ['No finding', 'Aortic enlargement', 'Atelectasis', 'Calcification','Cardiomegaly', 'Consolidation', 'ILD', 'Infiltration', \
                'Lung Opacity', 'Nodule/Mass', 'Other lesion', 'Pleural effusion', 'Pleural thickening', 'Pneumothorax', 'Pulmonary fibrosis']
-BATCH_SIZE = 2
+BATCH_SIZE = 2 #8
 MAX_EPOCHS = 20
 NUM_CLASSES =  len(CLASS_NAMES)
-CKPT_PATH = '/data/pycode/SFSAttention/ckpts/vincxr_det_densenet.pkl'
-
+CKPT_PATH = '/data/pycode/SFSAttention/ckpts/vincxr_det_resnet_sna.pkl'
+#nohup python main_vincxr_det.py > logs/vincxr_det_resnet_sna.log 2>&1 &
 def Train():
     print('********************load data********************')
     data_loader_train = get_box_dataloader_VIN(batch_size=BATCH_SIZE, shuffle=True, num_workers=0)
@@ -49,10 +49,10 @@ def Train():
     print('********************load data succeed!********************')
 
     print('********************load model********************')
-    #resnet = resnet50(pretrained=False, num_classes=NUM_CLASSES).cuda()
-    #backbone = nn.Sequential(resnet.conv1, resnet.bn1,resnet.relu, resnet.maxpool,resnet.layer1,resnet.layer2,resnet.layer3,resnet.layer4)
-    backbone = densenet121(pretrained=False, num_classes=NUM_CLASSES).features.cuda()
-    backbone.out_channels = 1024 #resnet18=512,  densenet121=1024
+    resnet = resnet18(pretrained=False, num_classes=NUM_CLASSES).cuda()
+    backbone = nn.Sequential(resnet.conv1, resnet.bn1,resnet.relu, resnet.maxpool,resnet.layer1,resnet.layer2,resnet.layer3,resnet.layer4)
+    #backbone = densenet121(pretrained=False, num_classes=NUM_CLASSES).features.cuda()
+    backbone.out_channels = 512 #resnet18=512,  densenet121=1024
     anchor_generator = AnchorGenerator(sizes=((32, 64, 128, 256),),aspect_ratios=((0.5, 1.0, 2.0),))
     roi_pooler = torchvision.ops.MultiScaleRoIAlign(featmap_names=['0'],output_size=7,sampling_ratio=2)
     model = FasterRCNN(backbone, num_classes=NUM_CLASSES, rpn_anchor_generator=anchor_generator, box_roi_pool=roi_pooler).cuda()
@@ -63,7 +63,7 @@ def Train():
         print("=> Loaded well-trained checkpoint from: " + CKPT_PATH)
     #model = nn.DataParallel(model).cuda()  # make model available multi GPU cores training    
     torch.backends.cudnn.benchmark = True  # improve train speed slightly
-    optimizer_model = optim.Adam(model.parameters(), lr=0.01, betas=(0.9, 0.999), eps=1e-08, weight_decay=1e-4)
+    optimizer_model = optim.Adam(model.parameters(), lr=1e-3, betas=(0.9, 0.999), eps=1e-08, weight_decay=1e-5)
     lr_scheduler_model = lr_scheduler.StepLR(optimizer_model , step_size = 10, gamma = 1)
     print('********************load model succeed!********************')
 
@@ -105,10 +105,10 @@ def Test():
     print('********************load data succeed!********************')
 
     print('********************load model********************')
-    #resnet = resnet50(pretrained=False, num_classes=NUM_CLASSES).cuda()
-    #backbone = nn.Sequential(resnet.conv1, resnet.bn1,resnet.relu, resnet.maxpool,resnet.layer1,resnet.layer2,resnet.layer3,resnet.layer4)
-    backbone = densenet121(pretrained=False, num_classes=NUM_CLASSES).features.cuda()
-    backbone.out_channels = 1024 #resnet18=512,  densenet121=1024
+    resnet = resnet18(pretrained=False, num_classes=NUM_CLASSES).cuda()
+    backbone = nn.Sequential(resnet.conv1, resnet.bn1,resnet.relu, resnet.maxpool,resnet.layer1,resnet.layer2,resnet.layer3,resnet.layer4)
+    #backbone = densenet121(pretrained=False, num_classes=NUM_CLASSES).features.cuda()
+    backbone.out_channels = 512 #resnet18=512,  densenet121=1024
     anchor_generator = AnchorGenerator(sizes=((32, 64, 128, 256),),aspect_ratios=((0.5, 1.0, 2.0),))
     roi_pooler = torchvision.ops.MultiScaleRoIAlign(featmap_names=['0'],output_size=7,sampling_ratio=2)
     model = FasterRCNN(backbone, num_classes=NUM_CLASSES, rpn_anchor_generator=anchor_generator, box_roi_pool=roi_pooler).cuda()
