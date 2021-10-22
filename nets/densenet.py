@@ -200,7 +200,8 @@ class DenseNet(nn.Module):
             ('norm0', nn.BatchNorm2d(num_init_features)),
             ('relu0', nn.ReLU(inplace=True)),
             ('pool0', nn.MaxPool2d(kernel_size=3, stride=2, padding=1)), #imagenet
-            #('attlayer', SNALayer(channels=num_init_features)),#attention layer
+            ('pool1', nn.MaxPool2d(kernel_size=3, stride=2, padding=1)), #for attention layer
+            ('attlayer', SNALayer(channels=num_init_features)),#attention layer
         ]))
 
         # Each denseblock
