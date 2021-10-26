@@ -200,8 +200,8 @@ class DenseNet(nn.Module):
             ('norm0', nn.BatchNorm2d(num_init_features)),
             ('relu0', nn.ReLU(inplace=True)),
             ('pool0', nn.MaxPool2d(kernel_size=3, stride=2, padding=1)), #imagenet
-            ('pool1', nn.MaxPool2d(kernel_size=3, stride=2, padding=1)), #for attention layer
-            ('attlayer', SNALayer(channels=num_init_features)),#attention layer
+            #('pool1', nn.MaxPool2d(kernel_size=3, stride=2, padding=1)), #for attention layer
+            #('attlayer', SNALayer(channels=num_init_features)),#attention layer
         ]))
 
         # Each denseblock
@@ -226,6 +226,8 @@ class DenseNet(nn.Module):
         # Final batch norm
         self.features.add_module('norm5', nn.BatchNorm2d(num_features))
 
+        self.attlayer = SNALayer(channels=num_features)
+
         # Linear layer
         #self.classifier = nn.Linear(num_features, num_classes) #for celoss
         self.classifier = nn.Sequential(nn.Linear(num_features, num_classes), nn.Sigmoid()) #for bceloss
@@ -244,6 +246,9 @@ class DenseNet(nn.Module):
 
     def forward(self, x: Tensor) -> Tensor:
         features = self.features(x)   
+        
+        x = self.attlayer(x)#attention layer
+
         out = F.relu(features, inplace=True)
         out = F.adaptive_avg_pool2d(out, (1, 1))
         out = torch.flatten(out, 1)

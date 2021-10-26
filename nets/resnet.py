@@ -6,6 +6,7 @@ Ref: https://github.com/pytorch/vision/blob/master/torchvision/models/resnet.py
 """
 import sys
 import math
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -218,8 +219,8 @@ class ResNet(nn.Module):
                                        dilate=replace_stride_with_dilation[2])
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
 
-        self.fc = nn.Linear(512 * block.expansion, num_classes)
-        #self.fc = nn.Sequential(nn.Linear(512 * block.expansion, num_classes), nn.Sigmoid())
+        #self.fc = nn.Linear(512 * block.expansion, num_classes)
+        self.fc = nn.Sequential(nn.Linear(512 * block.expansion, num_classes), nn.Sigmoid())
 
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
@@ -270,8 +271,10 @@ class ResNet(nn.Module):
         x = self.relu(x)
         x = self.maxpool(x)#unused for cifar100
 
+        np.save('/data/pycode/SFSAttention/logs/cxr_cls_resnet/resnet_sna_fea_before.npy',x.cpu().numpy()) 
         x = self.attlayer(x) #attention layer
-
+        np.save('/data/pycode/SFSAttention/logs/cxr_cls_resnet/resnet_sna_fea_after.npy',x.cpu().numpy()) 
+        
         x = self.layer1(x)
         x = self.layer2(x)
         x = self.layer3(x)

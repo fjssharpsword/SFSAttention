@@ -83,42 +83,132 @@ def Heatmap():
     for i in range(5):
         img_ori = np.transpose(img[i],(1,2,0))
         axes[0,i].imshow(img_ori, aspect="auto")
+        lbl_val_list = []
         for j in range(len(lbl)):
-            x, y, w, h = box[i][j][0], box[i][j][1], box[i][j][2]-box[i][j][0], box[i][j][3]-box[i][j][1]
-            rect = patches.Rectangle((x, y), w, h, linewidth=2, edgecolor='r', facecolor='none')# Create a Rectangle patch
-            axes[0,i].add_patch(rect)# Add the patch to the Axes
             lbl_val = int(lbl[i][j])
-            axes[0,i].text(int(x)-20, int(y)-5, CLASS_NAMES[lbl_val])
+            if lbl_val not in lbl_val_list: 
+                lbl_val_list.append(lbl_val)
+                x, y, w, h = box[i][j][0], box[i][j][1], box[i][j][2]-box[i][j][0], box[i][j][3]-box[i][j][1]
+                rect = patches.Rectangle((x, y), w, h, linewidth=2, edgecolor='r', facecolor='none')# Create a Rectangle patch
+                axes[0,i].add_patch(rect)# Add the patch to the Axes
+                axes[0,i].text(int(x)-20, int(y)-5, CLASS_NAMES[lbl_val])    
         axes[0,i].axis('off')
 
     #second row - heatmap befor sna layer
     for i in range(5):
+        """
         img_ori = np.transpose(img[i],(1,2,0))
-        #img_ori = np.uint8(255 * img_ori) #[0,1] ->[0,255]
+        img_ori = np.uint8(255 * img_ori) #[0,1] ->[0,255]
         fea_map = fea_before[i]
-        cam = np.mean(fea_map, 0) #h,w
+        #cam = np.mean(fea_map, 0) #h,w
+        cam = np.max(fea_map, 0) 
         cam = cam - np.min(cam)
         cam = cam / np.max(cam)
-        #cam = np.uint8(255 * cam)
+        cam = np.uint8(255 * cam)
         cam = cv2.resize(cam, (img_ori.shape[0], img_ori.shape[1]))
         cam = cv2.applyColorMap(cam, cv2.COLORMAP_JET)
         overlay_img = cv2.addWeighted(img_ori, 0.7, cam, 0.3, 0)
         axes[1,i].imshow(overlay_img, aspect="auto")
+        """
+        fea_map = fea_before[i]
+        cam = np.max(fea_map, 0) 
+        axes[1,i].imshow(cam, aspect="auto", cmap='gray')
         axes[1,i].axis('off')
 
-
-
-
     #third row -heatmap after sna layer
+    for i in range(5):
+        """
+        img_ori = np.transpose(img[i],(1,2,0))
+        img_ori = np.uint8(255 * img_ori) #[0,1] ->[0,255]
+        fea_map = fea_after[i]
+        #cam = np.mean(fea_map, 0) #h,w
+        cam = np.max(fea_map, 0) 
+        cam = cam - np.min(cam)
+        cam = cam / np.max(cam)
+        cam = np.uint8(255 * cam)
+        cam = cv2.resize(cam, (img_ori.shape[0], img_ori.shape[1]))
+        cam = cv2.applyColorMap(cam, cv2.COLORMAP_JET)
+        overlay_img = cv2.addWeighted(img_ori, 0.7, cam, 0.3, 0)
+        axes[2,i].imshow(overlay_img, aspect="auto")
+        """
+        fea_map = fea_after[i]
+        cam = np.max(fea_map, 0) 
+        axes[2,i].imshow(cam, aspect="auto", cmap='gray')
+        axes[2,i].axis('off')
 
     #save 
     fig.savefig('/data/pycode/SFSAttention/imgs/cxr_heatmap.png', dpi=300, bbox_inches='tight')
 
+
+def feature_hist():
+    root = '/data/pycode/SFSAttention/logs/cxr_cls_resnet/'
+    img = np.load(root + 'resnet_sna_img.npy')
+    box = np.load(root + 'resnet_sna_box.npy', allow_pickle=True)
+    lbl = np.load(root + 'resnet_sna_lbl.npy', allow_pickle=True)
+    fea_before = np.load(root + 'resnet_sna_fea_before.npy')
+    fea_after = np.load(root + 'resnet_sna_fea_after.npy')
+
+    fig, axes = plt.subplots(3,5, constrained_layout=True, figsize=(20,9))
+
+    #first row- origi image
+    class_name = []
+    for i in range(5):
+        img_ori = np.transpose(img[i],(1,2,0))
+        axes[0,i].imshow(img_ori, aspect="auto")
+        area = []
+        for j in range(len(lbl)):
+            x, y, w, h = box[i][j][0], box[i][j][1], box[i][j][2]-box[i][j][0], box[i][j][3]-box[i][j][1]
+            area.append(w*h)
+        j = area.index(max(area))
+        x, y, w, h = box[i][j][0], box[i][j][1], box[i][j][2]-box[i][j][0], box[i][j][3]-box[i][j][1]
+        rect = patches.Rectangle((x, y), w, h, linewidth=2, edgecolor='r', facecolor='none')# Create a Rectangle patch
+        axes[0,i].add_patch(rect)# Add the patch to the Axes
+        lbl_val = int(lbl[i][j])
+        axes[0,i].text(int(x)-20, int(y)-5, CLASS_NAMES[lbl_val])
+        class_name.append(CLASS_NAMES[lbl_val])    
+        axes[0,i].axis('off')
+
+    #solve spectral norm matrix
+    cam_b_batch = []
+    for i in range(5):
+        cam_b_batch.append(np.max(fea_before[i], 0).flatten())
+    cam_b_batch = np.array(cam_b_batch)
+    U, Sigma, VT = np.linalg.svd(cam_b_batch)
+    sn_val = U[:,:1].dot(np.diag(Sigma[:1])).dot(VT[:1,:])
+    cam_a_batch = cam_b_batch + sn_val
+
+    #second row- contour lie
+    for i in range(5):
+        cam_b = cam_b_batch[i].reshape(56,56)
+        x = np.arange(0,len(cam_b),1)
+        y = np.arange(len(cam_b),0,-1)
+        X,Y = np.meshgrid(x,y)
+        #cam_b = cam_b - np.min(cam_b)
+        #cam_b = cam_b / np.max(cam_b)
+        #im = axes[1,i].imshow(cam_b, cmap="YlGnBu") #heatmap
+        axes[1,i].contourf(X,Y,cam_b,6,cmap="YlGnBu")
+
+    #Thrid row - features before sna layer
+    for i in range(5):
+        cam_a = cam_a_batch[i].reshape(56,56)
+        x = np.arange(0,len(cam_a),1)
+        y = np.arange(len(cam_a),0,-1)
+        X,Y = np.meshgrid(x,y)
+        axes[2,i].contourf(X,Y,cam_a,6,cmap="YlGnBu")
+        #cam_a = fea_after[i]
+        #cam_a = np.max(cam_a, 0) 
+        #cam_a = cam_a - np.min(cam_a)
+        #cam_a = cam_a / np.max(cam_a)
+        #im = axes[2,i].imshow(cam_a, cmap="YlGnBu") #heatmap
+        
+        
+    #save 
+    fig.savefig('/data/pycode/SFSAttention/imgs/cxr_his.png', dpi=300, bbox_inches='tight')   
+
 def main():
-    #Train()
-    #Test()
     #BoxTest()
-    Heatmap()
+    #Heatmap()
+    feature_hist()
 
 if __name__ == '__main__':
     main()
