@@ -12,6 +12,7 @@ import time
 import argparse
 import numpy as np
 import pandas as pd
+import random
 import torch
 import torchvision
 import torch.nn as nn
@@ -54,6 +55,7 @@ def BoxTest():
     print('********************load model succeed!********************')
 
     print('********************begin Testing!********************')
+    idx = 0
     with torch.autograd.no_grad():
         for batch_idx, (images, targets) in enumerate(test_loader):
             images_tn = torch.FloatTensor()
@@ -67,7 +69,8 @@ def BoxTest():
             lbl_np = [ tgt['labels'].numpy() for tgt in targets]
             np.save('/data/pycode/SFSAttention/logs/cxr_cls_resnet/resnet_sna_box.npy', np.array(box_np))
             np.save('/data/pycode/SFSAttention/logs/cxr_cls_resnet/resnet_sna_lbl.npy', np.array(lbl_np))
-            break
+            idx = idx + 1
+            if idx==1: break
 
 def Heatmap():
     root = '/data/pycode/SFSAttention/logs/cxr_cls_resnet/'
@@ -148,26 +151,33 @@ def feature_hist():
     fea_before = np.load(root + 'resnet_sna_fea_before.npy')
     fea_after = np.load(root + 'resnet_sna_fea_after.npy')
 
-    fig, axes = plt.subplots(3,5, constrained_layout=True, figsize=(20,9))
+    fig, axes = plt.subplots(4,5, constrained_layout=True, figsize=(25,16))
 
     #first row- origi image
     class_name = []
+    resize_box = []
     for i in range(5):
         img_ori = np.transpose(img[i],(1,2,0))
+        #img_ori = cv2.resize(img_ori, (56, 56))
         axes[0,i].imshow(img_ori, aspect="auto")
-        area = []
-        for j in range(len(lbl)):
-            x, y, w, h = box[i][j][0], box[i][j][1], box[i][j][2]-box[i][j][0], box[i][j][3]-box[i][j][1]
-            area.append(w*h)
-        j = area.index(max(area))
+        #area = []
+        #for j in range(len(lbl[i])):
+        #    x, y, w, h = box[i][j][0], box[i][j][1], box[i][j][2]-box[i][j][0], box[i][j][3]-box[i][j][1]
+        #    area.append(w*h)
+        #j = area.index(max(area))
+        while True:
+            j = random.choice(range(len(lbl[i])))
+            lbl_val = int(lbl[i][j])
+            if CLASS_NAMES[lbl_val] in class_name: continue
+            else: break
         x, y, w, h = box[i][j][0], box[i][j][1], box[i][j][2]-box[i][j][0], box[i][j][3]-box[i][j][1]
         rect = patches.Rectangle((x, y), w, h, linewidth=2, edgecolor='r', facecolor='none')# Create a Rectangle patch
         axes[0,i].add_patch(rect)# Add the patch to the Axes
-        lbl_val = int(lbl[i][j])
-        axes[0,i].text(int(x)-20, int(y)-5, CLASS_NAMES[lbl_val])
-        class_name.append(CLASS_NAMES[lbl_val])    
+        axes[0,i].text(int(x), int(y)-5, CLASS_NAMES[lbl_val])
         axes[0,i].axis('off')
-
+        class_name.append(CLASS_NAMES[lbl_val])    
+        resize_box.append([x*(56/224), y*(56/224), w*(56/224), h*(56/224)])
+        
     #solve spectral norm matrix
     cam_b_batch = []
     for i in range(5):
@@ -181,26 +191,36 @@ def feature_hist():
     for i in range(5):
         cam_b = cam_b_batch[i].reshape(56,56)
         x = np.arange(0,len(cam_b),1)
-        y = np.arange(len(cam_b),0,-1)
+        y = np.arange(len(cam_b)-1,0-1,-1)
         X,Y = np.meshgrid(x,y)
-        #cam_b = cam_b - np.min(cam_b)
-        #cam_b = cam_b / np.max(cam_b)
-        #im = axes[1,i].imshow(cam_b, cmap="YlGnBu") #heatmap
-        axes[1,i].contourf(X,Y,cam_b,6,cmap="YlGnBu")
+        axes[1,i].contourf(X,Y,cam_b,6,cmap="YlGnBu") #cmap="YlGnBu"：The higher the number, the darker the color
+        x, y, w, h = resize_box[i]
+        rect = patches.Rectangle((x, 56-y), w, -h, linewidth=2, edgecolor='r', facecolor='none')# Create a Rectangle patch
+        axes[1,i].add_patch(rect)# Add the patch to the Axes
+        axes[1,i].axis('off')
 
     #Thrid row - features before sna layer
     for i in range(5):
+        incre = sn_val[i].reshape(56,56)
+        x = np.arange(0,len(incre),1)
+        y = np.arange(len(incre)-1,0-1,-1)
+        X,Y = np.meshgrid(x,y)
+        axes[2,i].contourf(X,Y,incre,6,cmap="YlGnBu") #cmap="YlGnBu_r"：The higher the number, the lighter the color
+        x, y, w, h = resize_box[i]
+        rect = patches.Rectangle((x, 56-y), w, -h, linewidth=2, edgecolor='r', facecolor='none')# Create a Rectangle patch
+        axes[2,i].add_patch(rect)# Add the patch to the Axes
+        axes[2,i].axis('off')
+
+    for i in range(5):
         cam_a = cam_a_batch[i].reshape(56,56)
         x = np.arange(0,len(cam_a),1)
-        y = np.arange(len(cam_a),0,-1)
+        y = np.arange(len(cam_a)-1,0-1,-1)
         X,Y = np.meshgrid(x,y)
-        axes[2,i].contourf(X,Y,cam_a,6,cmap="YlGnBu")
-        #cam_a = fea_after[i]
-        #cam_a = np.max(cam_a, 0) 
-        #cam_a = cam_a - np.min(cam_a)
-        #cam_a = cam_a / np.max(cam_a)
-        #im = axes[2,i].imshow(cam_a, cmap="YlGnBu") #heatmap
-        
+        axes[3,i].contourf(X,Y,cam_a,6,cmap="YlGnBu") #cmap="YlGnBu_r"：The higher the number, the lighter the color
+        x, y, w, h = resize_box[i]
+        rect = patches.Rectangle((x, 56-y), w, -h, linewidth=2, edgecolor='r', facecolor='none')# Create a Rectangle patch
+        axes[3,i].add_patch(rect)# Add the patch to the Axes
+        axes[3,i].axis('off')
         
     #save 
     fig.savefig('/data/pycode/SFSAttention/imgs/cxr_his.png', dpi=300, bbox_inches='tight')   
