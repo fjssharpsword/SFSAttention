@@ -211,7 +211,7 @@ def Test():
     print("\r Top-5 ACC/CI = %.4f/%.4f" % (acc, ci) )
 
 def main():
-    #Train()
+    Train()
     Test()
 
 if __name__ == '__main__':
