@@ -154,29 +154,37 @@ def feature_hist():
     fig, axes = plt.subplots(4,5, constrained_layout=True, figsize=(25,16))
 
     #first row- origi image
-    class_name = []
-    resize_box = []
+    lbl_new = []
+    box_new = []
+    ep = 56/224
     for i in range(5):
-        img_ori = np.transpose(img[i],(1,2,0))
         #img_ori = cv2.resize(img_ori, (56, 56))
-        axes[0,i].imshow(img_ori, aspect="auto")
         #area = []
         #for j in range(len(lbl[i])):
         #    x, y, w, h = box[i][j][0], box[i][j][1], box[i][j][2]-box[i][j][0], box[i][j][3]-box[i][j][1]
         #    area.append(w*h)
         #j = area.index(max(area))
-        while True:
-            j = random.choice(range(len(lbl[i])))
+        #while True:
+        #    j = random.choice(range(len(lbl[i])))
+        #    lbl_val = int(lbl[i][j])
+        #    if CLASS_NAMES[lbl_val] in class_name: continue
+        #    else: break
+        img_ori = np.transpose(img[i],(1,2,0))
+        axes[0,i].imshow(img_ori, aspect="auto")
+        lbl_list = []
+        box_list = []
+        for j in range(len(lbl[i])):
             lbl_val = int(lbl[i][j])
-            if CLASS_NAMES[lbl_val] in class_name: continue
-            else: break
-        x, y, w, h = box[i][j][0], box[i][j][1], box[i][j][2]-box[i][j][0], box[i][j][3]-box[i][j][1]
-        rect = patches.Rectangle((x, y), w, h, linewidth=2, edgecolor='r', facecolor='none')# Create a Rectangle patch
-        axes[0,i].add_patch(rect)# Add the patch to the Axes
-        axes[0,i].text(int(x), int(y)-5, CLASS_NAMES[lbl_val])
+            if lbl_val not in lbl_list:
+                x, y, w, h = box[i][j][0], box[i][j][1], box[i][j][2]-box[i][j][0], box[i][j][3]-box[i][j][1]
+                rect = patches.Rectangle((x, y), w, h, linewidth=2, edgecolor='r', facecolor='none')# Create a Rectangle patch
+                axes[0,i].add_patch(rect)# Add the patch to the Axes
+                axes[0,i].text(int(x), int(y)-5, CLASS_NAMES[lbl_val])
+                lbl_list.append(lbl_val)
+                box_list.append([x*ep,y*ep, w*ep, h*ep])
+        lbl_new.append(lbl_list)
+        box_new.append(box_list)
         axes[0,i].axis('off')
-        class_name.append(CLASS_NAMES[lbl_val])    
-        resize_box.append([x*(56/224), y*(56/224), w*(56/224), h*(56/224)])
         
     #solve spectral norm matrix
     cam_b_batch = []
@@ -194,9 +202,10 @@ def feature_hist():
         y = np.arange(len(cam_b)-1,0-1,-1)
         X,Y = np.meshgrid(x,y)
         axes[1,i].contourf(X,Y,cam_b,6,cmap="YlGnBu") #cmap="YlGnBu"：The higher the number, the darker the color
-        x, y, w, h = resize_box[i]
-        rect = patches.Rectangle((x, 56-y), w, -h, linewidth=2, edgecolor='r', facecolor='none')# Create a Rectangle patch
-        axes[1,i].add_patch(rect)# Add the patch to the Axes
+        for j in range(len(lbl_new[i])):
+            x, y, w, h = box_new[i][j][0],  box_new[i][j][1], box_new[i][j][2], box_new[i][j][3]
+            rect = patches.Rectangle((x, 56-y), w, -h, linewidth=2, edgecolor='r', facecolor='none')# Create a Rectangle patch
+            axes[1,i].add_patch(rect)# Add the patch to the Axes
         axes[1,i].axis('off')
 
     #Thrid row - features before sna layer
@@ -206,9 +215,10 @@ def feature_hist():
         y = np.arange(len(incre)-1,0-1,-1)
         X,Y = np.meshgrid(x,y)
         axes[2,i].contourf(X,Y,incre,6,cmap="YlGnBu") #cmap="YlGnBu_r"：The higher the number, the lighter the color
-        x, y, w, h = resize_box[i]
-        rect = patches.Rectangle((x, 56-y), w, -h, linewidth=2, edgecolor='r', facecolor='none')# Create a Rectangle patch
-        axes[2,i].add_patch(rect)# Add the patch to the Axes
+        for j in range(len(lbl_new[i])):
+            x, y, w, h = box_new[i][j][0],  box_new[i][j][1], box_new[i][j][2], box_new[i][j][3]
+            rect = patches.Rectangle((x, 56-y), w, -h, linewidth=2, edgecolor='r', facecolor='none')# Create a Rectangle patch
+            axes[2,i].add_patch(rect)# Add the patch to the Axes
         axes[2,i].axis('off')
 
     for i in range(5):
@@ -217,9 +227,10 @@ def feature_hist():
         y = np.arange(len(cam_a)-1,0-1,-1)
         X,Y = np.meshgrid(x,y)
         axes[3,i].contourf(X,Y,cam_a,6,cmap="YlGnBu") #cmap="YlGnBu_r"：The higher the number, the lighter the color
-        x, y, w, h = resize_box[i]
-        rect = patches.Rectangle((x, 56-y), w, -h, linewidth=2, edgecolor='r', facecolor='none')# Create a Rectangle patch
-        axes[3,i].add_patch(rect)# Add the patch to the Axes
+        for j in range(len(lbl_new[i])):
+            x, y, w, h = box_new[i][j][0],  box_new[i][j][1], box_new[i][j][2], box_new[i][j][3]
+            rect = patches.Rectangle((x, 56-y), w, -h, linewidth=2, edgecolor='r', facecolor='none')# Create a Rectangle patch
+            axes[3,i].add_patch(rect)# Add the patch to the Axes
         axes[3,i].axis('off')
         
     #save 
