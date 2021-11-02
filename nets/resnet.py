@@ -143,7 +143,7 @@ class Bottleneck(nn.Module):
         #attention layer
         #self.attlayer = SELayer(planes * self.expansion, reduction=16)
         #self.attlayer = ECA_layer(channel=planes * self.expansion, k_size=3)
-        #self.attlayer = SNALayer(channels=planes * self.expansion)
+        self.attlayer = SNALayer(channels=planes * self.expansion)
 
     def forward(self, x: Tensor) -> Tensor:
         identity = x
@@ -163,7 +163,7 @@ class Bottleneck(nn.Module):
             identity = self.downsample(x)
 
         #attention layer
-        #out = self.attlayer(out)
+        out = self.attlayer(out)
 
         out += identity
         out = self.relu(out)
@@ -219,8 +219,8 @@ class ResNet(nn.Module):
                                        dilate=replace_stride_with_dilation[2])
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
 
-        #self.fc = nn.Linear(512 * block.expansion, num_classes)
-        self.fc = nn.Sequential(nn.Linear(512 * block.expansion, num_classes), nn.Sigmoid())
+        self.fc = nn.Linear(512 * block.expansion, num_classes)
+        #self.fc = nn.Sequential(nn.Linear(512 * block.expansion, num_classes), nn.Sigmoid())
 
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
@@ -271,9 +271,9 @@ class ResNet(nn.Module):
         x = self.relu(x)
         x = self.maxpool(x)#unused for cifar100
 
-        np.save('/data/pycode/SFSAttention/logs/cxr_cls_resnet/resnet_sna_fea_before.npy',x.cpu().numpy()) 
+        #np.save('/data/pycode/SFSAttention/logs/cxr_cls_resnet/resnet_sna_fea_before.npy',x.cpu().numpy()) 
         x = self.attlayer(x) #attention layer
-        np.save('/data/pycode/SFSAttention/logs/cxr_cls_resnet/resnet_sna_fea_after.npy',x.cpu().numpy()) 
+        #np.save('/data/pycode/SFSAttention/logs/cxr_cls_resnet/resnet_sna_fea_after.npy',x.cpu().numpy()) 
         
         x = self.layer1(x)
         x = self.layer2(x)
