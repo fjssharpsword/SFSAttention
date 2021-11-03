@@ -331,6 +331,159 @@ def plot_svd_compression2():
     plt.tight_layout()
     plt.savefig('/data/pycode/SFSAttention/imgs/svd.png', dpi=300, bbox_inches='tight')
 
+def plot_svd_shift():
+    NATURAL_IMG_PATH = '/data/fjsdata/ImageNet/ILSVRC2012_data/val/n02129165/ILSVRC2012_val_00003788.JPEG'
+    MEDICAL_IMG_PATH = '/data/fjsdata/Vin-CXR/train_val_jpg/afb6230703512afc370f236e8fe98806.jpeg'
+    natural_img = cv2.imread(NATURAL_IMG_PATH, cv2.IMREAD_GRAYSCALE)
+    medical_img = cv2.imread(MEDICAL_IMG_PATH, cv2.IMREAD_GRAYSCALE)
+
+    fig, axes = plt.subplots(2,10, constrained_layout=True, figsize=(30,6))#
+
+    #column 1 
+    #row 1: natural image
+    axes[0,0].imshow(natural_img, aspect="auto",cmap='gray')
+    axes[0,0].axis('off')
+    axes[0,0].set_title('(a)')#Natural Image (280, 415)
+    #row 2: medical image
+    axes[1,0].imshow(medical_img, aspect="auto",cmap='gray')
+    axes[1,0].axis('off')
+
+    #column 2
+    #row 1: natural image explained variance
+    _, Sigma, _ = np.linalg.svd(natural_img)
+    var_sigma = np.round(Sigma**2/np.sum(Sigma**2), decimals=3)
+    cum_sum = np.cumsum(var_sigma)[0:50]
+    axes[0,1].plot(np.arange(len(cum_sum)), cum_sum,'g-')
+    non_zero_point = var_sigma[np.nonzero(var_sigma)]
+    idx = len(non_zero_point)
+    axes[0,1].plot(np.arange(len(cum_sum))[idx], cum_sum[idx],'ro')
+    axes[0,1].axhline(y=cum_sum[idx], xmin=0, xmax=len(non_zero_point)/len(cum_sum), color='b', linestyle='--')
+    axes[0,1].axvline(x=np.arange(len(cum_sum))[idx], ymin=0, ymax=cum_sum[idx], color='b', linestyle='--')
+    axes[0,1].set_title('(b)')
+    axes[0,1].grid(b=True, ls=':')
+    #row 2: medical iamge explained variance
+    _, Sigma, _ = np.linalg.svd(medical_img)
+    var_sigma = np.round(Sigma**2/np.sum(Sigma**2), decimals=3)
+    cum_sum = np.cumsum(var_sigma)[0:50]
+    axes[1,1].plot(np.arange(len(cum_sum)), cum_sum,'g-')
+    non_zero_point = var_sigma[np.nonzero(var_sigma)]
+    idx = len(non_zero_point)
+    axes[1,1].plot(np.arange(len(cum_sum))[idx], cum_sum[idx],'ro')
+    axes[1,1].axhline(y=cum_sum[idx], xmin=0, xmax=len(non_zero_point)/len(cum_sum), color='b', linestyle='--')
+    axes[1,1].axvline(x=np.arange(len(cum_sum))[idx], ymin=0, ymax=cum_sum[idx], color='b', linestyle='--')
+    axes[1,1].grid(b=True, ls=':')
+
+    #column 3
+    #row 1: natural image k=30
+    img_com = svd_compression(natural_img, k=30)
+    axes[0,2].imshow(img_com, aspect="auto",cmap='gray')
+    axes[0,2].axis('off')
+    axes[0,2].set_title('(c)') #'Singular values'
+    #row 2: medical image k=30
+    img_com = svd_compression(medical_img, k=30)
+    axes[1,2].imshow(img_com, aspect="auto",cmap='gray')
+    axes[1,2].axis('off')
+
+    #column 4
+    #row 1: natural image batch=1 spectral norm
+    natural_img = cv2.resize(natural_img,(56,56))
+    #natural_img = natural_img.reshape(1, 56*56)
+    img_com = svd_compression(natural_img, k=1)
+    #axes[0,3].imshow(img_com, aspect="auto",cmap='gray')
+    #axes[0,3].axis('off')
+    #axes[0,3].set_title('(d)')#'Spectral norm'
+    x = np.arange(0,56,1)
+    y = np.arange(56-1,0-1,-1)
+    X,Y = np.meshgrid(x,y)
+    axes[0,3].contourf(X,Y,img_com,6,cmap="YlGnBu")
+    axes[0,3].set_title('(d)')
+    axes[0,3].axis('off')
+    #row 2: medical image batch=1 spectral norm
+    medical_img = cv2.resize(medical_img,(56,56))
+    #medical_img = medical_img.reshape(1, 56*56)
+    img_com = svd_compression(medical_img, k=1)
+    #axes[1,3].imshow(img_com, aspect="auto",cmap='gray')
+    #axes[1,3].axis('off')
+    x = np.arange(0,56,1)
+    y = np.arange(56-1,0-1,-1)
+    X,Y = np.meshgrid(x,y)
+    axes[1,3].contourf(X,Y,img_com,6,cmap="YlGnBu")
+    axes[1,3].axis('off')
+
+    #column 5
+    #row 1: natural image batch_svd
+    nat_sd = [0.86, 0.84, 0.81, 0.83, 0.79]
+    x_axis = [1,2,3,4,5]
+    axes[0,4].plot(x_axis, np.array(nat_sd),'go-')
+    axes[0,4].set_xticks(x_axis)
+    axes[0,4].set_xticklabels(['8', '16', '32', '64', '128'])
+    axes[0,4].set_title('(e)')
+    axes[0,4].grid(b=True, ls=':')
+    #row 2: medical image batch_svd
+    med_sd = [0.95, 0.93, 0.93, 0.92, 0.90]
+    x_axis = [1,2,3,4,5]
+    axes[1,4].plot(x_axis, np.array(med_sd),'go-')
+    axes[1,4].set_xticks(x_axis)
+    axes[1,4].set_xticklabels(['8', '16', '32', '64', '128'])
+    axes[1,4].grid(b=True, ls=':')
+
+    #column 6-10
+    NATURAL_ROOT = '/data/fjsdata/ImageNet/ILSVRC2012_data/val/n02129165/' #natural image
+    MEDICAL_ROOT = '/data/fjsdata/Vin-CXR/train_val_jpg/'#medical image
+    #calculate singular degree
+    bs = [8-1, 16-1, 32-1, 64-1, 128-1]
+    title =['(f)', '(g)', '(h)', '(i)', '(j)']
+    for i in range(len(bs)):
+        batch_img = torch.FloatTensor()
+        for _, _, fs in os.walk(NATURAL_ROOT):
+            for f in fs:
+                if batch_img.size(0) == bs[i]: break
+                img = os.path.join(NATURAL_ROOT, f)
+                img = cv2.imread(img, cv2.IMREAD_GRAYSCALE)
+                img = cv2.resize(img,(56,56))
+                batch_img = torch.cat((batch_img, torch.Tensor(img).unsqueeze(0)), 0)
+        img = cv2.imread(NATURAL_IMG_PATH, cv2.IMREAD_GRAYSCALE)
+        img = cv2.resize(img,(56,56))
+        batch_img = torch.cat((batch_img, torch.Tensor(img).unsqueeze(0)), 0)
+        batch_img = batch_img.view(batch_img.size(0), -1)
+        img_com = svd_compression(batch_img.numpy(), k=1)
+        img_com = img_com[-1,:].reshape((56,56))
+        #axes[0,5+i].imshow(img_com, aspect="auto",cmap='gray')
+        #axes[0,5+i].set_title(title[i])
+        #axes[0,5+i].axis('off')
+        x = np.arange(0,56,1)
+        y = np.arange(56-1,0-1,-1)
+        X,Y = np.meshgrid(x,y)
+        axes[0,5+i].contourf(X,Y,img_com,6,cmap="YlGnBu")
+        axes[0,5+i].set_title(title[i])
+        axes[0,5+i].axis('off')
+
+        #four row
+        batch_img = torch.FloatTensor()
+        for _, _, fs in os.walk(MEDICAL_ROOT):
+            for f in fs:
+                if batch_img.size(0) == bs[i]: break
+                img = os.path.join(MEDICAL_ROOT, f)
+                img = cv2.imread(img, cv2.IMREAD_GRAYSCALE)
+                img = cv2.resize(img,(56,56))
+                batch_img = torch.cat((batch_img, torch.Tensor(img).unsqueeze(0)), 0)
+        img = cv2.imread(MEDICAL_IMG_PATH, cv2.IMREAD_GRAYSCALE)
+        img = cv2.resize(img,(56,56))
+        batch_img = torch.cat((batch_img, torch.Tensor(img).unsqueeze(0)), 0)
+        batch_img = batch_img.view(batch_img.size(0), -1)
+        img_com = svd_compression(batch_img.numpy(), k=1)
+        img_com = img_com[-1,:].reshape((56,56))
+        #axes[1,5+i].imshow(img_com, aspect="auto",cmap='gray')
+        #axes[1,5+i].axis('off')
+        x = np.arange(0,56,1)
+        y = np.arange(56-1,0-1,-1)
+        X,Y = np.meshgrid(x,y)
+        axes[1,5+i].contourf(X,Y,img_com,6,cmap="YlGnBu")
+        axes[1,5+i].axis('off')
+
+    #save
+    fig.savefig('/data/pycode/SFSAttention/imgs/img_com.png', dpi=300, bbox_inches='tight')
+
 if __name__ == "__main__":
     """
     W = torch.rand(100,200)
@@ -339,6 +492,7 @@ if __name__ == "__main__":
     U, S, V = torch.svd(W)
     print(S.max())
     """
-    plot_svd_compression()
+    #plot_svd_compression()
     #calculate_batch_SN()
     #plot_svd_compression2()
+    plot_svd_shift()
