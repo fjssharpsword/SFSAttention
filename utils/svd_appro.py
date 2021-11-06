@@ -10,6 +10,7 @@ import torchvision.transforms as transforms
 import matplotlib.pyplot as plt
 from PIL import Image
 import seaborn as sns
+import random
 
 def power_iteration(W, eps=1e-10):
         """
@@ -428,15 +429,15 @@ def plot_svd_shift():
     axes[1,4].grid(b=True, ls=':')
 
     #column 6-10
-    NATURAL_ROOT = '/data/fjsdata/ImageNet/ILSVRC2012_data/val/n02129165/' #natural image
+    NATURAL_ROOT = '/data/fjsdata/ImageNet/ILSVRC2012_data/val/n02129165/' #natural image 
     MEDICAL_ROOT = '/data/fjsdata/Vin-CXR/train_val_jpg/'#medical image
     #calculate singular degree
-    bs = [8-1, 16-1, 32-1, 64-1, 128-1]
+    bs = [2-1, 4-1, 8-1, 16-1, 32-1] #[8-1, 16-1, 32-1, 64-1, 128-1]
     title =['(f)', '(g)', '(h)', '(i)', '(j)']
     for i in range(len(bs)):
         batch_img = torch.FloatTensor()
         for _, _, fs in os.walk(NATURAL_ROOT):
-            for f in fs:
+            for f in fs: #random.sample(fs, bs[i]):
                 if batch_img.size(0) == bs[i]: break
                 img = os.path.join(NATURAL_ROOT, f)
                 img = cv2.imread(img, cv2.IMREAD_GRAYSCALE)
