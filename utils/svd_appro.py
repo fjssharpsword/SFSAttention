@@ -338,7 +338,7 @@ def plot_svd_shift():
     natural_img = cv2.imread(NATURAL_IMG_PATH, cv2.IMREAD_GRAYSCALE)
     medical_img = cv2.imread(MEDICAL_IMG_PATH, cv2.IMREAD_GRAYSCALE)
 
-    fig, axes = plt.subplots(2,10, constrained_layout=True, figsize=(30,6))#
+    fig, axes = plt.subplots(2,3, constrained_layout=True, figsize=(12,8))#
 
     #column 1 
     #row 1: natural image
@@ -362,6 +362,8 @@ def plot_svd_shift():
     axes[0,1].axvline(x=np.arange(len(cum_sum))[idx], ymin=0, ymax=cum_sum[idx], color='b', linestyle='--')
     axes[0,1].set_title('(b)')
     axes[0,1].grid(b=True, ls=':')
+    #axes[0,1].set_ylabel('Explained variance ratio')
+    #axes[0,1].set_xlabel('Singular values')
     #row 2: medical iamge explained variance
     _, Sigma, _ = np.linalg.svd(medical_img)
     var_sigma = np.round(Sigma**2/np.sum(Sigma**2), decimals=3)
@@ -373,6 +375,8 @@ def plot_svd_shift():
     axes[1,1].axhline(y=cum_sum[idx], xmin=0, xmax=len(non_zero_point)/len(cum_sum), color='b', linestyle='--')
     axes[1,1].axvline(x=np.arange(len(cum_sum))[idx], ymin=0, ymax=cum_sum[idx], color='b', linestyle='--')
     axes[1,1].grid(b=True, ls=':')
+    #axes[1,1].set_ylabel('Explained variance ratio')
+    #axes[1,1].set_xlabel('Singular values')
 
     #column 3
     #row 1: natural image k=30
@@ -385,6 +389,7 @@ def plot_svd_shift():
     axes[1,2].imshow(img_com, aspect="auto",cmap='gray')
     axes[1,2].axis('off')
 
+    """
     #column 4
     #row 1: natural image batch=1 spectral norm
     natural_img = cv2.resize(natural_img,(56,56))
@@ -410,7 +415,7 @@ def plot_svd_shift():
     X,Y = np.meshgrid(x,y)
     axes[1,3].contourf(X,Y,img_com,6,cmap="YlGnBu")
     axes[1,3].axis('off')
-
+    
     #column 5
     #row 1: natural image batch_svd
     nat_sd = [0.86, 0.84, 0.81, 0.83, 0.79]
@@ -481,7 +486,7 @@ def plot_svd_shift():
         X,Y = np.meshgrid(x,y)
         axes[1,5+i].contourf(X,Y,img_com,6,cmap="YlGnBu")
         axes[1,5+i].axis('off')
-
+    """
     #save
     fig.savefig('/data/pycode/SFSAttention/imgs/img_com.png', dpi=300, bbox_inches='tight')
 
