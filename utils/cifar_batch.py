@@ -129,9 +129,113 @@ def vis_batch_performance():
     #save
     fig.savefig('/data/pycode/SFSAttention/imgs/cifar_batch.png', dpi=300, bbox_inches='tight')
 
+def vis_batch_performance2():
+    
+    x_ticks = ['8', '16', '32', '64', '128'] #x_axies
+    x_axies = np.arange(len(x_ticks))
+
+    #ResNet-top1
+    resnet_top1 = [77.04, 77.85, 77.34, 76.63, 74.84] #y_axies
+    resnet_se_top1 = [77.38, 78.04, 77.71, 76.81, 75.01]
+    resnet_eca_top1 = [77.71, 78.23, 78.12, 77.09, 75.42]
+    resnet_aa_top1 = [77.94, 78.37, 78.26, 77.12, 75.53]
+    resnet_sna_top1 = [78.38, 79.17, 78.44, 77.29, 75.87]
+
+    #ResNet-top5
+    resnet_top5 = [93.13, 93.69, 93.60, 93.50, 92.23] #y_axies
+    resnet_se_top5 = [93.11, 93.65, 93.64, 93.42, 92.20]
+    resnet_eca_top5 = [93.19, 93.91, 93.70, 93.43, 92.35]
+    resnet_aa_top5 = [93.32, 93.76, 93.54, 93.39, 92.31]
+    resnet_sna_top5 = [93.67, 94.13, 93.99, 93.86, 92.58]
+
+
+    #DenseNet-top1
+    densenet_top1 = [76.62, 79.31, 77.97, 77.64, 76.40] #y_axies
+    densenet_se_top1 = [77.02, 79.84, 78.43, 77.91, 76.97]
+    densenet_eca_top1 = [77.23, 79.93, 78.61, 78.05, 77.12]
+    densenet_aa_top1 = [77.51, 80.06, 78.73, 78.38, 77.40]
+    densenet_sna_top1 = [78.04, 80.81, 78.74, 78.36, 77.86]
+
+    #DenseNet-top5
+    densenet_top5 = [93.69, 94.83, 94.57, 93.76, 93.06] #y_axies
+    densenet_se_top5 = [93.57, 94.79, 94.55, 93.79, 93.11]
+    densenet_eca_top5 = [93.81, 94.91, 94.63, 93.81, 93.24]
+    densenet_aa_top5 = [93.87, 95.03, 94.71, 93.90, 93.35]
+    densenet_sna_top5 = [94.08, 95.20, 94.88, 94.02, 93.51]
+
+
+    fig, axes = plt.subplots(2, 2, constrained_layout=True, figsize=(10,6)) #
+
+    #plot resnet-top1
+    axes[0,0].plot(x_axies, resnet_top1,'bo-',label='ResNet-18')
+    axes[0,0].plot(x_axies, resnet_se_top1,'go-',label='ResNet-18 + SE')
+    axes[0,0].plot(x_axies, resnet_eca_top1,'yo-',label='ResNet-18 + ECA')
+    axes[0,0].plot(x_axies, resnet_aa_top1,'co-',label='ResNet-18 + AA')
+    axes[0,0].plot(x_axies, resnet_sna_top1,'ro-',label='ResNet-18 + SNA (Ours)')
+    for a, b in zip(x_axies, resnet_sna_top1):
+        axes[0,0].text(a, b, b, ha='center', va='bottom')
+    axes[0,0].set_xlabel('Batch size')
+    axes[0,0].set_xticks(x_axies)
+    axes[0,0].set_xticklabels(x_ticks)
+    axes[0,0].set_ylabel('Top-1')
+    axes[0,0].set_ylim(74.50,79.50)
+    axes[0,0].grid(b=True, ls=':')
+    axes[0,0].legend(loc = 'lower center') #upper center, lower left
+
+    #plot resnet-top5
+    axes[0,1].plot(x_axies, resnet_top5,'bo-',label='ResNet-18')
+    axes[0,1].plot(x_axies, resnet_se_top5,'go-',label='ResNet-18 + SE')
+    axes[0,1].plot(x_axies, resnet_eca_top5,'yo-',label='ResNet-18 + ECA')
+    axes[0,1].plot(x_axies, resnet_aa_top5,'co-',label='ResNet-18 + AA')
+    axes[0,1].plot(x_axies, resnet_sna_top5,'ro-',label='ResNet-18 + SNA (Ours)')
+    for a, b in zip(x_axies, resnet_sna_top5):
+        axes[0,1].text(a, b, b, ha='center', va='bottom')
+    axes[0,1].set_xlabel('Batch size')
+    axes[0,1].set_xticks(x_axies)
+    axes[0,1].set_xticklabels(x_ticks)
+    axes[0,1].set_ylabel('Top-5')
+    axes[0,1].set_ylim(92, 94.50)
+    axes[0,1].grid(b=True, ls=':')
+    axes[0,1].legend(loc = 'lower center') #upper center, lower left
+
+    #plot densenet-top1
+    axes[1,0].plot(x_axies, densenet_top1,'bo-',label='DenseNet-18')
+    axes[1,0].plot(x_axies, densenet_se_top1,'go-',label='DenseNet-18 + SE')
+    axes[1,0].plot(x_axies, densenet_eca_top1,'yo-',label='DenseNet-18 + ECA')
+    axes[1,0].plot(x_axies, densenet_aa_top1,'co-',label='DenseNet-18 + AA')
+    axes[1,0].plot(x_axies, densenet_sna_top1,'ro-',label='DenseNet-18 + SNA (Ours)')
+    for a, b in zip(x_axies, densenet_sna_top1):
+        axes[1,0].text(a, b, b, ha='center', va='bottom')
+    axes[1,0].set_xlabel('Batch size')
+    axes[1,0].set_xticks(x_axies)
+    axes[1,0].set_xticklabels(x_ticks)
+    axes[1,0].set_ylabel('Top-1')
+    axes[1,0].set_ylim(76.0,81.0)
+    axes[1,0].grid(b=True, ls=':')
+    axes[1,0].legend(loc = 'lower center') #upper center, lower left
+
+    #plot densenet-top5
+    axes[1,1].plot(x_axies, densenet_top5,'bo-',label='DenseNet-18')
+    axes[1,1].plot(x_axies, densenet_se_top5,'go-',label='DenseNet-18 + SE')
+    axes[1,1].plot(x_axies, densenet_eca_top5,'yo-',label='DenseNet-18 + ECA')
+    axes[1,1].plot(x_axies, densenet_aa_top5,'co-',label='DenseNet-18 + AA')
+    axes[1,1].plot(x_axies, densenet_sna_top5,'ro-',label='DenseNet-18 + SNA (Ours)')
+    for a, b in zip(x_axies, densenet_sna_top5):
+        axes[1,1].text(a, b, b, ha='center', va='bottom')
+    axes[1,1].set_xlabel('Batch size')
+    axes[1,1].set_xticks(x_axies)
+    axes[1,1].set_xticklabels(x_ticks)
+    axes[1,1].set_ylabel('Top-5')
+    axes[1,1].set_ylim(92.50, 95.50)
+    axes[1,1].grid(b=True, ls=':')
+    axes[1,1].legend(loc = 'lower center') #upper center, lower left
+
+    #save
+    fig.savefig('/data/pycode/SFSAttention/imgs/cifar_batch.png', dpi=300, bbox_inches='tight')
 
 def main():
-    vis_batch_performance()
+    #vis_batch_performance()
+    vis_batch_performance2()
 
 if __name__ == '__main__':
     main()
