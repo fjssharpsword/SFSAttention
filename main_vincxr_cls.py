@@ -28,16 +28,19 @@ import seaborn as sns
 #define by myself
 from utils.common import count_bytes, compute_AUCs
 from nets.resnet import resnet18
+from nets.vit import ViT
+import nets.deit
+from timm.models import create_model
 from nets.densenet import densenet121
 from dsts.vincxr_cls import get_box_dataloader_VIN
 #config
 os.environ['CUDA_VISIBLE_DEVICES'] = "0,1,2,3,4,5,6,7"
-max_epoches = 50 #30
-BATCH_SIZE = 256 #32*8
+max_epoches = 30
+BATCH_SIZE = 32*8
 CLASS_NAMES = ['No finding', 'Aortic enlargement', 'Atelectasis', 'Calcification','Cardiomegaly', 'Consolidation', 'ILD', 'Infiltration', \
                'Lung Opacity', 'Nodule/Mass', 'Other lesion', 'Pleural effusion', 'Pleural thickening', 'Pneumothorax', 'Pulmonary fibrosis']
-CKPT_PATH = '/data/pycode/SFSAttention/ckpts/vincxr_cls_resnet_sna.pkl'
-#nohup python main_vincxr_cls.py > logs/vincxr_cls_resnet_sna.log 2>&1 &
+CKPT_PATH = '/data/pycode/SFSAttention/ckpts/vincxr_cls_deit.pkl'
+#nohup python main_vincxr_cls.py > logs/vincxr_cls_deit.log 2>&1 &
 def Train():
     print('********************load data********************')
     train_loader = get_box_dataloader_VIN(batch_size=BATCH_SIZE, shuffle=True, num_workers=8)
@@ -47,7 +50,9 @@ def Train():
     print('********************load data succeed!********************')
 
     print('********************load model********************')
-    model = resnet18(pretrained=False, num_classes=len(CLASS_NAMES))
+    #model = resnet18(pretrained=False, num_classes=len(CLASS_NAMES))
+    #model = ViT(image_size = 224, patch_size = 32, num_classes = len(CLASS_NAMES),dim = 1024,depth = 6,heads = 16,mlp_dim = 2048,dropout = 0.1,emb_dropout = 0.1).cuda()
+    model = create_model('deit_tiny_distilled_patch16_224',pretrained=False,num_classes=len(CLASS_NAMES),drop_rate=0.0,drop_path_rate=0.1,drop_block_rate=None).cuda()
     if os.path.exists(CKPT_PATH):
         checkpoint = torch.load(CKPT_PATH)
         model.load_state_dict(checkpoint) #strict=False
@@ -124,7 +129,9 @@ def Test():
     print('********************load data succeed!********************')
 
     print('********************load model********************')
-    model = resnet18(pretrained=False, num_classes=len(CLASS_NAMES)).cuda()
+    #model = resnet18(pretrained=False, num_classes=len(CLASS_NAMES)).cuda()
+    #model = ViT(image_size = 224, patch_size = 32, num_classes = len(CLASS_NAMES),dim = 1024,depth = 6,heads = 16,mlp_dim = 2048,dropout = 0.1,emb_dropout = 0.1).cuda()
+    model = create_model('deit_tiny_distilled_patch16_224',pretrained=False,num_classes=len(CLASS_NAMES),drop_rate=0.0,drop_path_rate=0.1,drop_block_rate=None).cuda()
     if os.path.exists(CKPT_PATH):
         checkpoint = torch.load(CKPT_PATH)
         model.load_state_dict(checkpoint) #strict=False
