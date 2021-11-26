@@ -6,9 +6,10 @@ import numpy as np
 from scipy import linalg as la
 
 #https://github.com/rosinality/glow-pytorch
+#https://openai.com/blog/glow/
+#https://github.com/openai/glow
 
 logabs = lambda x: torch.log(torch.abs(x))
-
 
 class ActNorm(nn.Module):
     def __init__(self, in_channel, logdet=True):
@@ -90,7 +91,7 @@ class InvConv2d(nn.Module):
 class InvConv2dLU(nn.Module):
     def __init__(self, in_channel):
         super().__init__()
-
+        #LU decomposition
         weight = np.random.randn(in_channel, in_channel)
         q, _ = la.qr(weight)
         w_p, w_l, w_u = la.lu(q.astype(np.float32))
@@ -101,7 +102,7 @@ class InvConv2dLU(nn.Module):
 
         w_p = torch.from_numpy(w_p)
         w_l = torch.from_numpy(w_l)
-        w_s = torch.from_numpy(w_s)
+        w_s = torch.from_numpy(np.array(w_s))
         w_u = torch.from_numpy(w_u)
 
         self.register_buffer("w_p", w_p)
@@ -181,7 +182,7 @@ class AffineCoupling(nn.Module):
         if self.affine:
             log_s, t = self.net(in_a).chunk(2, 1)
             # s = torch.exp(log_s)
-            s = F.sigmoid(log_s + 2)
+            s = torch.sigmoid(log_s + 2)#F.sigmoid(log_s + 2)
             # out_a = s * in_a + t
             out_b = (in_b + t) * s
 
@@ -200,7 +201,7 @@ class AffineCoupling(nn.Module):
         if self.affine:
             log_s, t = self.net(out_a).chunk(2, 1)
             # s = torch.exp(log_s)
-            s = F.sigmoid(log_s + 2)
+            s = torch.sigmoid(log_s + 2) #F.sigmoid(log_s + 2)
             # in_a = (out_a - t) / s
             in_b = out_b / s - t
 
@@ -367,7 +368,6 @@ class Glow(nn.Module):
         for i, block in enumerate(self.blocks[::-1]):
             if i == 0:
                 input = block.reverse(z_list[-1], z_list[-1], reconstruct=reconstruct)
-
             else:
                 input = block.reverse(input, z_list[-(i + 1)], reconstruct=reconstruct)
 
