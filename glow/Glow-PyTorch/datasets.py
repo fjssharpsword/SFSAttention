@@ -4,7 +4,8 @@ import torch
 import torch.nn.functional as F
 
 from torchvision import transforms, datasets
-
+from data.CXR import get_box_dataloader_VIN
+from data.Fundus import get_train_dataset_CXR, get_test_dataset_CXR
 n_bits = 8
 
 
@@ -20,7 +21,6 @@ def preprocess(x):
     x = x / n_bins - 0.5
 
     return x
-
 
 def postprocess(x):
     x = torch.clamp(x, -0.5, 0.5)
@@ -79,7 +79,22 @@ def get_CIFAR10(augment, dataroot, download):
 
     return image_shape, num_classes, train_dataset, test_dataset
 
+def get_CXR():
+    image_shape = (112, 112, 3)
+    num_classes = 15
+    train_dataset = get_box_dataloader_VIN(is_train = True)
+    test_dataset = get_box_dataloader_VIN(is_train = False)
+    return image_shape, num_classes, train_dataset, test_dataset
 
+
+def get_Fundus():
+    image_shape = (112, 112, 3)
+    num_classes = 5
+    train_dataset = get_train_dataset_CXR()
+    test_dataset = get_test_dataset_CXR()
+    return image_shape, num_classes, train_dataset, test_dataset
+
+"""
 def get_SVHN(augment, dataroot, download):
     image_shape = (32, 32, 3)
     num_classes = 10
@@ -113,3 +128,4 @@ def get_SVHN(augment, dataroot, download):
     )
 
     return image_shape, num_classes, train_dataset, test_dataset
+"""
