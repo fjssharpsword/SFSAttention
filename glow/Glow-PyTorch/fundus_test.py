@@ -19,8 +19,9 @@ def sample(model, num_classes, batch_size):
     with torch.no_grad():
         if hparams['y_condition']:
             y = torch.eye(num_classes)
-            y = y.repeat(batch_size // num_classes + 1)
-            y = y[:32, :].to(device) # number hardcoded in model for now
+            #y = y.repeat(batch_size // num_classes + 1)
+            #y = y[:32, :].to(device) # number hardcoded in model for now
+            y = y.to(device)
         else:
             y = None
 
@@ -37,7 +38,7 @@ if __name__ == "__main__":
     model = Glow(image_shape, hparams['hidden_channels'], hparams['K'], hparams['L'], hparams['actnorm_scale'],
                 hparams['flow_permutation'], hparams['flow_coupling'], hparams['LU_decomposed'], num_classes,
                 hparams['learn_top'], hparams['y_condition'])
-    model.load_state_dict(torch.load(output_folder + 'glow_checkpoint_16274.pt', map_location={'cuda:7': 'cuda:1'})['model']) #model and optimizer
+    model.load_state_dict(torch.load(output_folder + 'glow_checkpoint_19776.pt', map_location={'cuda:7': 'cuda:1'})['model']) #model and optimizer
     model.set_actnorm_init()
     model = model.to(device)
     model = model.eval()
@@ -46,8 +47,8 @@ if __name__ == "__main__":
     test_loader = data.DataLoader(test_fundus, batch_size=4, shuffle=False,num_workers=0,drop_last=False)
     with torch.no_grad():
         for batch_idx, (img, lbl) in enumerate(test_loader):
-            z_out, _, _ = model(x=img.to(device))
-            img_p = model(z=z_out, temperature=1, reverse=True)
+            z_out, _, _ = model(x=img.to(device), y_onehot=lbl.to(device))
+            img_p = model(z=z_out, y_onehot=lbl.to(device), temperature=1, reverse=True)
             img = torch.cat((img, img_p.cpu().data), 0)
             utils.save_image(
                 img,
@@ -57,7 +58,7 @@ if __name__ == "__main__":
                 range=(-0.5, 0.5),
             )
             break;
-
+    """
     #sample 
     images = sample(model, num_classes, 10)
     grid = make_grid(images[:20], nrow=5).permute(1,2,0)
@@ -65,6 +66,7 @@ if __name__ == "__main__":
     plt.imshow(grid)
     plt.axis('off')
     plt.savefig("/data/pycode/SFSAttention/glow/Glow-PyTorch/logs/fundus_sample.png")
+    """
     """
     #Manipulation in latent space
     x_mdr = torch.FloatTensor() #1
@@ -104,7 +106,7 @@ if __name__ == "__main__":
     with torch.autograd.no_grad():
         for batch_idx, (image, label) in enumerate(train_loader):
             tr_label = torch.cat((tr_label, label), 0)
-            var_feat, _, _ = model(x=image.to(device))
+            var_feat, _, _ = model(x=image.to(device), y_onehot=label.to(device))
             tr_feat = torch.cat((tr_feat, var_feat.cpu().data.view(var_feat.shape[0],-1)), 0)
             sys.stdout.write('\r train set process: = {}'.format(batch_idx + 1))
             sys.stdout.flush()
@@ -115,7 +117,7 @@ if __name__ == "__main__":
     with torch.autograd.no_grad():
         for batch_idx, (image, label) in enumerate(test_loader):
             te_label = torch.cat((te_label, label), 0)
-            var_feat, _, _ = model(x=image.to(device))
+            var_feat, _, _ = model(x=image.to(device), y_onehot=label.to(device))
             te_feat = torch.cat((te_feat, var_feat.cpu().data.view(var_feat.shape[0],-1)), 0)
             sys.stdout.write('\r test set process: = {}'.format(batch_idx + 1))
             sys.stdout.flush()

@@ -10,8 +10,9 @@ from torch import nn, optim
 from torch.autograd import Variable, grad
 from torch.utils.data import DataLoader
 from torchvision import datasets, transforms, utils
+from Glow-PyTorch.data import Fundus
 
-from nets.glow import Glow
+from glow import Glow
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -127,11 +128,11 @@ def train(args, model, optimizer):
                 f"Loss: {loss.item():.5f}; logP: {log_p.item():.5f}; logdet: {log_det.item():.5f}; lr: {warmup_lr:.7f}"
             )
 
-            if i % 100 == 0:
+            if i % 1000 == 0:
                 with torch.no_grad():
                     utils.save_image(
                         model_single.reverse(z_sample).cpu().data,
-                        f"logs/glow/{str(i + 1).zfill(6)}.png",
+                        f"Glow-PyTorch/logs/{str(i + 1).zfill(6)}.png",
                         normalize=True,
                         nrow=10,
                         range=(-0.5, 0.5),
@@ -139,10 +140,10 @@ def train(args, model, optimizer):
 
             if i % 10000 == 0:
                 torch.save(
-                    model.state_dict(), f"ckpts/glow_model_{str(i + 1).zfill(6)}.pt"
+                    model.state_dict(), f"Glow-PyTorch/logs/glow_model_{str(i + 1).zfill(6)}.pt"
                 )
                 torch.save(
-                    optimizer.state_dict(), f"ckpts/glow_optim_{str(i + 1).zfill(6)}.pt"
+                    optimizer.state_dict(), f"Glow-PyTorch/logs/glow_optim_{str(i + 1).zfill(6)}.pt"
                 )
 
 
@@ -160,4 +161,4 @@ if __name__ == "__main__":
 
     train(args, model, optimizer)
 
-    #nohup python main_glow.py > logs/glow/train.log 2>&1 &
+    #nohup python main_glow.py > Glow-PyTorch/logs/train.log 2>&1 &
