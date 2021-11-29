@@ -10,7 +10,7 @@ from torch import nn, optim
 from torch.autograd import Variable, grad
 from torch.utils.data import DataLoader
 from torchvision import datasets, transforms, utils
-from Glow-PyTorch.data import Fundus
+from GlowPyTorch.data import Fundus
 
 from glow import Glow
 
@@ -132,7 +132,7 @@ def train(args, model, optimizer):
                 with torch.no_grad():
                     utils.save_image(
                         model_single.reverse(z_sample).cpu().data,
-                        f"Glow-PyTorch/logs/{str(i + 1).zfill(6)}.png",
+                        f"GlowPyTorch/logs/{str(i + 1).zfill(6)}.png",
                         normalize=True,
                         nrow=10,
                         range=(-0.5, 0.5),
@@ -140,10 +140,10 @@ def train(args, model, optimizer):
 
             if i % 10000 == 0:
                 torch.save(
-                    model.state_dict(), f"Glow-PyTorch/logs/glow_model_{str(i + 1).zfill(6)}.pt"
+                    model.state_dict(), f"GlowPyTorch/logs/glow_model_{str(i + 1).zfill(6)}.pt"
                 )
                 torch.save(
-                    optimizer.state_dict(), f"Glow-PyTorch/logs/glow_optim_{str(i + 1).zfill(6)}.pt"
+                    optimizer.state_dict(), f"GlowPyTorch/logs/glow_optim_{str(i + 1).zfill(6)}.pt"
                 )
 
 
@@ -161,4 +161,4 @@ if __name__ == "__main__":
 
     train(args, model, optimizer)
 
-    #nohup python main_glow.py > Glow-PyTorch/logs/train.log 2>&1 &
+    #nohup python main_glow.py > GlowPyTorch/logs/train.log 2>&1 &
