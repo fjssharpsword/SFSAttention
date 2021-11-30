@@ -40,7 +40,7 @@ def sample_data(path, batch_size, image_size):
         ]
     )
 
-    dataset = datasets.ImageFolder(path, transform=transform)
+    dataset = datasets.ImageFolder(path, transform=transform) #get_train_dataset_CXR()
     loader = DataLoader(dataset, shuffle=True, batch_size=batch_size, num_workers=4)
     loader = iter(loader)
 
