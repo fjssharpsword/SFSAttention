@@ -18,7 +18,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 parser = argparse.ArgumentParser(description="Glow trainer")
 parser.add_argument("--batch", default=16, type=int, help="batch size")
-parser.add_argument("--iter", default=200000, type=int, help="maximum iterations")
+parser.add_argument("--iter", default=100000, type=int, help="maximum iterations") #imagenet-1k:200000
 parser.add_argument("--n_flow", default=32, type=int, help="number of flows in each block")
 parser.add_argument("--n_block", default=4, type=int, help="number of blocks")
 parser.add_argument("--no_lu",action="store_true",help="use plain convolution instead of LU decomposed version",)
@@ -40,7 +40,8 @@ def sample_data(path, batch_size, image_size):
         ]
     )
 
-    dataset = datasets.ImageFolder(path, transform=transform) #get_train_dataset_CXR()
+    #dataset = datasets.ImageFolder(path, transform=transform) #ImageNet-1k
+    dataset = get_train_dataset_CXR()
     loader = DataLoader(dataset, shuffle=True, batch_size=batch_size, num_workers=4)
     loader = iter(loader)
 
@@ -128,7 +129,7 @@ def train(args, model, optimizer):
                 f"Loss: {loss.item():.5f}; logP: {log_p.item():.5f}; logdet: {log_det.item():.5f}; lr: {warmup_lr:.7f}"
             )
 
-            if i % 1000 == 0:
+            if i % 200 == 0:
                 with torch.no_grad():
                     utils.save_image(
                         model_single.reverse(z_sample).cpu().data,
