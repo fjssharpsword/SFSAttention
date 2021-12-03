@@ -10,7 +10,8 @@ from torch import nn, optim
 from torch.autograd import Variable, grad
 from torch.utils.data import DataLoader
 from torchvision import datasets, transforms, utils
-from GlowPyTorch.data import Fundus
+from GlowPyTorch.data.Fundus import get_train_dataset_fundus
+from GlowPyTorch.data.CXR import get_box_dataloader_VIN
 
 from glow import Glow
 
@@ -25,7 +26,7 @@ parser.add_argument("--no_lu",action="store_true",help="use plain convolution in
 parser.add_argument("--affine", action="store_true", help="use affine coupling instead of additive")
 parser.add_argument("--n_bits", default=5, type=int, help="number of bits")
 parser.add_argument("--lr", default=1e-4, type=float, help="learning rate")
-parser.add_argument("--img_size", default=64, type=int, help="image size")
+parser.add_argument("--img_size", default=128, type=int, help="image size") #imagenet-1k:64
 parser.add_argument("--temp", default=0.7, type=float, help="temperature of sampling")
 parser.add_argument("--n_sample", default=20, type=int, help="number of samples")
 parser.add_argument("--path", default = '/data/fjsdata/ImageNet/ILSVRC2012_data/val', type=str, help="Path to image directory") #metavar="PATH"
@@ -41,7 +42,8 @@ def sample_data(path, batch_size, image_size):
     )
 
     #dataset = datasets.ImageFolder(path, transform=transform) #ImageNet-1k
-    dataset = get_train_dataset_CXR()
+    #dataset = get_train_dataset_fundus()
+    dataset = get_box_dataloader_VIN() 
     loader = DataLoader(dataset, shuffle=True, batch_size=batch_size, num_workers=4)
     loader = iter(loader)
 

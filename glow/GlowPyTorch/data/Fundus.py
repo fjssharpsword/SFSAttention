@@ -77,10 +77,10 @@ PATH_TO_IMAGES_DIR_TEST = '/data/fjsdata/fundus/IDRID/BDiseaseGrading/OriginalIm
 PATH_TO_LABELS_DIR_TRAIN = '/data/fjsdata/fundus/IDRID/BDiseaseGrading/Groundtruths/IDRiD_Grading_Training.csv'
 PATH_TO_LABELS_DIR_TEST = '/data/fjsdata/fundus/IDRID/BDiseaseGrading/Groundtruths/IDRiD_Grading_Testing.csv'
 
-def get_train_dataset_CXR():
+def get_train_dataset_fundus():
     dataset_train = DatasetGenerator(path_to_img_dir=PATH_TO_IMAGES_DIR_TRAIN, path_to_lbl_dir=PATH_TO_LABELS_DIR_TRAIN)
     return dataset_train
 
-def get_test_dataset_CXR():
+def get_test_dataset_fundus():
     dataset_test = DatasetGenerator(path_to_img_dir=PATH_TO_IMAGES_DIR_TEST, path_to_lbl_dir=PATH_TO_LABELS_DIR_TEST)
     return dataset_test
