@@ -742,12 +742,13 @@ def g_path_regularize(fake_img, latents, mean_path_length, decay=0.01):
 
 if __name__ == "__main__":
     #for debug  
-    generator = Generator(size=256, style_dim=512, n_mlp=8).cuda()
-    discriminator = Discriminator(size=256).cuda()
+    device = torch.device("cuda:7" if torch.cuda.is_available() else "cpu")
+    generator = Generator(size=256, style_dim=512, n_mlp=8).to(device)
+    discriminator = Discriminator(size=256).to(device)
 
     noises = make_noise(batch=2, latent_dim=512, n_noise=2)
-    fake_img, _ = generator(noises)
-    real_img = torch.rand(2,3,256,256).cuda().requires_grad_()
+    fake_img, out_latent = generator(noises, return_latents=True)
+    real_img = torch.rand(2,3,256,256).to(device).requires_grad_()
     fake_pred = discriminator(fake_img)
     real_pred = discriminator(real_img)
     d_loss = d_logistic_loss(real_pred, fake_pred)
