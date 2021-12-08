@@ -73,14 +73,14 @@ def make_image(tensor):
 
 
 if __name__ == "__main__":
-    device = "cuda"
-
+    device = "cuda:7"
+    root = "/data/pycode/SFSAttention/stylegan/"
     parser = argparse.ArgumentParser(
         description="Image projector to the generator latent spaces"
     )
-    parser.add_argument(
-        "--ckpt", type=str, required=True, help="path to the model checkpoint"
-    )
+    #parser.add_argument(
+    #    "--ckpt", type=str, required=True, help="path to the model checkpoint"
+    #)
     parser.add_argument(
         "--size", type=int, default=256, help="output image sizes of the generator"
     )
@@ -119,9 +119,9 @@ if __name__ == "__main__":
         action="store_true",
         help="allow to use distinct latent codes to each layers",
     )
-    parser.add_argument(
-        "files", metavar="FILES", nargs="+", help="path to image files to be projected"
-    )
+    #parser.add_argument(
+    #    "files", metavar="FILES", nargs="+", help="path to image files to be projected"
+    #)
 
     args = parser.parse_args()
 
@@ -140,26 +140,29 @@ if __name__ == "__main__":
 
     imgs = []
 
-    for imgfile in args.files:
+    #for imgfile in args.files:
+    files = [root+'imgs/IDRiD_098.jpg', root+'imgs/IDRiD_099.jpg']
+    for imgfile in files:
         img = transform(Image.open(imgfile).convert("RGB"))
         imgs.append(img)
 
     imgs = torch.stack(imgs, 0).to(device)
 
     g_ema = Generator(args.size, 512, 8)
-    g_ema.load_state_dict(torch.load(args.ckpt)["g_ema"], strict=False)
+    #g_ema.load_state_dict(torch.load(args.ckpt)["g_ema"], strict=False)
+    g_ema.load_state_dict(torch.load(root+'checkpoint/300000.pt', map_location={'cuda:0': 'cuda:7'})["g_ema"], strict=False)
     g_ema.eval()
     g_ema = g_ema.to(device)
 
     with torch.no_grad():
-        noise_sample = torch.randn(n_mean_latent, 512, device=device)
-        latent_out = g_ema.style(noise_sample)
+        noise_sample = torch.randn(n_mean_latent, 512, device=device) #generate z of 10000 with 512 lengths
+        latent_out = g_ema.style(noise_sample) #FC layer, turn to style vectors
 
         latent_mean = latent_out.mean(0)
         latent_std = ((latent_out - latent_mean).pow(2).sum() / n_mean_latent) ** 0.5
 
     percept = lpips.PerceptualLoss(
-        model="net-lin", net="vgg", use_gpu=device.startswith("cuda")
+        model="net-lin", net="vgg", use_gpu=device.startswith("cuda"), gpu_ids=[7]
     )
 
     noises_single = g_ema.make_noise()
@@ -225,12 +228,13 @@ if __name__ == "__main__":
 
     img_gen, _ = g_ema([latent_path[-1]], input_is_latent=True, noise=noises)
 
-    filename = os.path.splitext(os.path.basename(args.files[0]))[0] + ".pt"
+    #filename = os.path.splitext(os.path.basename(args.files[0]))[0] + ".pt"
+    filename = root+'imgs/' + os.path.splitext(os.path.basename(files[0]))[0] + ".pt"
 
     img_ar = make_image(img_gen)
 
     result_file = {}
-    for i, input_name in enumerate(args.files):
+    for i, input_name in enumerate(files):
         noise_single = []
         for noise in noises:
             noise_single.append(noise[i : i + 1])
@@ -243,8 +247,8 @@ if __name__ == "__main__":
 
         img_name = os.path.splitext(os.path.basename(input_name))[0] + "-project.png"
         pil_img = Image.fromarray(img_ar[i])
-        pil_img.save(img_name)
+        pil_img.save(root+'imgs/' + img_name)
 
     torch.save(result_file, filename)
 
-    #python projector.py --ckpt checkpoint/009000.pt imgs/IDRiD_098.jpg imgs/IDRiD_099.jpg
+    #python projector.py --ckpt checkpoint/300000.pt imgs/IDRiD_098.jpg imgs/IDRiD_099.jpg
