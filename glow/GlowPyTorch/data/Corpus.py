@@ -48,6 +48,10 @@ class DatasetGenerator(Dataset):
         if mel_length > self.max_mel_length:
             random_start = np.random.randint(0, mel_length - self.max_mel_length)
             mel_tensor = mel_tensor[:, :, random_start:random_start + self.max_mel_length]
+        if mel_length < self.max_mel_length:#interpolation
+            mel_tensor = mel_tensor.repeat(1, 1, int(self.max_mel_length/mel_length)+1)
+            mel_tensor = mel_tensor[:, :, 0:self.max_mel_length]          
+
         return mel_tensor
 
     def __getitem__(self, index):

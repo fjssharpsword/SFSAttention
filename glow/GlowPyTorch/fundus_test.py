@@ -13,7 +13,7 @@ from datasets import get_CIFAR10, get_Fundus, postprocess
 from model import Glow
 
 device = "cpu" if (not torch.cuda.is_available())  else "cuda:2"
-output_folder = "/data/pycode/SFSAttention/glow/Glow-PyTorch/output/"
+output_folder = "/data/pycode/SFSAttention/glow/GlowPyTorch/output/"
 
 def sample(model, num_classes, batch_size):
     with torch.no_grad():

@@ -433,7 +433,7 @@ if __name__ == "__main__":
 
     parser.add_argument(
         "--output_dir",
-        default="/data/pycode/SFSAttention/glow/Glow-PyTorch/output/",
+        default="/data/pycode/SFSAttention/glow/GlowPyTorch/output/",
         help="Directory to output logs and model checkpoints",
     )
 
