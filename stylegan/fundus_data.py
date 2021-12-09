@@ -67,8 +67,7 @@ class DatasetGenerator(Dataset):
         label = self.label_list[index]
         label = torch.as_tensor(label, dtype=torch.float32)
   
-        #return image, label
-        return image
+        return image, label
 
     def __len__(self):
         return len(self.image_list)

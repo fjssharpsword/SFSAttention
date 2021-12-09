@@ -1,11 +1,13 @@
 from pathlib import Path
-
+import torchvision.datasets as dset
 import torch
 import torch.nn.functional as F
-
+import torchaudio
+import librosa
 from torchvision import transforms, datasets
 from data.CXR import get_box_dataloader_VIN
-from data.Fundus import get_train_dataset_CXR, get_test_dataset_CXR
+from data.Fundus import get_train_dataset_fundus, get_test_dataset_fundus
+from data.Corpus import get_train_dataset_corpus
 n_bits = 8
 
 
@@ -92,6 +94,13 @@ def get_Fundus():
     num_classes = 5
     train_dataset = get_train_dataset_CXR()
     test_dataset = get_test_dataset_CXR()
+    return image_shape, num_classes, train_dataset, test_dataset
+
+def get_corpus():
+    image_shape = (80, 192, 1)
+    num_classes = 20
+    train_dataset = get_train_dataset_corpus()
+    test_dataset = get_train_dataset_corpus()
     return image_shape, num_classes, train_dataset, test_dataset
 
 """

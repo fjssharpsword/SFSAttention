@@ -141,7 +141,7 @@ if __name__ == "__main__":
     imgs = []
 
     #for imgfile in args.files:
-    files = [root+'imgs/IDRiD_098.jpg', root+'imgs/IDRiD_099.jpg']
+    files = [root+'imgs/IDRiD_81.jpg']#[root+'imgs/IDRiD_098.jpg', root+'imgs/IDRiD_099.jpg']
     for imgfile in files:
         img = transform(Image.open(imgfile).convert("RGB"))
         imgs.append(img)
@@ -150,7 +150,7 @@ if __name__ == "__main__":
 
     g_ema = Generator(args.size, 512, 8)
     #g_ema.load_state_dict(torch.load(args.ckpt)["g_ema"], strict=False)
-    g_ema.load_state_dict(torch.load(root+'checkpoint/300000.pt', map_location={'cuda:0': 'cuda:7'})["g_ema"], strict=False)
+    g_ema.load_state_dict(torch.load(root+'checkpoint/400000.pt', map_location={'cuda:0': 'cuda:7'})["g_ema"], strict=False)
     g_ema.eval()
     g_ema = g_ema.to(device)
 
