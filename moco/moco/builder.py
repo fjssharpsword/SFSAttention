@@ -6,7 +6,8 @@
 
 import torch
 import torch.nn as nn
-
+from functools import partial
+import torchvision.models as torchvision_models
 
 class MoCo(nn.Module):
     """
@@ -135,3 +136,11 @@ def concat_all_gather(tensor):
 
     output = torch.cat(tensors_gather, dim=0)
     return output
+
+if __name__ == '__main__':
+    model = MoCo_ResNet(
+            partial(torchvision_models.__dict__['resnet50'], zero_init_residual=True), 
+            256, 4096, 1.0).cuda()
+    x = torch.rand(2, 3, 224, 224).cuda()
+    out = model.base_encoder(x)
+    print(out.shape)
