@@ -308,7 +308,7 @@ def main_worker(gpu, ngpus_per_node, args):
 
         if not args.multiprocessing_distributed or (args.multiprocessing_distributed
                 and args.rank == 0): # only the first GPU saves checkpoint
-            if epoch % 50 == 0:
+            if (epoch+1) % 50 == 0:
                 save_checkpoint({
                     'epoch': epoch + 1,
                     'arch': args.arch,
