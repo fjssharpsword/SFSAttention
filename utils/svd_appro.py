@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 from PIL import Image
 import seaborn as sns
 import random
+import matplotlib.patches as patches
 
 def power_iteration(W, eps=1e-10):
         """
@@ -333,10 +334,17 @@ def plot_svd_compression2():
     plt.savefig('/data/pycode/SFSAttention/imgs/svd.png', dpi=300, bbox_inches='tight')
 
 def plot_svd_shift():
-    NATURAL_IMG_PATH = '/data/fjsdata/ImageNet/ILSVRC2012_data/val/n02129165/ILSVRC2012_val_00003788.JPEG'
-    MEDICAL_IMG_PATH = '/data/fjsdata/Vin-CXR/train_val_jpg/afb6230703512afc370f236e8fe98806.jpeg'
+    NATURAL_IMG_PATH = '/data/fjsdata/ImageNet/ILSVRC2012_data/val/n02129165/ILSVRC2012_val_00011018.JPEG' # n02129165/ILSVRC2012_val_00003788.JPEG
+    #afb6230703512afc370f236e8fe98806.jpeg; fff2025e3c1d6970a8a6ee0404ac6940ljpeg
+    #ecef71a87df9aee5cca62966f95d9f26,Cardiomegaly,3,R10,1089.0,1522.0,2345.0,1906.0
+    #7c6bf9b40c9b53c6b49b00c0fa1e61e5, Aortic enlargement,0,R9,1588.0,824.0,1912.0,1227.0
+    MEDICAL_IMG_PATH = '/data/fjsdata/Vin-CXR/train_val_jpg/ecef71a87df9aee5cca62966f95d9f26.jpeg' #
+    box = [1588.0,824.0,1912.0,1227.0]
+    class_name = 'Aortic enlargement'
     natural_img = cv2.imread(NATURAL_IMG_PATH, cv2.IMREAD_GRAYSCALE)
+    print(natural_img.shape)
     medical_img = cv2.imread(MEDICAL_IMG_PATH, cv2.IMREAD_GRAYSCALE)
+    print(medical_img.shape)
 
     fig, axes = plt.subplots(2,3, constrained_layout=True, figsize=(12,8))#
 
@@ -347,6 +355,9 @@ def plot_svd_shift():
     axes[0,0].set_title('(a)')#Natural Image (280, 415)
     #row 2: medical image
     axes[1,0].imshow(medical_img, aspect="auto",cmap='gray')
+    rect = patches.Rectangle((box[0], box[1]), box[2]-box[0], box[3]-box[1], linewidth=2, edgecolor='r', facecolor='none')
+    axes[1,0].add_patch(rect)# add groundtruth
+    axes[1,0].text(box[0]-20, box[1]-5, class_name)
     axes[1,0].axis('off')
 
     #column 2
@@ -387,6 +398,9 @@ def plot_svd_shift():
     #row 2: medical image k=30
     img_com = svd_compression(medical_img, k=30)
     axes[1,2].imshow(img_com, aspect="auto",cmap='gray')
+    rect = patches.Rectangle((box[0], box[1]), box[2]-box[0], box[3]-box[1], linewidth=2, edgecolor='r', facecolor='none')
+    axes[1,2].add_patch(rect)# add groundtruth
+    axes[1,2].text(box[0]-20, box[1]-5, class_name)
     axes[1,2].axis('off')
 
     """
@@ -488,7 +502,7 @@ def plot_svd_shift():
         axes[1,5+i].axis('off')
     """
     #save
-    fig.savefig('/data/pycode/SFSAttention/imgs/img_com.png', dpi=300, bbox_inches='tight')
+    fig.savefig('/data/pycode/SFSAttention/imgs/img_com_sfconv.png', dpi=300, bbox_inches='tight')
 
 if __name__ == "__main__":
     """
