@@ -131,7 +131,8 @@ def vis_batch_performance():
 
 def vis_batch_performance2():
     
-    x_ticks = ['8', '16', '32', '64', '128'] #x_axies
+    #x_ticks = ['8', '16', '32', '64', '128'] #x_axies
+    x_ticks = ['1', '2', '4', '8', '16']
     x_axies = np.arange(len(x_ticks))
 
     #ResNet-top1
@@ -174,7 +175,7 @@ def vis_batch_performance2():
     axes[0,0].plot(x_axies, resnet_sna_top1,'ro-',label='ResNet-18 + SNA (Ours)')
     for a, b in zip(x_axies, resnet_sna_top1):
         axes[0,0].text(a, b, b, ha='center', va='bottom')
-    axes[0,0].set_xlabel('Batch size')
+    axes[0,0].set_xlabel('Number of non-zero singular value')
     axes[0,0].set_xticks(x_axies)
     axes[0,0].set_xticklabels(x_ticks)
     axes[0,0].set_ylabel('Top-1')
@@ -190,7 +191,7 @@ def vis_batch_performance2():
     axes[0,1].plot(x_axies, resnet_sna_top5,'ro-',label='ResNet-18 + SNA (Ours)')
     for a, b in zip(x_axies, resnet_sna_top5):
         axes[0,1].text(a, b, b, ha='center', va='bottom')
-    axes[0,1].set_xlabel('Batch size')
+    axes[0,1].set_xlabel('Number of non-zero singular value')
     axes[0,1].set_xticks(x_axies)
     axes[0,1].set_xticklabels(x_ticks)
     axes[0,1].set_ylabel('Top-5')
@@ -206,7 +207,7 @@ def vis_batch_performance2():
     axes[1,0].plot(x_axies, densenet_sna_top1,'ro-',label='DenseNet-18 + SNA (Ours)')
     for a, b in zip(x_axies, densenet_sna_top1):
         axes[1,0].text(a, b, b, ha='center', va='bottom')
-    axes[1,0].set_xlabel('Batch size')
+    axes[1,0].set_xlabel('Number of non-zero singular value')
     axes[1,0].set_xticks(x_axies)
     axes[1,0].set_xticklabels(x_ticks)
     axes[1,0].set_ylabel('Top-1')
@@ -222,7 +223,7 @@ def vis_batch_performance2():
     axes[1,1].plot(x_axies, densenet_sna_top5,'ro-',label='DenseNet-18 + SNA (Ours)')
     for a, b in zip(x_axies, densenet_sna_top5):
         axes[1,1].text(a, b, b, ha='center', va='bottom')
-    axes[1,1].set_xlabel('Batch size')
+    axes[1,1].set_xlabel('Number of non-zero singular value')
     axes[1,1].set_xticks(x_axies)
     axes[1,1].set_xticklabels(x_ticks)
     axes[1,1].set_ylabel('Top-5')
