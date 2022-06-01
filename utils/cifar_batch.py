@@ -140,14 +140,14 @@ def vis_batch_performance2():
     resnet_se_top1 = [77.38, 78.04, 77.71, 76.81, 75.01]
     resnet_eca_top1 = [77.71, 78.23, 78.12, 77.09, 75.42]
     resnet_aa_top1 = [77.94, 78.37, 78.26, 77.12, 75.53]
-    resnet_sna_top1 = [78.38, 79.17, 78.44, 77.29, 75.87]
+    resnet_sna_top1 = [79.17, 79.38, 78.44, 77.29, 75.87]
 
     #ResNet-top5
     resnet_top5 = [93.13, 93.69, 93.60, 93.50, 92.23] #y_axies
     resnet_se_top5 = [93.11, 93.65, 93.64, 93.42, 92.20]
     resnet_eca_top5 = [93.19, 93.91, 93.70, 93.43, 92.35]
     resnet_aa_top5 = [93.32, 93.76, 93.54, 93.39, 92.31]
-    resnet_sna_top5 = [93.67, 94.13, 93.99, 93.86, 92.58]
+    resnet_sna_top5 = [94.13, 94.67, 93.99, 93.86, 92.58]
 
 
     #DenseNet-top1
@@ -155,14 +155,14 @@ def vis_batch_performance2():
     densenet_se_top1 = [77.02, 79.84, 78.43, 77.91, 76.97]
     densenet_eca_top1 = [77.23, 79.93, 78.61, 78.05, 77.12]
     densenet_aa_top1 = [77.51, 80.06, 78.73, 78.38, 77.40]
-    densenet_sna_top1 = [78.04, 80.81, 78.74, 78.36, 77.86]
+    densenet_sna_top1 = [80.81, 81.04, 78.74, 78.36, 77.86]
 
     #DenseNet-top5
     densenet_top5 = [93.69, 94.83, 94.57, 93.76, 93.06] #y_axies
     densenet_se_top5 = [93.57, 94.79, 94.55, 93.79, 93.11]
     densenet_eca_top5 = [93.81, 94.91, 94.63, 93.81, 93.24]
     densenet_aa_top5 = [93.87, 95.03, 94.71, 93.90, 93.35]
-    densenet_sna_top5 = [94.08, 95.20, 94.88, 94.02, 93.51]
+    densenet_sna_top5 = [95.20, 96.08, 94.88, 94.02, 93.51]
 
 
     fig, axes = plt.subplots(2, 2, constrained_layout=True, figsize=(10,6)) #
@@ -175,7 +175,7 @@ def vis_batch_performance2():
     axes[0,0].plot(x_axies, resnet_sna_top1,'ro-',label='ResNet-18 + SNA (Ours)')
     for a, b in zip(x_axies, resnet_sna_top1):
         axes[0,0].text(a, b, b, ha='center', va='bottom')
-    axes[0,0].set_xlabel('Number of non-zero singular value')
+    axes[0,0].set_xlabel('Rank-k singular value')
     axes[0,0].set_xticks(x_axies)
     axes[0,0].set_xticklabels(x_ticks)
     axes[0,0].set_ylabel('Top-1')
@@ -191,7 +191,7 @@ def vis_batch_performance2():
     axes[0,1].plot(x_axies, resnet_sna_top5,'ro-',label='ResNet-18 + SNA (Ours)')
     for a, b in zip(x_axies, resnet_sna_top5):
         axes[0,1].text(a, b, b, ha='center', va='bottom')
-    axes[0,1].set_xlabel('Number of non-zero singular value')
+    axes[0,1].set_xlabel('Rank-k singular value')
     axes[0,1].set_xticks(x_axies)
     axes[0,1].set_xticklabels(x_ticks)
     axes[0,1].set_ylabel('Top-5')
@@ -207,7 +207,7 @@ def vis_batch_performance2():
     axes[1,0].plot(x_axies, densenet_sna_top1,'ro-',label='DenseNet-18 + SNA (Ours)')
     for a, b in zip(x_axies, densenet_sna_top1):
         axes[1,0].text(a, b, b, ha='center', va='bottom')
-    axes[1,0].set_xlabel('Number of non-zero singular value')
+    axes[1,0].set_xlabel('Rank-k singular value')
     axes[1,0].set_xticks(x_axies)
     axes[1,0].set_xticklabels(x_ticks)
     axes[1,0].set_ylabel('Top-1')
@@ -223,7 +223,7 @@ def vis_batch_performance2():
     axes[1,1].plot(x_axies, densenet_sna_top5,'ro-',label='DenseNet-18 + SNA (Ours)')
     for a, b in zip(x_axies, densenet_sna_top5):
         axes[1,1].text(a, b, b, ha='center', va='bottom')
-    axes[1,1].set_xlabel('Number of non-zero singular value')
+    axes[1,1].set_xlabel('Rank-k singular value')
     axes[1,1].set_xticks(x_axies)
     axes[1,1].set_xticklabels(x_ticks)
     axes[1,1].set_ylabel('Top-5')
@@ -232,11 +232,65 @@ def vis_batch_performance2():
     axes[1,1].legend(loc = 'lower center') #upper center, lower left
 
     #save
-    fig.savefig('/data/pycode/SFSAttention/imgs/cifar_batch.png', dpi=300, bbox_inches='tight')
+    fig.savefig('/data/pycode/SFSAttention/imgs/cifar_sv.png', dpi=300, bbox_inches='tight')
+
+def vis_batch_performance3():
+    
+    #x_ticks = ['8', '16', '32', '64', '128'] #x_axies
+    x_ticks = ['1', '2', '4', '8', '16']
+    x_axies = np.arange(len(x_ticks))
+
+    #ResNet-top1
+    resnet_sna_top1 = [79.17, 79.38, 78.44, 77.29, 75.87]
+    #ResNet-top5
+    resnet_sna_top5 = [94.13, 94.67, 93.99, 93.86, 92.58]
+
+    #DenseNet-top1
+    densenet_sna_top1 = [80.81, 81.04, 78.74, 78.36, 77.86]
+
+    #DenseNet-top5
+    densenet_sna_top5 = [95.20, 95.79, 94.88, 94.02, 93.51]
+
+
+    fig, axes = plt.subplots(1, 2, constrained_layout=True, figsize=(10,5)) #
+
+    #plot top1
+    axes[0].plot(x_axies, resnet_sna_top1,'bo-',label='ResNet-18')
+    axes[0].plot(x_axies, densenet_sna_top1,'yo-',label='DenseNet-121')
+    for a, b in zip(x_axies, resnet_sna_top1):
+        axes[0].text(a, b, b, ha='center', va='bottom')
+    for a, b in zip(x_axies, densenet_sna_top1):
+        axes[0].text(a, b, b, ha='center', va='bottom')
+    axes[0].set_xlabel('Rank-k singular value')
+    axes[0].set_xticks(x_axies)
+    axes[0].set_xticklabels(x_ticks)
+    axes[0].set_ylabel('Top-1 accuracy')
+    axes[0].set_ylim(75.00, 82.00)
+    axes[0].grid(b=True, ls=':')
+    axes[0].legend(loc = 'lower center') #upper center, lower left
+
+    #plot top1
+    axes[1].plot(x_axies, resnet_sna_top5,'bo-',label='ResNet-18')
+    axes[1].plot(x_axies, densenet_sna_top5,'yo-',label='DenseNet-121')
+    for a, b in zip(x_axies, resnet_sna_top5):
+        axes[1].text(a, b, b, ha='center', va='bottom')
+    for a, b in zip(x_axies, densenet_sna_top5):
+        axes[1].text(a, b, b, ha='center', va='bottom')
+    axes[1].set_xlabel('Rank-k singular value')
+    axes[1].set_xticks(x_axies)
+    axes[1].set_xticklabels(x_ticks)
+    axes[1].set_ylabel('Top-5 accuracy')
+    axes[1].set_ylim(92.00, 96.00)
+    axes[1].grid(b=True, ls=':')
+    axes[1].legend(loc = 'lower center') #upper center, lower left
+
+    #save
+    fig.savefig('/data/pycode/SFSAttention/imgs/cifar_sv.png', dpi=300, bbox_inches='tight')
 
 def main():
     #vis_batch_performance()
-    vis_batch_performance2()
+    #vis_batch_performance2()
+    vis_batch_performance3()
 
 if __name__ == '__main__':
     main()
