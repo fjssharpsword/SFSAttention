@@ -83,7 +83,7 @@ def Train():
     print('********************load model succeed!********************')
 
     print('********************begin training!********************')
-    #log_writer = SummaryWriter('/data/tmpexec/tensorboard-log') #--port 10002, start tensorboard
+    #log_writer = SummaryWriter('/data/tmpexec/tb-log') #--port 10002, start tensorboard
     acc_min = 0.50 #float('inf')
     for epoch in range(max_epoches):
         since = time.time()
