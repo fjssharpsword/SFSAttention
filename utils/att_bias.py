@@ -126,7 +126,5 @@ if __name__ == "__main__":
     #sa = SpatialAttention().cuda()
     #out = sa(x)
     #print(out.shape)
-    attention_bias()
-
-
-
+    #attention_bias()
+    print(torch.version.cuda)

@@ -343,8 +343,10 @@ def plot_svd_shift():
     class_name = 'Aortic enlargement'
     natural_img = cv2.imread(NATURAL_IMG_PATH, cv2.IMREAD_GRAYSCALE)
     print(natural_img.shape)
+    #print(np.var(natural_img.flatten()))
     medical_img = cv2.imread(MEDICAL_IMG_PATH, cv2.IMREAD_GRAYSCALE)
     print(medical_img.shape)
+    #print(np.var(medical_img.flatten()))
 
     fig, axes = plt.subplots(2,3, constrained_layout=True, figsize=(12,8))#
 

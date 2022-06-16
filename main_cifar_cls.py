@@ -33,7 +33,7 @@ from nets.densenet import densenet121
 from nets.mobilenetv3 import mobilenet_v3_small
 from nets.efficient.model import EfficientNet
 #config
-os.environ['CUDA_VISIBLE_DEVICES'] = "0,1,2,3,4,5,6,7"
+os.environ['CUDA_VISIBLE_DEVICES'] = "0,1,2,3,4,5"
 max_epoches = 100 #200
 batch_size = 64 #[8*8, 16*8, 32*8, 64*8, 128*8]
 CKPT_PATH = '/data/pycode/SFSAttention/ckpts/cifar100_densenet_sna_8.pkl'
@@ -92,7 +92,7 @@ def Train():
     print('********************load model succeed!********************')
 
     print('********************begin training!********************')
-    #log_writer = SummaryWriter('/data/tmpexec/tensorboard-log') #--port 10002, start tensorboard
+    #log_writer = SummaryWriter('/data/tmpexec/tb-log') #--port 10002, start tensorboard
     acc_min = 0.50 #float('inf')
     for epoch in range(max_epoches):
         since = time.time()
@@ -226,7 +226,7 @@ def Test():
     print("\r Top-5 ACC/CI = %.4f/%.4f" % (acc, ci) )
 
 def main():
-    #Train()
+    Train()
     Test()
 
 if __name__ == '__main__':
