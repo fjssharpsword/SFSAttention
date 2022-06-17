@@ -128,3 +128,5 @@ if __name__ == "__main__":
     #print(out.shape)
     #attention_bias()
     print(torch.version.cuda)
+    print(torch.cuda.is_available())
+    print(torch.cuda.device_count())

@@ -4,6 +4,7 @@ Training implementation for CIFAR100 dataset
 Author: Jason.Fang
 Update time: 16/08/2021
 """
+import pdb
 import re
 import sys
 import os
@@ -33,11 +34,12 @@ from nets.densenet import densenet121
 from nets.mobilenetv3 import mobilenet_v3_small
 from nets.efficient.model import EfficientNet
 #config
-os.environ['CUDA_VISIBLE_DEVICES'] = "0,1,2,3,4,5"
+#os.environ['CUDA_VISIBLE_DEVICES'] = "0,1,2,3,4,5"
+os.environ['CUDA_VISIBLE_DEVICES'] = "0"
 max_epoches = 100 #200
-batch_size = 64 #[8*8, 16*8, 32*8, 64*8, 128*8]
+batch_size = 6*8 #[8*8, 16*8, 32*8, 64*8, 128*8]
 CKPT_PATH = '/data/pycode/SFSAttention/ckpts/cifar100_densenet_sna_8.pkl'
-#nohup python main_cifar_cls.py > logs/cifar100_densenet_sna_8.log 2>&1 &
+#nohup python3 main_cifar_cls.py > logs/cifar100_densenet_sna_8.log 2>&1 &
 #https://pytorch.org/tutorials/beginner/blitz/cifar10_tutorial.html
 def Train():
     print('********************load data********************')
@@ -92,7 +94,7 @@ def Train():
     print('********************load model succeed!********************')
 
     print('********************begin training!********************')
-    #log_writer = SummaryWriter('/data/tmpexec/tb-log') #--port 10002, start tensorboard
+    log_writer = SummaryWriter('/data/tmpexec/tb_log') #--port 10002, start tensorboard
     acc_min = 0.50 #float('inf')
     for epoch in range(max_epoches):
         since = time.time()
@@ -103,6 +105,7 @@ def Train():
         with torch.autograd.enable_grad():
             for batch_idx, (img, lbl) in enumerate(train_loader):
                 #forward
+                #pdb.set_trace()
                 var_image = torch.autograd.Variable(img).cuda()
                 var_label = torch.autograd.Variable(lbl).cuda()
                 var_out = model(var_image)
@@ -146,10 +149,9 @@ def Train():
 
         time_elapsed = time.time() - since
         print('Training epoch: {} completed in {:.0f}m {:.0f}s'.format(epoch+1, time_elapsed // 60 , time_elapsed % 60))
-        #log_writer.add_scalars('CrossEntropyLoss/CIFAR100-ResNet-SFConv', {'Train':np.mean(loss_train), 'Test':np.mean(loss_test)}, epoch+1)
-    #log_writer.close() #shut up the tensorboard
+        log_writer.add_scalars('CrossEntropyLoss/CIFAR100-ResNet-SFConv', {'Train':np.mean(loss_train), 'Test':np.mean(loss_test)}, epoch+1)
+    log_writer.close() #shut up the tensorboard
         
-
 def Test():
     print('********************load data********************')
     root = '/data/tmpexec/cifar'
