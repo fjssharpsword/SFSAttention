@@ -34,8 +34,8 @@ from nets.densenet import densenet121
 from nets.mobilenetv3 import mobilenet_v3_small
 from nets.efficient.model import EfficientNet
 #config
-#os.environ['CUDA_VISIBLE_DEVICES'] = "0,1,2,3,4,5"
-os.environ['CUDA_VISIBLE_DEVICES'] = "0"
+os.environ['CUDA_VISIBLE_DEVICES'] = "0,1,2,3,4,5"
+#os.environ['CUDA_VISIBLE_DEVICES'] = "0"
 max_epoches = 100 #200
 batch_size = 6*8 #[8*8, 16*8, 32*8, 64*8, 128*8]
 CKPT_PATH = '/data/pycode/SFSAttention/ckpts/cifar100_densenet_sna_8.pkl'
