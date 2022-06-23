@@ -248,7 +248,7 @@ def Test():
 
 def main():
     Train()
-    Test()
+    Test() 
 
 if __name__ == '__main__':
     main()
