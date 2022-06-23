@@ -201,15 +201,15 @@ class ResNet(nn.Module):
         self.groups = groups
         self.base_width = width_per_group
 
-        self.conv1 = nn.Conv2d(3, self.inplanes, kernel_size=7, stride=2, padding=3, bias=False)#imagenet-1k
-        #self.conv1 = nn.Conv2d(3, self.inplanes, kernel_size=3, stride=1, padding=1, bias=False)#cifar100
+        #self.conv1 = nn.Conv2d(3, self.inplanes, kernel_size=7, stride=2, padding=3, bias=False)#imagenet-1k
+        self.conv1 = nn.Conv2d(3, self.inplanes, kernel_size=3, stride=1, padding=1, bias=False)#cifar100
 
         self.bn1 = norm_layer(self.inplanes)
         self.relu = nn.ReLU(inplace=True)
 
-        self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)#unused for cifar100
+        #self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)#unused for cifar100
 
-        self.attlayer = SNALayer(channels=self.inplanes) #attention layer
+        #self.attlayer = SNALayer(channels=self.inplanes) #attention layer
 
         self.layer1 = self._make_layer(block, 64, layers[0])
         self.layer2 = self._make_layer(block, 128, layers[1], stride=2,
@@ -270,10 +270,10 @@ class ResNet(nn.Module):
         x = self.conv1(x)
         x = self.bn1(x)
         x = self.relu(x)
-        x = self.maxpool(x)#unused for cifar100
+        #x = self.maxpool(x)#unused for cifar100
 
         #np.save('/data/pycode/SFSAttention/logs/cxr_cls_resnet/resnet_sna_fea_before.npy',x.cpu().numpy()) 
-        x = self.attlayer(x) #attention layer
+        #x = self.attlayer(x) #attention layer
         #np.save('/data/pycode/SFSAttention/logs/cxr_cls_resnet/resnet_sna_fea_after.npy',x.cpu().numpy()) 
         
         x = self.layer1(x)

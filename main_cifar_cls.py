@@ -35,11 +35,10 @@ from nets.mobilenetv3 import mobilenet_v3_small
 from nets.efficient.model import EfficientNet
 #config
 os.environ['CUDA_VISIBLE_DEVICES'] = "0,1,2,3,4,5"
-#os.environ['CUDA_VISIBLE_DEVICES'] = "0"
-max_epoches = 100 #200
-batch_size = 6*8 #[8*8, 16*8, 32*8, 64*8, 128*8]
-CKPT_PATH = '/data/pycode/SFSAttention/ckpts/cifar100_densenet_sna_8.pkl'
-#nohup python3 main_cifar_cls.py > logs/cifar100_densenet_sna_8.log 2>&1 &
+max_epoches = 50 #200
+batch_size = 6*32 #[8*8, 16*8, 32*8, 64*8, 128*8]
+CKPT_PATH = '/data/pycode/SFSAttention/ckpts/cifar_resnet.pkl'
+#nohup python3 main_cifar_cls.py > logs/cifar_resnet.log 2>&1 &
 #https://pytorch.org/tutorials/beginner/blitz/cifar10_tutorial.html
 def Train():
     print('********************load data********************')
@@ -78,7 +77,8 @@ def Train():
     print('********************load data succeed!********************')
 
     print('********************load model********************')
-    model = densenet121(pretrained=False, num_classes=100)
+    model = resnet18(pretrained=False, num_classes=100)
+    #model = densenet121(pretrained=False, num_classes=100)
     #model = EfficientNet.from_name('efficientnet-b0', in_channels=3, num_classes=100)
     if os.path.exists(CKPT_PATH):
         checkpoint = torch.load(CKPT_PATH)
@@ -147,9 +147,17 @@ def Train():
             torch.save(model.module.state_dict(), CKPT_PATH) #Saving torch.nn.DataParallel Models
             print(' Epoch: {} model has been already save!'.format(epoch + 1))
 
+        #print the histogram
+        if (epoch+1)==1 or (epoch+1) % 10 == 0:
+            for name, param in model.named_parameters():
+                if "conv" in name:
+                    log_writer.add_histogram(name + '_data', param.clone().cpu().data.numpy(), epoch+1)
+                    if param.grad is not None: #leaf node in the graph retain gradient
+                        log_writer.add_histogram(name + '_grad', param.grad, epoch+1)
+
         time_elapsed = time.time() - since
         print('Training epoch: {} completed in {:.0f}m {:.0f}s'.format(epoch+1, time_elapsed // 60 , time_elapsed % 60))
-        log_writer.add_scalars('CrossEntropyLoss/CIFAR100-ResNet-SFConv', {'Train':np.mean(loss_train), 'Test':np.mean(loss_test)}, epoch+1)
+        log_writer.add_scalars('CELoss/CIFAR100-ResNet', {'Train':np.mean(loss_train), 'Test':np.mean(loss_test)}, epoch+1)
     log_writer.close() #shut up the tensorboard
         
 def Test():
@@ -172,7 +180,15 @@ def Test():
     print('********************load data succeed!********************')
 
     print('********************load model********************')
-    model = densenet121(pretrained=False, num_classes=100).cuda()
+    model = resnet18(pretrained=False, num_classes=100).cuda()
+    """
+    param_size = 0
+    for name, param in model.named_parameters():
+        if param.requires_grad:
+            print(name,'---', param.size())
+            param_size = param_size + param.numel()
+    """
+    #model = densenet121(pretrained=False, num_classes=100).cuda()
     #model = EfficientNet.from_name('efficientnet-b0', in_channels=3, num_classes=100).cuda()
     if os.path.exists(CKPT_PATH):
         checkpoint = torch.load(CKPT_PATH)
