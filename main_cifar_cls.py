@@ -95,6 +95,7 @@ def Train():
 
     print('********************begin training!********************')
     log_writer = SummaryWriter('/data/tmpexec/tb_log') #--port 10002, start tensorboard
+    #log_writer.add_graph(model) #plot network 
     acc_min = 0.50 #float('inf')
     for epoch in range(max_epoches):
         since = time.time()
@@ -109,6 +110,8 @@ def Train():
                 var_image = torch.autograd.Variable(img).cuda()
                 var_label = torch.autograd.Variable(lbl).cuda()
                 var_out = model(var_image)
+                #log_writer.add_embedding(var_out.cpu().data) #embedding
+                #log_writer.close()
                 # backward and update parameters
                 optimizer_model.zero_grad()
                 loss_tensor = criterion.forward(var_out, var_label) 
@@ -146,7 +149,7 @@ def Train():
             acc_min = acc
             torch.save(model.module.state_dict(), CKPT_PATH) #Saving torch.nn.DataParallel Models
             print(' Epoch: {} model has been already save!'.format(epoch + 1))
-
+        """
         #print the histogram
         if (epoch+1)==1 or (epoch+1) % 10 == 0:
             for name, param in model.named_parameters():
@@ -154,7 +157,7 @@ def Train():
                     log_writer.add_histogram(name + '_data', param.clone().cpu().data.numpy(), epoch+1)
                     if param.grad is not None: #leaf node in the graph retain gradient
                         log_writer.add_histogram(name + '_grad', param.grad, epoch+1)
-
+        """
         time_elapsed = time.time() - since
         print('Training epoch: {} completed in {:.0f}m {:.0f}s'.format(epoch+1, time_elapsed // 60 , time_elapsed % 60))
         log_writer.add_scalars('CELoss/CIFAR100-ResNet', {'Train':np.mean(loss_train), 'Test':np.mean(loss_test)}, epoch+1)
