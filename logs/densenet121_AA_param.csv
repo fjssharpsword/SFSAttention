@@ -1,0 +1,945 @@
+,layer,shape,size
+0,features.conv0.weight,"torch.Size([64, 3, 3, 3])",1728
+1,features.norm0.weight,torch.Size([64]),64
+2,features.norm0.bias,torch.Size([64]),64
+3,features.denseblock1.denselayer1.norm1.weight,torch.Size([64]),64
+4,features.denseblock1.denselayer1.norm1.bias,torch.Size([64]),64
+5,features.denseblock1.denselayer1.conv1.conv_out.weight,"torch.Size([124, 64, 1, 1])",7936
+6,features.denseblock1.denselayer1.conv1.conv_out.bias,torch.Size([124]),124
+7,features.denseblock1.denselayer1.conv1.qkv_conv.weight,"torch.Size([84, 64, 1, 1])",5376
+8,features.denseblock1.denselayer1.conv1.qkv_conv.bias,torch.Size([84]),84
+9,features.denseblock1.denselayer1.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+10,features.denseblock1.denselayer1.conv1.attn_out.bias,torch.Size([4]),4
+11,features.denseblock1.denselayer1.norm2.weight,torch.Size([128]),128
+12,features.denseblock1.denselayer1.norm2.bias,torch.Size([128]),128
+13,features.denseblock1.denselayer1.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+14,features.denseblock1.denselayer1.conv2.conv_out.bias,torch.Size([28]),28
+15,features.denseblock1.denselayer1.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+16,features.denseblock1.denselayer1.conv2.qkv_conv.bias,torch.Size([84]),84
+17,features.denseblock1.denselayer1.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+18,features.denseblock1.denselayer1.conv2.attn_out.bias,torch.Size([4]),4
+19,features.denseblock1.denselayer2.norm1.weight,torch.Size([96]),96
+20,features.denseblock1.denselayer2.norm1.bias,torch.Size([96]),96
+21,features.denseblock1.denselayer2.conv1.conv_out.weight,"torch.Size([124, 96, 1, 1])",11904
+22,features.denseblock1.denselayer2.conv1.conv_out.bias,torch.Size([124]),124
+23,features.denseblock1.denselayer2.conv1.qkv_conv.weight,"torch.Size([84, 96, 1, 1])",8064
+24,features.denseblock1.denselayer2.conv1.qkv_conv.bias,torch.Size([84]),84
+25,features.denseblock1.denselayer2.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+26,features.denseblock1.denselayer2.conv1.attn_out.bias,torch.Size([4]),4
+27,features.denseblock1.denselayer2.norm2.weight,torch.Size([128]),128
+28,features.denseblock1.denselayer2.norm2.bias,torch.Size([128]),128
+29,features.denseblock1.denselayer2.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+30,features.denseblock1.denselayer2.conv2.conv_out.bias,torch.Size([28]),28
+31,features.denseblock1.denselayer2.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+32,features.denseblock1.denselayer2.conv2.qkv_conv.bias,torch.Size([84]),84
+33,features.denseblock1.denselayer2.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+34,features.denseblock1.denselayer2.conv2.attn_out.bias,torch.Size([4]),4
+35,features.denseblock1.denselayer3.norm1.weight,torch.Size([128]),128
+36,features.denseblock1.denselayer3.norm1.bias,torch.Size([128]),128
+37,features.denseblock1.denselayer3.conv1.conv_out.weight,"torch.Size([124, 128, 1, 1])",15872
+38,features.denseblock1.denselayer3.conv1.conv_out.bias,torch.Size([124]),124
+39,features.denseblock1.denselayer3.conv1.qkv_conv.weight,"torch.Size([84, 128, 1, 1])",10752
+40,features.denseblock1.denselayer3.conv1.qkv_conv.bias,torch.Size([84]),84
+41,features.denseblock1.denselayer3.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+42,features.denseblock1.denselayer3.conv1.attn_out.bias,torch.Size([4]),4
+43,features.denseblock1.denselayer3.norm2.weight,torch.Size([128]),128
+44,features.denseblock1.denselayer3.norm2.bias,torch.Size([128]),128
+45,features.denseblock1.denselayer3.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+46,features.denseblock1.denselayer3.conv2.conv_out.bias,torch.Size([28]),28
+47,features.denseblock1.denselayer3.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+48,features.denseblock1.denselayer3.conv2.qkv_conv.bias,torch.Size([84]),84
+49,features.denseblock1.denselayer3.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+50,features.denseblock1.denselayer3.conv2.attn_out.bias,torch.Size([4]),4
+51,features.denseblock1.denselayer4.norm1.weight,torch.Size([160]),160
+52,features.denseblock1.denselayer4.norm1.bias,torch.Size([160]),160
+53,features.denseblock1.denselayer4.conv1.conv_out.weight,"torch.Size([124, 160, 1, 1])",19840
+54,features.denseblock1.denselayer4.conv1.conv_out.bias,torch.Size([124]),124
+55,features.denseblock1.denselayer4.conv1.qkv_conv.weight,"torch.Size([84, 160, 1, 1])",13440
+56,features.denseblock1.denselayer4.conv1.qkv_conv.bias,torch.Size([84]),84
+57,features.denseblock1.denselayer4.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+58,features.denseblock1.denselayer4.conv1.attn_out.bias,torch.Size([4]),4
+59,features.denseblock1.denselayer4.norm2.weight,torch.Size([128]),128
+60,features.denseblock1.denselayer4.norm2.bias,torch.Size([128]),128
+61,features.denseblock1.denselayer4.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+62,features.denseblock1.denselayer4.conv2.conv_out.bias,torch.Size([28]),28
+63,features.denseblock1.denselayer4.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+64,features.denseblock1.denselayer4.conv2.qkv_conv.bias,torch.Size([84]),84
+65,features.denseblock1.denselayer4.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+66,features.denseblock1.denselayer4.conv2.attn_out.bias,torch.Size([4]),4
+67,features.denseblock1.denselayer5.norm1.weight,torch.Size([192]),192
+68,features.denseblock1.denselayer5.norm1.bias,torch.Size([192]),192
+69,features.denseblock1.denselayer5.conv1.conv_out.weight,"torch.Size([124, 192, 1, 1])",23808
+70,features.denseblock1.denselayer5.conv1.conv_out.bias,torch.Size([124]),124
+71,features.denseblock1.denselayer5.conv1.qkv_conv.weight,"torch.Size([84, 192, 1, 1])",16128
+72,features.denseblock1.denselayer5.conv1.qkv_conv.bias,torch.Size([84]),84
+73,features.denseblock1.denselayer5.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+74,features.denseblock1.denselayer5.conv1.attn_out.bias,torch.Size([4]),4
+75,features.denseblock1.denselayer5.norm2.weight,torch.Size([128]),128
+76,features.denseblock1.denselayer5.norm2.bias,torch.Size([128]),128
+77,features.denseblock1.denselayer5.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+78,features.denseblock1.denselayer5.conv2.conv_out.bias,torch.Size([28]),28
+79,features.denseblock1.denselayer5.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+80,features.denseblock1.denselayer5.conv2.qkv_conv.bias,torch.Size([84]),84
+81,features.denseblock1.denselayer5.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+82,features.denseblock1.denselayer5.conv2.attn_out.bias,torch.Size([4]),4
+83,features.denseblock1.denselayer6.norm1.weight,torch.Size([224]),224
+84,features.denseblock1.denselayer6.norm1.bias,torch.Size([224]),224
+85,features.denseblock1.denselayer6.conv1.conv_out.weight,"torch.Size([124, 224, 1, 1])",27776
+86,features.denseblock1.denselayer6.conv1.conv_out.bias,torch.Size([124]),124
+87,features.denseblock1.denselayer6.conv1.qkv_conv.weight,"torch.Size([84, 224, 1, 1])",18816
+88,features.denseblock1.denselayer6.conv1.qkv_conv.bias,torch.Size([84]),84
+89,features.denseblock1.denselayer6.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+90,features.denseblock1.denselayer6.conv1.attn_out.bias,torch.Size([4]),4
+91,features.denseblock1.denselayer6.norm2.weight,torch.Size([128]),128
+92,features.denseblock1.denselayer6.norm2.bias,torch.Size([128]),128
+93,features.denseblock1.denselayer6.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+94,features.denseblock1.denselayer6.conv2.conv_out.bias,torch.Size([28]),28
+95,features.denseblock1.denselayer6.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+96,features.denseblock1.denselayer6.conv2.qkv_conv.bias,torch.Size([84]),84
+97,features.denseblock1.denselayer6.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+98,features.denseblock1.denselayer6.conv2.attn_out.bias,torch.Size([4]),4
+99,features.transition1.norm.weight,torch.Size([256]),256
+100,features.transition1.norm.bias,torch.Size([256]),256
+101,features.transition1.conv.weight,"torch.Size([128, 256, 1, 1])",32768
+102,features.denseblock2.denselayer1.norm1.weight,torch.Size([128]),128
+103,features.denseblock2.denselayer1.norm1.bias,torch.Size([128]),128
+104,features.denseblock2.denselayer1.conv1.conv_out.weight,"torch.Size([124, 128, 1, 1])",15872
+105,features.denseblock2.denselayer1.conv1.conv_out.bias,torch.Size([124]),124
+106,features.denseblock2.denselayer1.conv1.qkv_conv.weight,"torch.Size([84, 128, 1, 1])",10752
+107,features.denseblock2.denselayer1.conv1.qkv_conv.bias,torch.Size([84]),84
+108,features.denseblock2.denselayer1.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+109,features.denseblock2.denselayer1.conv1.attn_out.bias,torch.Size([4]),4
+110,features.denseblock2.denselayer1.norm2.weight,torch.Size([128]),128
+111,features.denseblock2.denselayer1.norm2.bias,torch.Size([128]),128
+112,features.denseblock2.denselayer1.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+113,features.denseblock2.denselayer1.conv2.conv_out.bias,torch.Size([28]),28
+114,features.denseblock2.denselayer1.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+115,features.denseblock2.denselayer1.conv2.qkv_conv.bias,torch.Size([84]),84
+116,features.denseblock2.denselayer1.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+117,features.denseblock2.denselayer1.conv2.attn_out.bias,torch.Size([4]),4
+118,features.denseblock2.denselayer2.norm1.weight,torch.Size([160]),160
+119,features.denseblock2.denselayer2.norm1.bias,torch.Size([160]),160
+120,features.denseblock2.denselayer2.conv1.conv_out.weight,"torch.Size([124, 160, 1, 1])",19840
+121,features.denseblock2.denselayer2.conv1.conv_out.bias,torch.Size([124]),124
+122,features.denseblock2.denselayer2.conv1.qkv_conv.weight,"torch.Size([84, 160, 1, 1])",13440
+123,features.denseblock2.denselayer2.conv1.qkv_conv.bias,torch.Size([84]),84
+124,features.denseblock2.denselayer2.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+125,features.denseblock2.denselayer2.conv1.attn_out.bias,torch.Size([4]),4
+126,features.denseblock2.denselayer2.norm2.weight,torch.Size([128]),128
+127,features.denseblock2.denselayer2.norm2.bias,torch.Size([128]),128
+128,features.denseblock2.denselayer2.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+129,features.denseblock2.denselayer2.conv2.conv_out.bias,torch.Size([28]),28
+130,features.denseblock2.denselayer2.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+131,features.denseblock2.denselayer2.conv2.qkv_conv.bias,torch.Size([84]),84
+132,features.denseblock2.denselayer2.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+133,features.denseblock2.denselayer2.conv2.attn_out.bias,torch.Size([4]),4
+134,features.denseblock2.denselayer3.norm1.weight,torch.Size([192]),192
+135,features.denseblock2.denselayer3.norm1.bias,torch.Size([192]),192
+136,features.denseblock2.denselayer3.conv1.conv_out.weight,"torch.Size([124, 192, 1, 1])",23808
+137,features.denseblock2.denselayer3.conv1.conv_out.bias,torch.Size([124]),124
+138,features.denseblock2.denselayer3.conv1.qkv_conv.weight,"torch.Size([84, 192, 1, 1])",16128
+139,features.denseblock2.denselayer3.conv1.qkv_conv.bias,torch.Size([84]),84
+140,features.denseblock2.denselayer3.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+141,features.denseblock2.denselayer3.conv1.attn_out.bias,torch.Size([4]),4
+142,features.denseblock2.denselayer3.norm2.weight,torch.Size([128]),128
+143,features.denseblock2.denselayer3.norm2.bias,torch.Size([128]),128
+144,features.denseblock2.denselayer3.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+145,features.denseblock2.denselayer3.conv2.conv_out.bias,torch.Size([28]),28
+146,features.denseblock2.denselayer3.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+147,features.denseblock2.denselayer3.conv2.qkv_conv.bias,torch.Size([84]),84
+148,features.denseblock2.denselayer3.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+149,features.denseblock2.denselayer3.conv2.attn_out.bias,torch.Size([4]),4
+150,features.denseblock2.denselayer4.norm1.weight,torch.Size([224]),224
+151,features.denseblock2.denselayer4.norm1.bias,torch.Size([224]),224
+152,features.denseblock2.denselayer4.conv1.conv_out.weight,"torch.Size([124, 224, 1, 1])",27776
+153,features.denseblock2.denselayer4.conv1.conv_out.bias,torch.Size([124]),124
+154,features.denseblock2.denselayer4.conv1.qkv_conv.weight,"torch.Size([84, 224, 1, 1])",18816
+155,features.denseblock2.denselayer4.conv1.qkv_conv.bias,torch.Size([84]),84
+156,features.denseblock2.denselayer4.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+157,features.denseblock2.denselayer4.conv1.attn_out.bias,torch.Size([4]),4
+158,features.denseblock2.denselayer4.norm2.weight,torch.Size([128]),128
+159,features.denseblock2.denselayer4.norm2.bias,torch.Size([128]),128
+160,features.denseblock2.denselayer4.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+161,features.denseblock2.denselayer4.conv2.conv_out.bias,torch.Size([28]),28
+162,features.denseblock2.denselayer4.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+163,features.denseblock2.denselayer4.conv2.qkv_conv.bias,torch.Size([84]),84
+164,features.denseblock2.denselayer4.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+165,features.denseblock2.denselayer4.conv2.attn_out.bias,torch.Size([4]),4
+166,features.denseblock2.denselayer5.norm1.weight,torch.Size([256]),256
+167,features.denseblock2.denselayer5.norm1.bias,torch.Size([256]),256
+168,features.denseblock2.denselayer5.conv1.conv_out.weight,"torch.Size([124, 256, 1, 1])",31744
+169,features.denseblock2.denselayer5.conv1.conv_out.bias,torch.Size([124]),124
+170,features.denseblock2.denselayer5.conv1.qkv_conv.weight,"torch.Size([84, 256, 1, 1])",21504
+171,features.denseblock2.denselayer5.conv1.qkv_conv.bias,torch.Size([84]),84
+172,features.denseblock2.denselayer5.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+173,features.denseblock2.denselayer5.conv1.attn_out.bias,torch.Size([4]),4
+174,features.denseblock2.denselayer5.norm2.weight,torch.Size([128]),128
+175,features.denseblock2.denselayer5.norm2.bias,torch.Size([128]),128
+176,features.denseblock2.denselayer5.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+177,features.denseblock2.denselayer5.conv2.conv_out.bias,torch.Size([28]),28
+178,features.denseblock2.denselayer5.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+179,features.denseblock2.denselayer5.conv2.qkv_conv.bias,torch.Size([84]),84
+180,features.denseblock2.denselayer5.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+181,features.denseblock2.denselayer5.conv2.attn_out.bias,torch.Size([4]),4
+182,features.denseblock2.denselayer6.norm1.weight,torch.Size([288]),288
+183,features.denseblock2.denselayer6.norm1.bias,torch.Size([288]),288
+184,features.denseblock2.denselayer6.conv1.conv_out.weight,"torch.Size([124, 288, 1, 1])",35712
+185,features.denseblock2.denselayer6.conv1.conv_out.bias,torch.Size([124]),124
+186,features.denseblock2.denselayer6.conv1.qkv_conv.weight,"torch.Size([84, 288, 1, 1])",24192
+187,features.denseblock2.denselayer6.conv1.qkv_conv.bias,torch.Size([84]),84
+188,features.denseblock2.denselayer6.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+189,features.denseblock2.denselayer6.conv1.attn_out.bias,torch.Size([4]),4
+190,features.denseblock2.denselayer6.norm2.weight,torch.Size([128]),128
+191,features.denseblock2.denselayer6.norm2.bias,torch.Size([128]),128
+192,features.denseblock2.denselayer6.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+193,features.denseblock2.denselayer6.conv2.conv_out.bias,torch.Size([28]),28
+194,features.denseblock2.denselayer6.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+195,features.denseblock2.denselayer6.conv2.qkv_conv.bias,torch.Size([84]),84
+196,features.denseblock2.denselayer6.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+197,features.denseblock2.denselayer6.conv2.attn_out.bias,torch.Size([4]),4
+198,features.denseblock2.denselayer7.norm1.weight,torch.Size([320]),320
+199,features.denseblock2.denselayer7.norm1.bias,torch.Size([320]),320
+200,features.denseblock2.denselayer7.conv1.conv_out.weight,"torch.Size([124, 320, 1, 1])",39680
+201,features.denseblock2.denselayer7.conv1.conv_out.bias,torch.Size([124]),124
+202,features.denseblock2.denselayer7.conv1.qkv_conv.weight,"torch.Size([84, 320, 1, 1])",26880
+203,features.denseblock2.denselayer7.conv1.qkv_conv.bias,torch.Size([84]),84
+204,features.denseblock2.denselayer7.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+205,features.denseblock2.denselayer7.conv1.attn_out.bias,torch.Size([4]),4
+206,features.denseblock2.denselayer7.norm2.weight,torch.Size([128]),128
+207,features.denseblock2.denselayer7.norm2.bias,torch.Size([128]),128
+208,features.denseblock2.denselayer7.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+209,features.denseblock2.denselayer7.conv2.conv_out.bias,torch.Size([28]),28
+210,features.denseblock2.denselayer7.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+211,features.denseblock2.denselayer7.conv2.qkv_conv.bias,torch.Size([84]),84
+212,features.denseblock2.denselayer7.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+213,features.denseblock2.denselayer7.conv2.attn_out.bias,torch.Size([4]),4
+214,features.denseblock2.denselayer8.norm1.weight,torch.Size([352]),352
+215,features.denseblock2.denselayer8.norm1.bias,torch.Size([352]),352
+216,features.denseblock2.denselayer8.conv1.conv_out.weight,"torch.Size([124, 352, 1, 1])",43648
+217,features.denseblock2.denselayer8.conv1.conv_out.bias,torch.Size([124]),124
+218,features.denseblock2.denselayer8.conv1.qkv_conv.weight,"torch.Size([84, 352, 1, 1])",29568
+219,features.denseblock2.denselayer8.conv1.qkv_conv.bias,torch.Size([84]),84
+220,features.denseblock2.denselayer8.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+221,features.denseblock2.denselayer8.conv1.attn_out.bias,torch.Size([4]),4
+222,features.denseblock2.denselayer8.norm2.weight,torch.Size([128]),128
+223,features.denseblock2.denselayer8.norm2.bias,torch.Size([128]),128
+224,features.denseblock2.denselayer8.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+225,features.denseblock2.denselayer8.conv2.conv_out.bias,torch.Size([28]),28
+226,features.denseblock2.denselayer8.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+227,features.denseblock2.denselayer8.conv2.qkv_conv.bias,torch.Size([84]),84
+228,features.denseblock2.denselayer8.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+229,features.denseblock2.denselayer8.conv2.attn_out.bias,torch.Size([4]),4
+230,features.denseblock2.denselayer9.norm1.weight,torch.Size([384]),384
+231,features.denseblock2.denselayer9.norm1.bias,torch.Size([384]),384
+232,features.denseblock2.denselayer9.conv1.conv_out.weight,"torch.Size([124, 384, 1, 1])",47616
+233,features.denseblock2.denselayer9.conv1.conv_out.bias,torch.Size([124]),124
+234,features.denseblock2.denselayer9.conv1.qkv_conv.weight,"torch.Size([84, 384, 1, 1])",32256
+235,features.denseblock2.denselayer9.conv1.qkv_conv.bias,torch.Size([84]),84
+236,features.denseblock2.denselayer9.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+237,features.denseblock2.denselayer9.conv1.attn_out.bias,torch.Size([4]),4
+238,features.denseblock2.denselayer9.norm2.weight,torch.Size([128]),128
+239,features.denseblock2.denselayer9.norm2.bias,torch.Size([128]),128
+240,features.denseblock2.denselayer9.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+241,features.denseblock2.denselayer9.conv2.conv_out.bias,torch.Size([28]),28
+242,features.denseblock2.denselayer9.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+243,features.denseblock2.denselayer9.conv2.qkv_conv.bias,torch.Size([84]),84
+244,features.denseblock2.denselayer9.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+245,features.denseblock2.denselayer9.conv2.attn_out.bias,torch.Size([4]),4
+246,features.denseblock2.denselayer10.norm1.weight,torch.Size([416]),416
+247,features.denseblock2.denselayer10.norm1.bias,torch.Size([416]),416
+248,features.denseblock2.denselayer10.conv1.conv_out.weight,"torch.Size([124, 416, 1, 1])",51584
+249,features.denseblock2.denselayer10.conv1.conv_out.bias,torch.Size([124]),124
+250,features.denseblock2.denselayer10.conv1.qkv_conv.weight,"torch.Size([84, 416, 1, 1])",34944
+251,features.denseblock2.denselayer10.conv1.qkv_conv.bias,torch.Size([84]),84
+252,features.denseblock2.denselayer10.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+253,features.denseblock2.denselayer10.conv1.attn_out.bias,torch.Size([4]),4
+254,features.denseblock2.denselayer10.norm2.weight,torch.Size([128]),128
+255,features.denseblock2.denselayer10.norm2.bias,torch.Size([128]),128
+256,features.denseblock2.denselayer10.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+257,features.denseblock2.denselayer10.conv2.conv_out.bias,torch.Size([28]),28
+258,features.denseblock2.denselayer10.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+259,features.denseblock2.denselayer10.conv2.qkv_conv.bias,torch.Size([84]),84
+260,features.denseblock2.denselayer10.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+261,features.denseblock2.denselayer10.conv2.attn_out.bias,torch.Size([4]),4
+262,features.denseblock2.denselayer11.norm1.weight,torch.Size([448]),448
+263,features.denseblock2.denselayer11.norm1.bias,torch.Size([448]),448
+264,features.denseblock2.denselayer11.conv1.conv_out.weight,"torch.Size([124, 448, 1, 1])",55552
+265,features.denseblock2.denselayer11.conv1.conv_out.bias,torch.Size([124]),124
+266,features.denseblock2.denselayer11.conv1.qkv_conv.weight,"torch.Size([84, 448, 1, 1])",37632
+267,features.denseblock2.denselayer11.conv1.qkv_conv.bias,torch.Size([84]),84
+268,features.denseblock2.denselayer11.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+269,features.denseblock2.denselayer11.conv1.attn_out.bias,torch.Size([4]),4
+270,features.denseblock2.denselayer11.norm2.weight,torch.Size([128]),128
+271,features.denseblock2.denselayer11.norm2.bias,torch.Size([128]),128
+272,features.denseblock2.denselayer11.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+273,features.denseblock2.denselayer11.conv2.conv_out.bias,torch.Size([28]),28
+274,features.denseblock2.denselayer11.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+275,features.denseblock2.denselayer11.conv2.qkv_conv.bias,torch.Size([84]),84
+276,features.denseblock2.denselayer11.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+277,features.denseblock2.denselayer11.conv2.attn_out.bias,torch.Size([4]),4
+278,features.denseblock2.denselayer12.norm1.weight,torch.Size([480]),480
+279,features.denseblock2.denselayer12.norm1.bias,torch.Size([480]),480
+280,features.denseblock2.denselayer12.conv1.conv_out.weight,"torch.Size([124, 480, 1, 1])",59520
+281,features.denseblock2.denselayer12.conv1.conv_out.bias,torch.Size([124]),124
+282,features.denseblock2.denselayer12.conv1.qkv_conv.weight,"torch.Size([84, 480, 1, 1])",40320
+283,features.denseblock2.denselayer12.conv1.qkv_conv.bias,torch.Size([84]),84
+284,features.denseblock2.denselayer12.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+285,features.denseblock2.denselayer12.conv1.attn_out.bias,torch.Size([4]),4
+286,features.denseblock2.denselayer12.norm2.weight,torch.Size([128]),128
+287,features.denseblock2.denselayer12.norm2.bias,torch.Size([128]),128
+288,features.denseblock2.denselayer12.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+289,features.denseblock2.denselayer12.conv2.conv_out.bias,torch.Size([28]),28
+290,features.denseblock2.denselayer12.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+291,features.denseblock2.denselayer12.conv2.qkv_conv.bias,torch.Size([84]),84
+292,features.denseblock2.denselayer12.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+293,features.denseblock2.denselayer12.conv2.attn_out.bias,torch.Size([4]),4
+294,features.transition2.norm.weight,torch.Size([512]),512
+295,features.transition2.norm.bias,torch.Size([512]),512
+296,features.transition2.conv.weight,"torch.Size([256, 512, 1, 1])",131072
+297,features.denseblock3.denselayer1.norm1.weight,torch.Size([256]),256
+298,features.denseblock3.denselayer1.norm1.bias,torch.Size([256]),256
+299,features.denseblock3.denselayer1.conv1.conv_out.weight,"torch.Size([124, 256, 1, 1])",31744
+300,features.denseblock3.denselayer1.conv1.conv_out.bias,torch.Size([124]),124
+301,features.denseblock3.denselayer1.conv1.qkv_conv.weight,"torch.Size([84, 256, 1, 1])",21504
+302,features.denseblock3.denselayer1.conv1.qkv_conv.bias,torch.Size([84]),84
+303,features.denseblock3.denselayer1.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+304,features.denseblock3.denselayer1.conv1.attn_out.bias,torch.Size([4]),4
+305,features.denseblock3.denselayer1.norm2.weight,torch.Size([128]),128
+306,features.denseblock3.denselayer1.norm2.bias,torch.Size([128]),128
+307,features.denseblock3.denselayer1.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+308,features.denseblock3.denselayer1.conv2.conv_out.bias,torch.Size([28]),28
+309,features.denseblock3.denselayer1.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+310,features.denseblock3.denselayer1.conv2.qkv_conv.bias,torch.Size([84]),84
+311,features.denseblock3.denselayer1.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+312,features.denseblock3.denselayer1.conv2.attn_out.bias,torch.Size([4]),4
+313,features.denseblock3.denselayer2.norm1.weight,torch.Size([288]),288
+314,features.denseblock3.denselayer2.norm1.bias,torch.Size([288]),288
+315,features.denseblock3.denselayer2.conv1.conv_out.weight,"torch.Size([124, 288, 1, 1])",35712
+316,features.denseblock3.denselayer2.conv1.conv_out.bias,torch.Size([124]),124
+317,features.denseblock3.denselayer2.conv1.qkv_conv.weight,"torch.Size([84, 288, 1, 1])",24192
+318,features.denseblock3.denselayer2.conv1.qkv_conv.bias,torch.Size([84]),84
+319,features.denseblock3.denselayer2.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+320,features.denseblock3.denselayer2.conv1.attn_out.bias,torch.Size([4]),4
+321,features.denseblock3.denselayer2.norm2.weight,torch.Size([128]),128
+322,features.denseblock3.denselayer2.norm2.bias,torch.Size([128]),128
+323,features.denseblock3.denselayer2.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+324,features.denseblock3.denselayer2.conv2.conv_out.bias,torch.Size([28]),28
+325,features.denseblock3.denselayer2.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+326,features.denseblock3.denselayer2.conv2.qkv_conv.bias,torch.Size([84]),84
+327,features.denseblock3.denselayer2.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+328,features.denseblock3.denselayer2.conv2.attn_out.bias,torch.Size([4]),4
+329,features.denseblock3.denselayer3.norm1.weight,torch.Size([320]),320
+330,features.denseblock3.denselayer3.norm1.bias,torch.Size([320]),320
+331,features.denseblock3.denselayer3.conv1.conv_out.weight,"torch.Size([124, 320, 1, 1])",39680
+332,features.denseblock3.denselayer3.conv1.conv_out.bias,torch.Size([124]),124
+333,features.denseblock3.denselayer3.conv1.qkv_conv.weight,"torch.Size([84, 320, 1, 1])",26880
+334,features.denseblock3.denselayer3.conv1.qkv_conv.bias,torch.Size([84]),84
+335,features.denseblock3.denselayer3.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+336,features.denseblock3.denselayer3.conv1.attn_out.bias,torch.Size([4]),4
+337,features.denseblock3.denselayer3.norm2.weight,torch.Size([128]),128
+338,features.denseblock3.denselayer3.norm2.bias,torch.Size([128]),128
+339,features.denseblock3.denselayer3.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+340,features.denseblock3.denselayer3.conv2.conv_out.bias,torch.Size([28]),28
+341,features.denseblock3.denselayer3.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+342,features.denseblock3.denselayer3.conv2.qkv_conv.bias,torch.Size([84]),84
+343,features.denseblock3.denselayer3.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+344,features.denseblock3.denselayer3.conv2.attn_out.bias,torch.Size([4]),4
+345,features.denseblock3.denselayer4.norm1.weight,torch.Size([352]),352
+346,features.denseblock3.denselayer4.norm1.bias,torch.Size([352]),352
+347,features.denseblock3.denselayer4.conv1.conv_out.weight,"torch.Size([124, 352, 1, 1])",43648
+348,features.denseblock3.denselayer4.conv1.conv_out.bias,torch.Size([124]),124
+349,features.denseblock3.denselayer4.conv1.qkv_conv.weight,"torch.Size([84, 352, 1, 1])",29568
+350,features.denseblock3.denselayer4.conv1.qkv_conv.bias,torch.Size([84]),84
+351,features.denseblock3.denselayer4.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+352,features.denseblock3.denselayer4.conv1.attn_out.bias,torch.Size([4]),4
+353,features.denseblock3.denselayer4.norm2.weight,torch.Size([128]),128
+354,features.denseblock3.denselayer4.norm2.bias,torch.Size([128]),128
+355,features.denseblock3.denselayer4.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+356,features.denseblock3.denselayer4.conv2.conv_out.bias,torch.Size([28]),28
+357,features.denseblock3.denselayer4.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+358,features.denseblock3.denselayer4.conv2.qkv_conv.bias,torch.Size([84]),84
+359,features.denseblock3.denselayer4.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+360,features.denseblock3.denselayer4.conv2.attn_out.bias,torch.Size([4]),4
+361,features.denseblock3.denselayer5.norm1.weight,torch.Size([384]),384
+362,features.denseblock3.denselayer5.norm1.bias,torch.Size([384]),384
+363,features.denseblock3.denselayer5.conv1.conv_out.weight,"torch.Size([124, 384, 1, 1])",47616
+364,features.denseblock3.denselayer5.conv1.conv_out.bias,torch.Size([124]),124
+365,features.denseblock3.denselayer5.conv1.qkv_conv.weight,"torch.Size([84, 384, 1, 1])",32256
+366,features.denseblock3.denselayer5.conv1.qkv_conv.bias,torch.Size([84]),84
+367,features.denseblock3.denselayer5.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+368,features.denseblock3.denselayer5.conv1.attn_out.bias,torch.Size([4]),4
+369,features.denseblock3.denselayer5.norm2.weight,torch.Size([128]),128
+370,features.denseblock3.denselayer5.norm2.bias,torch.Size([128]),128
+371,features.denseblock3.denselayer5.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+372,features.denseblock3.denselayer5.conv2.conv_out.bias,torch.Size([28]),28
+373,features.denseblock3.denselayer5.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+374,features.denseblock3.denselayer5.conv2.qkv_conv.bias,torch.Size([84]),84
+375,features.denseblock3.denselayer5.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+376,features.denseblock3.denselayer5.conv2.attn_out.bias,torch.Size([4]),4
+377,features.denseblock3.denselayer6.norm1.weight,torch.Size([416]),416
+378,features.denseblock3.denselayer6.norm1.bias,torch.Size([416]),416
+379,features.denseblock3.denselayer6.conv1.conv_out.weight,"torch.Size([124, 416, 1, 1])",51584
+380,features.denseblock3.denselayer6.conv1.conv_out.bias,torch.Size([124]),124
+381,features.denseblock3.denselayer6.conv1.qkv_conv.weight,"torch.Size([84, 416, 1, 1])",34944
+382,features.denseblock3.denselayer6.conv1.qkv_conv.bias,torch.Size([84]),84
+383,features.denseblock3.denselayer6.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+384,features.denseblock3.denselayer6.conv1.attn_out.bias,torch.Size([4]),4
+385,features.denseblock3.denselayer6.norm2.weight,torch.Size([128]),128
+386,features.denseblock3.denselayer6.norm2.bias,torch.Size([128]),128
+387,features.denseblock3.denselayer6.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+388,features.denseblock3.denselayer6.conv2.conv_out.bias,torch.Size([28]),28
+389,features.denseblock3.denselayer6.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+390,features.denseblock3.denselayer6.conv2.qkv_conv.bias,torch.Size([84]),84
+391,features.denseblock3.denselayer6.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+392,features.denseblock3.denselayer6.conv2.attn_out.bias,torch.Size([4]),4
+393,features.denseblock3.denselayer7.norm1.weight,torch.Size([448]),448
+394,features.denseblock3.denselayer7.norm1.bias,torch.Size([448]),448
+395,features.denseblock3.denselayer7.conv1.conv_out.weight,"torch.Size([124, 448, 1, 1])",55552
+396,features.denseblock3.denselayer7.conv1.conv_out.bias,torch.Size([124]),124
+397,features.denseblock3.denselayer7.conv1.qkv_conv.weight,"torch.Size([84, 448, 1, 1])",37632
+398,features.denseblock3.denselayer7.conv1.qkv_conv.bias,torch.Size([84]),84
+399,features.denseblock3.denselayer7.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+400,features.denseblock3.denselayer7.conv1.attn_out.bias,torch.Size([4]),4
+401,features.denseblock3.denselayer7.norm2.weight,torch.Size([128]),128
+402,features.denseblock3.denselayer7.norm2.bias,torch.Size([128]),128
+403,features.denseblock3.denselayer7.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+404,features.denseblock3.denselayer7.conv2.conv_out.bias,torch.Size([28]),28
+405,features.denseblock3.denselayer7.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+406,features.denseblock3.denselayer7.conv2.qkv_conv.bias,torch.Size([84]),84
+407,features.denseblock3.denselayer7.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+408,features.denseblock3.denselayer7.conv2.attn_out.bias,torch.Size([4]),4
+409,features.denseblock3.denselayer8.norm1.weight,torch.Size([480]),480
+410,features.denseblock3.denselayer8.norm1.bias,torch.Size([480]),480
+411,features.denseblock3.denselayer8.conv1.conv_out.weight,"torch.Size([124, 480, 1, 1])",59520
+412,features.denseblock3.denselayer8.conv1.conv_out.bias,torch.Size([124]),124
+413,features.denseblock3.denselayer8.conv1.qkv_conv.weight,"torch.Size([84, 480, 1, 1])",40320
+414,features.denseblock3.denselayer8.conv1.qkv_conv.bias,torch.Size([84]),84
+415,features.denseblock3.denselayer8.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+416,features.denseblock3.denselayer8.conv1.attn_out.bias,torch.Size([4]),4
+417,features.denseblock3.denselayer8.norm2.weight,torch.Size([128]),128
+418,features.denseblock3.denselayer8.norm2.bias,torch.Size([128]),128
+419,features.denseblock3.denselayer8.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+420,features.denseblock3.denselayer8.conv2.conv_out.bias,torch.Size([28]),28
+421,features.denseblock3.denselayer8.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+422,features.denseblock3.denselayer8.conv2.qkv_conv.bias,torch.Size([84]),84
+423,features.denseblock3.denselayer8.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+424,features.denseblock3.denselayer8.conv2.attn_out.bias,torch.Size([4]),4
+425,features.denseblock3.denselayer9.norm1.weight,torch.Size([512]),512
+426,features.denseblock3.denselayer9.norm1.bias,torch.Size([512]),512
+427,features.denseblock3.denselayer9.conv1.conv_out.weight,"torch.Size([124, 512, 1, 1])",63488
+428,features.denseblock3.denselayer9.conv1.conv_out.bias,torch.Size([124]),124
+429,features.denseblock3.denselayer9.conv1.qkv_conv.weight,"torch.Size([84, 512, 1, 1])",43008
+430,features.denseblock3.denselayer9.conv1.qkv_conv.bias,torch.Size([84]),84
+431,features.denseblock3.denselayer9.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+432,features.denseblock3.denselayer9.conv1.attn_out.bias,torch.Size([4]),4
+433,features.denseblock3.denselayer9.norm2.weight,torch.Size([128]),128
+434,features.denseblock3.denselayer9.norm2.bias,torch.Size([128]),128
+435,features.denseblock3.denselayer9.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+436,features.denseblock3.denselayer9.conv2.conv_out.bias,torch.Size([28]),28
+437,features.denseblock3.denselayer9.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+438,features.denseblock3.denselayer9.conv2.qkv_conv.bias,torch.Size([84]),84
+439,features.denseblock3.denselayer9.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+440,features.denseblock3.denselayer9.conv2.attn_out.bias,torch.Size([4]),4
+441,features.denseblock3.denselayer10.norm1.weight,torch.Size([544]),544
+442,features.denseblock3.denselayer10.norm1.bias,torch.Size([544]),544
+443,features.denseblock3.denselayer10.conv1.conv_out.weight,"torch.Size([124, 544, 1, 1])",67456
+444,features.denseblock3.denselayer10.conv1.conv_out.bias,torch.Size([124]),124
+445,features.denseblock3.denselayer10.conv1.qkv_conv.weight,"torch.Size([84, 544, 1, 1])",45696
+446,features.denseblock3.denselayer10.conv1.qkv_conv.bias,torch.Size([84]),84
+447,features.denseblock3.denselayer10.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+448,features.denseblock3.denselayer10.conv1.attn_out.bias,torch.Size([4]),4
+449,features.denseblock3.denselayer10.norm2.weight,torch.Size([128]),128
+450,features.denseblock3.denselayer10.norm2.bias,torch.Size([128]),128
+451,features.denseblock3.denselayer10.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+452,features.denseblock3.denselayer10.conv2.conv_out.bias,torch.Size([28]),28
+453,features.denseblock3.denselayer10.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+454,features.denseblock3.denselayer10.conv2.qkv_conv.bias,torch.Size([84]),84
+455,features.denseblock3.denselayer10.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+456,features.denseblock3.denselayer10.conv2.attn_out.bias,torch.Size([4]),4
+457,features.denseblock3.denselayer11.norm1.weight,torch.Size([576]),576
+458,features.denseblock3.denselayer11.norm1.bias,torch.Size([576]),576
+459,features.denseblock3.denselayer11.conv1.conv_out.weight,"torch.Size([124, 576, 1, 1])",71424
+460,features.denseblock3.denselayer11.conv1.conv_out.bias,torch.Size([124]),124
+461,features.denseblock3.denselayer11.conv1.qkv_conv.weight,"torch.Size([84, 576, 1, 1])",48384
+462,features.denseblock3.denselayer11.conv1.qkv_conv.bias,torch.Size([84]),84
+463,features.denseblock3.denselayer11.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+464,features.denseblock3.denselayer11.conv1.attn_out.bias,torch.Size([4]),4
+465,features.denseblock3.denselayer11.norm2.weight,torch.Size([128]),128
+466,features.denseblock3.denselayer11.norm2.bias,torch.Size([128]),128
+467,features.denseblock3.denselayer11.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+468,features.denseblock3.denselayer11.conv2.conv_out.bias,torch.Size([28]),28
+469,features.denseblock3.denselayer11.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+470,features.denseblock3.denselayer11.conv2.qkv_conv.bias,torch.Size([84]),84
+471,features.denseblock3.denselayer11.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+472,features.denseblock3.denselayer11.conv2.attn_out.bias,torch.Size([4]),4
+473,features.denseblock3.denselayer12.norm1.weight,torch.Size([608]),608
+474,features.denseblock3.denselayer12.norm1.bias,torch.Size([608]),608
+475,features.denseblock3.denselayer12.conv1.conv_out.weight,"torch.Size([124, 608, 1, 1])",75392
+476,features.denseblock3.denselayer12.conv1.conv_out.bias,torch.Size([124]),124
+477,features.denseblock3.denselayer12.conv1.qkv_conv.weight,"torch.Size([84, 608, 1, 1])",51072
+478,features.denseblock3.denselayer12.conv1.qkv_conv.bias,torch.Size([84]),84
+479,features.denseblock3.denselayer12.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+480,features.denseblock3.denselayer12.conv1.attn_out.bias,torch.Size([4]),4
+481,features.denseblock3.denselayer12.norm2.weight,torch.Size([128]),128
+482,features.denseblock3.denselayer12.norm2.bias,torch.Size([128]),128
+483,features.denseblock3.denselayer12.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+484,features.denseblock3.denselayer12.conv2.conv_out.bias,torch.Size([28]),28
+485,features.denseblock3.denselayer12.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+486,features.denseblock3.denselayer12.conv2.qkv_conv.bias,torch.Size([84]),84
+487,features.denseblock3.denselayer12.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+488,features.denseblock3.denselayer12.conv2.attn_out.bias,torch.Size([4]),4
+489,features.denseblock3.denselayer13.norm1.weight,torch.Size([640]),640
+490,features.denseblock3.denselayer13.norm1.bias,torch.Size([640]),640
+491,features.denseblock3.denselayer13.conv1.conv_out.weight,"torch.Size([124, 640, 1, 1])",79360
+492,features.denseblock3.denselayer13.conv1.conv_out.bias,torch.Size([124]),124
+493,features.denseblock3.denselayer13.conv1.qkv_conv.weight,"torch.Size([84, 640, 1, 1])",53760
+494,features.denseblock3.denselayer13.conv1.qkv_conv.bias,torch.Size([84]),84
+495,features.denseblock3.denselayer13.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+496,features.denseblock3.denselayer13.conv1.attn_out.bias,torch.Size([4]),4
+497,features.denseblock3.denselayer13.norm2.weight,torch.Size([128]),128
+498,features.denseblock3.denselayer13.norm2.bias,torch.Size([128]),128
+499,features.denseblock3.denselayer13.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+500,features.denseblock3.denselayer13.conv2.conv_out.bias,torch.Size([28]),28
+501,features.denseblock3.denselayer13.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+502,features.denseblock3.denselayer13.conv2.qkv_conv.bias,torch.Size([84]),84
+503,features.denseblock3.denselayer13.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+504,features.denseblock3.denselayer13.conv2.attn_out.bias,torch.Size([4]),4
+505,features.denseblock3.denselayer14.norm1.weight,torch.Size([672]),672
+506,features.denseblock3.denselayer14.norm1.bias,torch.Size([672]),672
+507,features.denseblock3.denselayer14.conv1.conv_out.weight,"torch.Size([124, 672, 1, 1])",83328
+508,features.denseblock3.denselayer14.conv1.conv_out.bias,torch.Size([124]),124
+509,features.denseblock3.denselayer14.conv1.qkv_conv.weight,"torch.Size([84, 672, 1, 1])",56448
+510,features.denseblock3.denselayer14.conv1.qkv_conv.bias,torch.Size([84]),84
+511,features.denseblock3.denselayer14.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+512,features.denseblock3.denselayer14.conv1.attn_out.bias,torch.Size([4]),4
+513,features.denseblock3.denselayer14.norm2.weight,torch.Size([128]),128
+514,features.denseblock3.denselayer14.norm2.bias,torch.Size([128]),128
+515,features.denseblock3.denselayer14.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+516,features.denseblock3.denselayer14.conv2.conv_out.bias,torch.Size([28]),28
+517,features.denseblock3.denselayer14.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+518,features.denseblock3.denselayer14.conv2.qkv_conv.bias,torch.Size([84]),84
+519,features.denseblock3.denselayer14.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+520,features.denseblock3.denselayer14.conv2.attn_out.bias,torch.Size([4]),4
+521,features.denseblock3.denselayer15.norm1.weight,torch.Size([704]),704
+522,features.denseblock3.denselayer15.norm1.bias,torch.Size([704]),704
+523,features.denseblock3.denselayer15.conv1.conv_out.weight,"torch.Size([124, 704, 1, 1])",87296
+524,features.denseblock3.denselayer15.conv1.conv_out.bias,torch.Size([124]),124
+525,features.denseblock3.denselayer15.conv1.qkv_conv.weight,"torch.Size([84, 704, 1, 1])",59136
+526,features.denseblock3.denselayer15.conv1.qkv_conv.bias,torch.Size([84]),84
+527,features.denseblock3.denselayer15.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+528,features.denseblock3.denselayer15.conv1.attn_out.bias,torch.Size([4]),4
+529,features.denseblock3.denselayer15.norm2.weight,torch.Size([128]),128
+530,features.denseblock3.denselayer15.norm2.bias,torch.Size([128]),128
+531,features.denseblock3.denselayer15.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+532,features.denseblock3.denselayer15.conv2.conv_out.bias,torch.Size([28]),28
+533,features.denseblock3.denselayer15.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+534,features.denseblock3.denselayer15.conv2.qkv_conv.bias,torch.Size([84]),84
+535,features.denseblock3.denselayer15.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+536,features.denseblock3.denselayer15.conv2.attn_out.bias,torch.Size([4]),4
+537,features.denseblock3.denselayer16.norm1.weight,torch.Size([736]),736
+538,features.denseblock3.denselayer16.norm1.bias,torch.Size([736]),736
+539,features.denseblock3.denselayer16.conv1.conv_out.weight,"torch.Size([124, 736, 1, 1])",91264
+540,features.denseblock3.denselayer16.conv1.conv_out.bias,torch.Size([124]),124
+541,features.denseblock3.denselayer16.conv1.qkv_conv.weight,"torch.Size([84, 736, 1, 1])",61824
+542,features.denseblock3.denselayer16.conv1.qkv_conv.bias,torch.Size([84]),84
+543,features.denseblock3.denselayer16.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+544,features.denseblock3.denselayer16.conv1.attn_out.bias,torch.Size([4]),4
+545,features.denseblock3.denselayer16.norm2.weight,torch.Size([128]),128
+546,features.denseblock3.denselayer16.norm2.bias,torch.Size([128]),128
+547,features.denseblock3.denselayer16.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+548,features.denseblock3.denselayer16.conv2.conv_out.bias,torch.Size([28]),28
+549,features.denseblock3.denselayer16.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+550,features.denseblock3.denselayer16.conv2.qkv_conv.bias,torch.Size([84]),84
+551,features.denseblock3.denselayer16.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+552,features.denseblock3.denselayer16.conv2.attn_out.bias,torch.Size([4]),4
+553,features.denseblock3.denselayer17.norm1.weight,torch.Size([768]),768
+554,features.denseblock3.denselayer17.norm1.bias,torch.Size([768]),768
+555,features.denseblock3.denselayer17.conv1.conv_out.weight,"torch.Size([124, 768, 1, 1])",95232
+556,features.denseblock3.denselayer17.conv1.conv_out.bias,torch.Size([124]),124
+557,features.denseblock3.denselayer17.conv1.qkv_conv.weight,"torch.Size([84, 768, 1, 1])",64512
+558,features.denseblock3.denselayer17.conv1.qkv_conv.bias,torch.Size([84]),84
+559,features.denseblock3.denselayer17.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+560,features.denseblock3.denselayer17.conv1.attn_out.bias,torch.Size([4]),4
+561,features.denseblock3.denselayer17.norm2.weight,torch.Size([128]),128
+562,features.denseblock3.denselayer17.norm2.bias,torch.Size([128]),128
+563,features.denseblock3.denselayer17.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+564,features.denseblock3.denselayer17.conv2.conv_out.bias,torch.Size([28]),28
+565,features.denseblock3.denselayer17.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+566,features.denseblock3.denselayer17.conv2.qkv_conv.bias,torch.Size([84]),84
+567,features.denseblock3.denselayer17.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+568,features.denseblock3.denselayer17.conv2.attn_out.bias,torch.Size([4]),4
+569,features.denseblock3.denselayer18.norm1.weight,torch.Size([800]),800
+570,features.denseblock3.denselayer18.norm1.bias,torch.Size([800]),800
+571,features.denseblock3.denselayer18.conv1.conv_out.weight,"torch.Size([124, 800, 1, 1])",99200
+572,features.denseblock3.denselayer18.conv1.conv_out.bias,torch.Size([124]),124
+573,features.denseblock3.denselayer18.conv1.qkv_conv.weight,"torch.Size([84, 800, 1, 1])",67200
+574,features.denseblock3.denselayer18.conv1.qkv_conv.bias,torch.Size([84]),84
+575,features.denseblock3.denselayer18.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+576,features.denseblock3.denselayer18.conv1.attn_out.bias,torch.Size([4]),4
+577,features.denseblock3.denselayer18.norm2.weight,torch.Size([128]),128
+578,features.denseblock3.denselayer18.norm2.bias,torch.Size([128]),128
+579,features.denseblock3.denselayer18.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+580,features.denseblock3.denselayer18.conv2.conv_out.bias,torch.Size([28]),28
+581,features.denseblock3.denselayer18.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+582,features.denseblock3.denselayer18.conv2.qkv_conv.bias,torch.Size([84]),84
+583,features.denseblock3.denselayer18.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+584,features.denseblock3.denselayer18.conv2.attn_out.bias,torch.Size([4]),4
+585,features.denseblock3.denselayer19.norm1.weight,torch.Size([832]),832
+586,features.denseblock3.denselayer19.norm1.bias,torch.Size([832]),832
+587,features.denseblock3.denselayer19.conv1.conv_out.weight,"torch.Size([124, 832, 1, 1])",103168
+588,features.denseblock3.denselayer19.conv1.conv_out.bias,torch.Size([124]),124
+589,features.denseblock3.denselayer19.conv1.qkv_conv.weight,"torch.Size([84, 832, 1, 1])",69888
+590,features.denseblock3.denselayer19.conv1.qkv_conv.bias,torch.Size([84]),84
+591,features.denseblock3.denselayer19.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+592,features.denseblock3.denselayer19.conv1.attn_out.bias,torch.Size([4]),4
+593,features.denseblock3.denselayer19.norm2.weight,torch.Size([128]),128
+594,features.denseblock3.denselayer19.norm2.bias,torch.Size([128]),128
+595,features.denseblock3.denselayer19.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+596,features.denseblock3.denselayer19.conv2.conv_out.bias,torch.Size([28]),28
+597,features.denseblock3.denselayer19.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+598,features.denseblock3.denselayer19.conv2.qkv_conv.bias,torch.Size([84]),84
+599,features.denseblock3.denselayer19.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+600,features.denseblock3.denselayer19.conv2.attn_out.bias,torch.Size([4]),4
+601,features.denseblock3.denselayer20.norm1.weight,torch.Size([864]),864
+602,features.denseblock3.denselayer20.norm1.bias,torch.Size([864]),864
+603,features.denseblock3.denselayer20.conv1.conv_out.weight,"torch.Size([124, 864, 1, 1])",107136
+604,features.denseblock3.denselayer20.conv1.conv_out.bias,torch.Size([124]),124
+605,features.denseblock3.denselayer20.conv1.qkv_conv.weight,"torch.Size([84, 864, 1, 1])",72576
+606,features.denseblock3.denselayer20.conv1.qkv_conv.bias,torch.Size([84]),84
+607,features.denseblock3.denselayer20.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+608,features.denseblock3.denselayer20.conv1.attn_out.bias,torch.Size([4]),4
+609,features.denseblock3.denselayer20.norm2.weight,torch.Size([128]),128
+610,features.denseblock3.denselayer20.norm2.bias,torch.Size([128]),128
+611,features.denseblock3.denselayer20.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+612,features.denseblock3.denselayer20.conv2.conv_out.bias,torch.Size([28]),28
+613,features.denseblock3.denselayer20.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+614,features.denseblock3.denselayer20.conv2.qkv_conv.bias,torch.Size([84]),84
+615,features.denseblock3.denselayer20.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+616,features.denseblock3.denselayer20.conv2.attn_out.bias,torch.Size([4]),4
+617,features.denseblock3.denselayer21.norm1.weight,torch.Size([896]),896
+618,features.denseblock3.denselayer21.norm1.bias,torch.Size([896]),896
+619,features.denseblock3.denselayer21.conv1.conv_out.weight,"torch.Size([124, 896, 1, 1])",111104
+620,features.denseblock3.denselayer21.conv1.conv_out.bias,torch.Size([124]),124
+621,features.denseblock3.denselayer21.conv1.qkv_conv.weight,"torch.Size([84, 896, 1, 1])",75264
+622,features.denseblock3.denselayer21.conv1.qkv_conv.bias,torch.Size([84]),84
+623,features.denseblock3.denselayer21.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+624,features.denseblock3.denselayer21.conv1.attn_out.bias,torch.Size([4]),4
+625,features.denseblock3.denselayer21.norm2.weight,torch.Size([128]),128
+626,features.denseblock3.denselayer21.norm2.bias,torch.Size([128]),128
+627,features.denseblock3.denselayer21.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+628,features.denseblock3.denselayer21.conv2.conv_out.bias,torch.Size([28]),28
+629,features.denseblock3.denselayer21.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+630,features.denseblock3.denselayer21.conv2.qkv_conv.bias,torch.Size([84]),84
+631,features.denseblock3.denselayer21.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+632,features.denseblock3.denselayer21.conv2.attn_out.bias,torch.Size([4]),4
+633,features.denseblock3.denselayer22.norm1.weight,torch.Size([928]),928
+634,features.denseblock3.denselayer22.norm1.bias,torch.Size([928]),928
+635,features.denseblock3.denselayer22.conv1.conv_out.weight,"torch.Size([124, 928, 1, 1])",115072
+636,features.denseblock3.denselayer22.conv1.conv_out.bias,torch.Size([124]),124
+637,features.denseblock3.denselayer22.conv1.qkv_conv.weight,"torch.Size([84, 928, 1, 1])",77952
+638,features.denseblock3.denselayer22.conv1.qkv_conv.bias,torch.Size([84]),84
+639,features.denseblock3.denselayer22.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+640,features.denseblock3.denselayer22.conv1.attn_out.bias,torch.Size([4]),4
+641,features.denseblock3.denselayer22.norm2.weight,torch.Size([128]),128
+642,features.denseblock3.denselayer22.norm2.bias,torch.Size([128]),128
+643,features.denseblock3.denselayer22.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+644,features.denseblock3.denselayer22.conv2.conv_out.bias,torch.Size([28]),28
+645,features.denseblock3.denselayer22.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+646,features.denseblock3.denselayer22.conv2.qkv_conv.bias,torch.Size([84]),84
+647,features.denseblock3.denselayer22.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+648,features.denseblock3.denselayer22.conv2.attn_out.bias,torch.Size([4]),4
+649,features.denseblock3.denselayer23.norm1.weight,torch.Size([960]),960
+650,features.denseblock3.denselayer23.norm1.bias,torch.Size([960]),960
+651,features.denseblock3.denselayer23.conv1.conv_out.weight,"torch.Size([124, 960, 1, 1])",119040
+652,features.denseblock3.denselayer23.conv1.conv_out.bias,torch.Size([124]),124
+653,features.denseblock3.denselayer23.conv1.qkv_conv.weight,"torch.Size([84, 960, 1, 1])",80640
+654,features.denseblock3.denselayer23.conv1.qkv_conv.bias,torch.Size([84]),84
+655,features.denseblock3.denselayer23.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+656,features.denseblock3.denselayer23.conv1.attn_out.bias,torch.Size([4]),4
+657,features.denseblock3.denselayer23.norm2.weight,torch.Size([128]),128
+658,features.denseblock3.denselayer23.norm2.bias,torch.Size([128]),128
+659,features.denseblock3.denselayer23.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+660,features.denseblock3.denselayer23.conv2.conv_out.bias,torch.Size([28]),28
+661,features.denseblock3.denselayer23.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+662,features.denseblock3.denselayer23.conv2.qkv_conv.bias,torch.Size([84]),84
+663,features.denseblock3.denselayer23.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+664,features.denseblock3.denselayer23.conv2.attn_out.bias,torch.Size([4]),4
+665,features.denseblock3.denselayer24.norm1.weight,torch.Size([992]),992
+666,features.denseblock3.denselayer24.norm1.bias,torch.Size([992]),992
+667,features.denseblock3.denselayer24.conv1.conv_out.weight,"torch.Size([124, 992, 1, 1])",123008
+668,features.denseblock3.denselayer24.conv1.conv_out.bias,torch.Size([124]),124
+669,features.denseblock3.denselayer24.conv1.qkv_conv.weight,"torch.Size([84, 992, 1, 1])",83328
+670,features.denseblock3.denselayer24.conv1.qkv_conv.bias,torch.Size([84]),84
+671,features.denseblock3.denselayer24.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+672,features.denseblock3.denselayer24.conv1.attn_out.bias,torch.Size([4]),4
+673,features.denseblock3.denselayer24.norm2.weight,torch.Size([128]),128
+674,features.denseblock3.denselayer24.norm2.bias,torch.Size([128]),128
+675,features.denseblock3.denselayer24.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+676,features.denseblock3.denselayer24.conv2.conv_out.bias,torch.Size([28]),28
+677,features.denseblock3.denselayer24.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+678,features.denseblock3.denselayer24.conv2.qkv_conv.bias,torch.Size([84]),84
+679,features.denseblock3.denselayer24.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+680,features.denseblock3.denselayer24.conv2.attn_out.bias,torch.Size([4]),4
+681,features.transition3.norm.weight,torch.Size([1024]),1024
+682,features.transition3.norm.bias,torch.Size([1024]),1024
+683,features.transition3.conv.weight,"torch.Size([512, 1024, 1, 1])",524288
+684,features.denseblock4.denselayer1.norm1.weight,torch.Size([512]),512
+685,features.denseblock4.denselayer1.norm1.bias,torch.Size([512]),512
+686,features.denseblock4.denselayer1.conv1.conv_out.weight,"torch.Size([124, 512, 1, 1])",63488
+687,features.denseblock4.denselayer1.conv1.conv_out.bias,torch.Size([124]),124
+688,features.denseblock4.denselayer1.conv1.qkv_conv.weight,"torch.Size([84, 512, 1, 1])",43008
+689,features.denseblock4.denselayer1.conv1.qkv_conv.bias,torch.Size([84]),84
+690,features.denseblock4.denselayer1.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+691,features.denseblock4.denselayer1.conv1.attn_out.bias,torch.Size([4]),4
+692,features.denseblock4.denselayer1.norm2.weight,torch.Size([128]),128
+693,features.denseblock4.denselayer1.norm2.bias,torch.Size([128]),128
+694,features.denseblock4.denselayer1.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+695,features.denseblock4.denselayer1.conv2.conv_out.bias,torch.Size([28]),28
+696,features.denseblock4.denselayer1.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+697,features.denseblock4.denselayer1.conv2.qkv_conv.bias,torch.Size([84]),84
+698,features.denseblock4.denselayer1.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+699,features.denseblock4.denselayer1.conv2.attn_out.bias,torch.Size([4]),4
+700,features.denseblock4.denselayer2.norm1.weight,torch.Size([544]),544
+701,features.denseblock4.denselayer2.norm1.bias,torch.Size([544]),544
+702,features.denseblock4.denselayer2.conv1.conv_out.weight,"torch.Size([124, 544, 1, 1])",67456
+703,features.denseblock4.denselayer2.conv1.conv_out.bias,torch.Size([124]),124
+704,features.denseblock4.denselayer2.conv1.qkv_conv.weight,"torch.Size([84, 544, 1, 1])",45696
+705,features.denseblock4.denselayer2.conv1.qkv_conv.bias,torch.Size([84]),84
+706,features.denseblock4.denselayer2.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+707,features.denseblock4.denselayer2.conv1.attn_out.bias,torch.Size([4]),4
+708,features.denseblock4.denselayer2.norm2.weight,torch.Size([128]),128
+709,features.denseblock4.denselayer2.norm2.bias,torch.Size([128]),128
+710,features.denseblock4.denselayer2.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+711,features.denseblock4.denselayer2.conv2.conv_out.bias,torch.Size([28]),28
+712,features.denseblock4.denselayer2.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+713,features.denseblock4.denselayer2.conv2.qkv_conv.bias,torch.Size([84]),84
+714,features.denseblock4.denselayer2.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+715,features.denseblock4.denselayer2.conv2.attn_out.bias,torch.Size([4]),4
+716,features.denseblock4.denselayer3.norm1.weight,torch.Size([576]),576
+717,features.denseblock4.denselayer3.norm1.bias,torch.Size([576]),576
+718,features.denseblock4.denselayer3.conv1.conv_out.weight,"torch.Size([124, 576, 1, 1])",71424
+719,features.denseblock4.denselayer3.conv1.conv_out.bias,torch.Size([124]),124
+720,features.denseblock4.denselayer3.conv1.qkv_conv.weight,"torch.Size([84, 576, 1, 1])",48384
+721,features.denseblock4.denselayer3.conv1.qkv_conv.bias,torch.Size([84]),84
+722,features.denseblock4.denselayer3.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+723,features.denseblock4.denselayer3.conv1.attn_out.bias,torch.Size([4]),4
+724,features.denseblock4.denselayer3.norm2.weight,torch.Size([128]),128
+725,features.denseblock4.denselayer3.norm2.bias,torch.Size([128]),128
+726,features.denseblock4.denselayer3.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+727,features.denseblock4.denselayer3.conv2.conv_out.bias,torch.Size([28]),28
+728,features.denseblock4.denselayer3.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+729,features.denseblock4.denselayer3.conv2.qkv_conv.bias,torch.Size([84]),84
+730,features.denseblock4.denselayer3.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+731,features.denseblock4.denselayer3.conv2.attn_out.bias,torch.Size([4]),4
+732,features.denseblock4.denselayer4.norm1.weight,torch.Size([608]),608
+733,features.denseblock4.denselayer4.norm1.bias,torch.Size([608]),608
+734,features.denseblock4.denselayer4.conv1.conv_out.weight,"torch.Size([124, 608, 1, 1])",75392
+735,features.denseblock4.denselayer4.conv1.conv_out.bias,torch.Size([124]),124
+736,features.denseblock4.denselayer4.conv1.qkv_conv.weight,"torch.Size([84, 608, 1, 1])",51072
+737,features.denseblock4.denselayer4.conv1.qkv_conv.bias,torch.Size([84]),84
+738,features.denseblock4.denselayer4.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+739,features.denseblock4.denselayer4.conv1.attn_out.bias,torch.Size([4]),4
+740,features.denseblock4.denselayer4.norm2.weight,torch.Size([128]),128
+741,features.denseblock4.denselayer4.norm2.bias,torch.Size([128]),128
+742,features.denseblock4.denselayer4.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+743,features.denseblock4.denselayer4.conv2.conv_out.bias,torch.Size([28]),28
+744,features.denseblock4.denselayer4.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+745,features.denseblock4.denselayer4.conv2.qkv_conv.bias,torch.Size([84]),84
+746,features.denseblock4.denselayer4.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+747,features.denseblock4.denselayer4.conv2.attn_out.bias,torch.Size([4]),4
+748,features.denseblock4.denselayer5.norm1.weight,torch.Size([640]),640
+749,features.denseblock4.denselayer5.norm1.bias,torch.Size([640]),640
+750,features.denseblock4.denselayer5.conv1.conv_out.weight,"torch.Size([124, 640, 1, 1])",79360
+751,features.denseblock4.denselayer5.conv1.conv_out.bias,torch.Size([124]),124
+752,features.denseblock4.denselayer5.conv1.qkv_conv.weight,"torch.Size([84, 640, 1, 1])",53760
+753,features.denseblock4.denselayer5.conv1.qkv_conv.bias,torch.Size([84]),84
+754,features.denseblock4.denselayer5.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+755,features.denseblock4.denselayer5.conv1.attn_out.bias,torch.Size([4]),4
+756,features.denseblock4.denselayer5.norm2.weight,torch.Size([128]),128
+757,features.denseblock4.denselayer5.norm2.bias,torch.Size([128]),128
+758,features.denseblock4.denselayer5.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+759,features.denseblock4.denselayer5.conv2.conv_out.bias,torch.Size([28]),28
+760,features.denseblock4.denselayer5.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+761,features.denseblock4.denselayer5.conv2.qkv_conv.bias,torch.Size([84]),84
+762,features.denseblock4.denselayer5.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+763,features.denseblock4.denselayer5.conv2.attn_out.bias,torch.Size([4]),4
+764,features.denseblock4.denselayer6.norm1.weight,torch.Size([672]),672
+765,features.denseblock4.denselayer6.norm1.bias,torch.Size([672]),672
+766,features.denseblock4.denselayer6.conv1.conv_out.weight,"torch.Size([124, 672, 1, 1])",83328
+767,features.denseblock4.denselayer6.conv1.conv_out.bias,torch.Size([124]),124
+768,features.denseblock4.denselayer6.conv1.qkv_conv.weight,"torch.Size([84, 672, 1, 1])",56448
+769,features.denseblock4.denselayer6.conv1.qkv_conv.bias,torch.Size([84]),84
+770,features.denseblock4.denselayer6.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+771,features.denseblock4.denselayer6.conv1.attn_out.bias,torch.Size([4]),4
+772,features.denseblock4.denselayer6.norm2.weight,torch.Size([128]),128
+773,features.denseblock4.denselayer6.norm2.bias,torch.Size([128]),128
+774,features.denseblock4.denselayer6.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+775,features.denseblock4.denselayer6.conv2.conv_out.bias,torch.Size([28]),28
+776,features.denseblock4.denselayer6.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+777,features.denseblock4.denselayer6.conv2.qkv_conv.bias,torch.Size([84]),84
+778,features.denseblock4.denselayer6.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+779,features.denseblock4.denselayer6.conv2.attn_out.bias,torch.Size([4]),4
+780,features.denseblock4.denselayer7.norm1.weight,torch.Size([704]),704
+781,features.denseblock4.denselayer7.norm1.bias,torch.Size([704]),704
+782,features.denseblock4.denselayer7.conv1.conv_out.weight,"torch.Size([124, 704, 1, 1])",87296
+783,features.denseblock4.denselayer7.conv1.conv_out.bias,torch.Size([124]),124
+784,features.denseblock4.denselayer7.conv1.qkv_conv.weight,"torch.Size([84, 704, 1, 1])",59136
+785,features.denseblock4.denselayer7.conv1.qkv_conv.bias,torch.Size([84]),84
+786,features.denseblock4.denselayer7.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+787,features.denseblock4.denselayer7.conv1.attn_out.bias,torch.Size([4]),4
+788,features.denseblock4.denselayer7.norm2.weight,torch.Size([128]),128
+789,features.denseblock4.denselayer7.norm2.bias,torch.Size([128]),128
+790,features.denseblock4.denselayer7.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+791,features.denseblock4.denselayer7.conv2.conv_out.bias,torch.Size([28]),28
+792,features.denseblock4.denselayer7.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+793,features.denseblock4.denselayer7.conv2.qkv_conv.bias,torch.Size([84]),84
+794,features.denseblock4.denselayer7.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+795,features.denseblock4.denselayer7.conv2.attn_out.bias,torch.Size([4]),4
+796,features.denseblock4.denselayer8.norm1.weight,torch.Size([736]),736
+797,features.denseblock4.denselayer8.norm1.bias,torch.Size([736]),736
+798,features.denseblock4.denselayer8.conv1.conv_out.weight,"torch.Size([124, 736, 1, 1])",91264
+799,features.denseblock4.denselayer8.conv1.conv_out.bias,torch.Size([124]),124
+800,features.denseblock4.denselayer8.conv1.qkv_conv.weight,"torch.Size([84, 736, 1, 1])",61824
+801,features.denseblock4.denselayer8.conv1.qkv_conv.bias,torch.Size([84]),84
+802,features.denseblock4.denselayer8.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+803,features.denseblock4.denselayer8.conv1.attn_out.bias,torch.Size([4]),4
+804,features.denseblock4.denselayer8.norm2.weight,torch.Size([128]),128
+805,features.denseblock4.denselayer8.norm2.bias,torch.Size([128]),128
+806,features.denseblock4.denselayer8.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+807,features.denseblock4.denselayer8.conv2.conv_out.bias,torch.Size([28]),28
+808,features.denseblock4.denselayer8.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+809,features.denseblock4.denselayer8.conv2.qkv_conv.bias,torch.Size([84]),84
+810,features.denseblock4.denselayer8.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+811,features.denseblock4.denselayer8.conv2.attn_out.bias,torch.Size([4]),4
+812,features.denseblock4.denselayer9.norm1.weight,torch.Size([768]),768
+813,features.denseblock4.denselayer9.norm1.bias,torch.Size([768]),768
+814,features.denseblock4.denselayer9.conv1.conv_out.weight,"torch.Size([124, 768, 1, 1])",95232
+815,features.denseblock4.denselayer9.conv1.conv_out.bias,torch.Size([124]),124
+816,features.denseblock4.denselayer9.conv1.qkv_conv.weight,"torch.Size([84, 768, 1, 1])",64512
+817,features.denseblock4.denselayer9.conv1.qkv_conv.bias,torch.Size([84]),84
+818,features.denseblock4.denselayer9.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+819,features.denseblock4.denselayer9.conv1.attn_out.bias,torch.Size([4]),4
+820,features.denseblock4.denselayer9.norm2.weight,torch.Size([128]),128
+821,features.denseblock4.denselayer9.norm2.bias,torch.Size([128]),128
+822,features.denseblock4.denselayer9.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+823,features.denseblock4.denselayer9.conv2.conv_out.bias,torch.Size([28]),28
+824,features.denseblock4.denselayer9.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+825,features.denseblock4.denselayer9.conv2.qkv_conv.bias,torch.Size([84]),84
+826,features.denseblock4.denselayer9.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+827,features.denseblock4.denselayer9.conv2.attn_out.bias,torch.Size([4]),4
+828,features.denseblock4.denselayer10.norm1.weight,torch.Size([800]),800
+829,features.denseblock4.denselayer10.norm1.bias,torch.Size([800]),800
+830,features.denseblock4.denselayer10.conv1.conv_out.weight,"torch.Size([124, 800, 1, 1])",99200
+831,features.denseblock4.denselayer10.conv1.conv_out.bias,torch.Size([124]),124
+832,features.denseblock4.denselayer10.conv1.qkv_conv.weight,"torch.Size([84, 800, 1, 1])",67200
+833,features.denseblock4.denselayer10.conv1.qkv_conv.bias,torch.Size([84]),84
+834,features.denseblock4.denselayer10.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+835,features.denseblock4.denselayer10.conv1.attn_out.bias,torch.Size([4]),4
+836,features.denseblock4.denselayer10.norm2.weight,torch.Size([128]),128
+837,features.denseblock4.denselayer10.norm2.bias,torch.Size([128]),128
+838,features.denseblock4.denselayer10.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+839,features.denseblock4.denselayer10.conv2.conv_out.bias,torch.Size([28]),28
+840,features.denseblock4.denselayer10.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+841,features.denseblock4.denselayer10.conv2.qkv_conv.bias,torch.Size([84]),84
+842,features.denseblock4.denselayer10.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+843,features.denseblock4.denselayer10.conv2.attn_out.bias,torch.Size([4]),4
+844,features.denseblock4.denselayer11.norm1.weight,torch.Size([832]),832
+845,features.denseblock4.denselayer11.norm1.bias,torch.Size([832]),832
+846,features.denseblock4.denselayer11.conv1.conv_out.weight,"torch.Size([124, 832, 1, 1])",103168
+847,features.denseblock4.denselayer11.conv1.conv_out.bias,torch.Size([124]),124
+848,features.denseblock4.denselayer11.conv1.qkv_conv.weight,"torch.Size([84, 832, 1, 1])",69888
+849,features.denseblock4.denselayer11.conv1.qkv_conv.bias,torch.Size([84]),84
+850,features.denseblock4.denselayer11.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+851,features.denseblock4.denselayer11.conv1.attn_out.bias,torch.Size([4]),4
+852,features.denseblock4.denselayer11.norm2.weight,torch.Size([128]),128
+853,features.denseblock4.denselayer11.norm2.bias,torch.Size([128]),128
+854,features.denseblock4.denselayer11.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+855,features.denseblock4.denselayer11.conv2.conv_out.bias,torch.Size([28]),28
+856,features.denseblock4.denselayer11.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+857,features.denseblock4.denselayer11.conv2.qkv_conv.bias,torch.Size([84]),84
+858,features.denseblock4.denselayer11.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+859,features.denseblock4.denselayer11.conv2.attn_out.bias,torch.Size([4]),4
+860,features.denseblock4.denselayer12.norm1.weight,torch.Size([864]),864
+861,features.denseblock4.denselayer12.norm1.bias,torch.Size([864]),864
+862,features.denseblock4.denselayer12.conv1.conv_out.weight,"torch.Size([124, 864, 1, 1])",107136
+863,features.denseblock4.denselayer12.conv1.conv_out.bias,torch.Size([124]),124
+864,features.denseblock4.denselayer12.conv1.qkv_conv.weight,"torch.Size([84, 864, 1, 1])",72576
+865,features.denseblock4.denselayer12.conv1.qkv_conv.bias,torch.Size([84]),84
+866,features.denseblock4.denselayer12.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+867,features.denseblock4.denselayer12.conv1.attn_out.bias,torch.Size([4]),4
+868,features.denseblock4.denselayer12.norm2.weight,torch.Size([128]),128
+869,features.denseblock4.denselayer12.norm2.bias,torch.Size([128]),128
+870,features.denseblock4.denselayer12.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+871,features.denseblock4.denselayer12.conv2.conv_out.bias,torch.Size([28]),28
+872,features.denseblock4.denselayer12.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+873,features.denseblock4.denselayer12.conv2.qkv_conv.bias,torch.Size([84]),84
+874,features.denseblock4.denselayer12.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+875,features.denseblock4.denselayer12.conv2.attn_out.bias,torch.Size([4]),4
+876,features.denseblock4.denselayer13.norm1.weight,torch.Size([896]),896
+877,features.denseblock4.denselayer13.norm1.bias,torch.Size([896]),896
+878,features.denseblock4.denselayer13.conv1.conv_out.weight,"torch.Size([124, 896, 1, 1])",111104
+879,features.denseblock4.denselayer13.conv1.conv_out.bias,torch.Size([124]),124
+880,features.denseblock4.denselayer13.conv1.qkv_conv.weight,"torch.Size([84, 896, 1, 1])",75264
+881,features.denseblock4.denselayer13.conv1.qkv_conv.bias,torch.Size([84]),84
+882,features.denseblock4.denselayer13.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+883,features.denseblock4.denselayer13.conv1.attn_out.bias,torch.Size([4]),4
+884,features.denseblock4.denselayer13.norm2.weight,torch.Size([128]),128
+885,features.denseblock4.denselayer13.norm2.bias,torch.Size([128]),128
+886,features.denseblock4.denselayer13.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+887,features.denseblock4.denselayer13.conv2.conv_out.bias,torch.Size([28]),28
+888,features.denseblock4.denselayer13.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+889,features.denseblock4.denselayer13.conv2.qkv_conv.bias,torch.Size([84]),84
+890,features.denseblock4.denselayer13.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+891,features.denseblock4.denselayer13.conv2.attn_out.bias,torch.Size([4]),4
+892,features.denseblock4.denselayer14.norm1.weight,torch.Size([928]),928
+893,features.denseblock4.denselayer14.norm1.bias,torch.Size([928]),928
+894,features.denseblock4.denselayer14.conv1.conv_out.weight,"torch.Size([124, 928, 1, 1])",115072
+895,features.denseblock4.denselayer14.conv1.conv_out.bias,torch.Size([124]),124
+896,features.denseblock4.denselayer14.conv1.qkv_conv.weight,"torch.Size([84, 928, 1, 1])",77952
+897,features.denseblock4.denselayer14.conv1.qkv_conv.bias,torch.Size([84]),84
+898,features.denseblock4.denselayer14.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+899,features.denseblock4.denselayer14.conv1.attn_out.bias,torch.Size([4]),4
+900,features.denseblock4.denselayer14.norm2.weight,torch.Size([128]),128
+901,features.denseblock4.denselayer14.norm2.bias,torch.Size([128]),128
+902,features.denseblock4.denselayer14.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+903,features.denseblock4.denselayer14.conv2.conv_out.bias,torch.Size([28]),28
+904,features.denseblock4.denselayer14.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+905,features.denseblock4.denselayer14.conv2.qkv_conv.bias,torch.Size([84]),84
+906,features.denseblock4.denselayer14.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+907,features.denseblock4.denselayer14.conv2.attn_out.bias,torch.Size([4]),4
+908,features.denseblock4.denselayer15.norm1.weight,torch.Size([960]),960
+909,features.denseblock4.denselayer15.norm1.bias,torch.Size([960]),960
+910,features.denseblock4.denselayer15.conv1.conv_out.weight,"torch.Size([124, 960, 1, 1])",119040
+911,features.denseblock4.denselayer15.conv1.conv_out.bias,torch.Size([124]),124
+912,features.denseblock4.denselayer15.conv1.qkv_conv.weight,"torch.Size([84, 960, 1, 1])",80640
+913,features.denseblock4.denselayer15.conv1.qkv_conv.bias,torch.Size([84]),84
+914,features.denseblock4.denselayer15.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+915,features.denseblock4.denselayer15.conv1.attn_out.bias,torch.Size([4]),4
+916,features.denseblock4.denselayer15.norm2.weight,torch.Size([128]),128
+917,features.denseblock4.denselayer15.norm2.bias,torch.Size([128]),128
+918,features.denseblock4.denselayer15.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+919,features.denseblock4.denselayer15.conv2.conv_out.bias,torch.Size([28]),28
+920,features.denseblock4.denselayer15.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+921,features.denseblock4.denselayer15.conv2.qkv_conv.bias,torch.Size([84]),84
+922,features.denseblock4.denselayer15.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+923,features.denseblock4.denselayer15.conv2.attn_out.bias,torch.Size([4]),4
+924,features.denseblock4.denselayer16.norm1.weight,torch.Size([992]),992
+925,features.denseblock4.denselayer16.norm1.bias,torch.Size([992]),992
+926,features.denseblock4.denselayer16.conv1.conv_out.weight,"torch.Size([124, 992, 1, 1])",123008
+927,features.denseblock4.denselayer16.conv1.conv_out.bias,torch.Size([124]),124
+928,features.denseblock4.denselayer16.conv1.qkv_conv.weight,"torch.Size([84, 992, 1, 1])",83328
+929,features.denseblock4.denselayer16.conv1.qkv_conv.bias,torch.Size([84]),84
+930,features.denseblock4.denselayer16.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+931,features.denseblock4.denselayer16.conv1.attn_out.bias,torch.Size([4]),4
+932,features.denseblock4.denselayer16.norm2.weight,torch.Size([128]),128
+933,features.denseblock4.denselayer16.norm2.bias,torch.Size([128]),128
+934,features.denseblock4.denselayer16.conv2.conv_out.weight,"torch.Size([28, 128, 3, 3])",32256
+935,features.denseblock4.denselayer16.conv2.conv_out.bias,torch.Size([28]),28
+936,features.denseblock4.denselayer16.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+937,features.denseblock4.denselayer16.conv2.qkv_conv.bias,torch.Size([84]),84
+938,features.denseblock4.denselayer16.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+939,features.denseblock4.denselayer16.conv2.attn_out.bias,torch.Size([4]),4
+940,features.norm5.weight,torch.Size([1024]),1024
+941,features.norm5.bias,torch.Size([1024]),1024
+942,classifier.weight,"torch.Size([100, 1024])",102400
+943,classifier.bias,torch.Size([100]),100

@@ -1,0 +1,158 @@
+,layer,shape,size
+0,conv1.weight,"torch.Size([64, 3, 3, 3])",1728
+1,bn1.weight,torch.Size([64]),64
+2,bn1.bias,torch.Size([64]),64
+3,layer1.0.conv1.conv_out.weight,"torch.Size([60, 64, 3, 3])",34560
+4,layer1.0.conv1.conv_out.bias,torch.Size([60]),60
+5,layer1.0.conv1.qkv_conv.weight,"torch.Size([84, 64, 3, 3])",48384
+6,layer1.0.conv1.qkv_conv.bias,torch.Size([84]),84
+7,layer1.0.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+8,layer1.0.conv1.attn_out.bias,torch.Size([4]),4
+9,layer1.0.bn1.weight,torch.Size([64]),64
+10,layer1.0.bn1.bias,torch.Size([64]),64
+11,layer1.0.conv2.conv_out.weight,"torch.Size([60, 64, 3, 3])",34560
+12,layer1.0.conv2.conv_out.bias,torch.Size([60]),60
+13,layer1.0.conv2.qkv_conv.weight,"torch.Size([84, 64, 3, 3])",48384
+14,layer1.0.conv2.qkv_conv.bias,torch.Size([84]),84
+15,layer1.0.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+16,layer1.0.conv2.attn_out.bias,torch.Size([4]),4
+17,layer1.0.bn2.weight,torch.Size([64]),64
+18,layer1.0.bn2.bias,torch.Size([64]),64
+19,layer1.1.conv1.conv_out.weight,"torch.Size([60, 64, 3, 3])",34560
+20,layer1.1.conv1.conv_out.bias,torch.Size([60]),60
+21,layer1.1.conv1.qkv_conv.weight,"torch.Size([84, 64, 3, 3])",48384
+22,layer1.1.conv1.qkv_conv.bias,torch.Size([84]),84
+23,layer1.1.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+24,layer1.1.conv1.attn_out.bias,torch.Size([4]),4
+25,layer1.1.bn1.weight,torch.Size([64]),64
+26,layer1.1.bn1.bias,torch.Size([64]),64
+27,layer1.1.conv2.conv_out.weight,"torch.Size([60, 64, 3, 3])",34560
+28,layer1.1.conv2.conv_out.bias,torch.Size([60]),60
+29,layer1.1.conv2.qkv_conv.weight,"torch.Size([84, 64, 3, 3])",48384
+30,layer1.1.conv2.qkv_conv.bias,torch.Size([84]),84
+31,layer1.1.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+32,layer1.1.conv2.attn_out.bias,torch.Size([4]),4
+33,layer1.1.bn2.weight,torch.Size([64]),64
+34,layer1.1.bn2.bias,torch.Size([64]),64
+35,layer2.0.conv1.conv_out.weight,"torch.Size([124, 64, 3, 3])",71424
+36,layer2.0.conv1.conv_out.bias,torch.Size([124]),124
+37,layer2.0.conv1.qkv_conv.weight,"torch.Size([84, 64, 3, 3])",48384
+38,layer2.0.conv1.qkv_conv.bias,torch.Size([84]),84
+39,layer2.0.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+40,layer2.0.conv1.attn_out.bias,torch.Size([4]),4
+41,layer2.0.bn1.weight,torch.Size([128]),128
+42,layer2.0.bn1.bias,torch.Size([128]),128
+43,layer2.0.conv2.conv_out.weight,"torch.Size([124, 128, 3, 3])",142848
+44,layer2.0.conv2.conv_out.bias,torch.Size([124]),124
+45,layer2.0.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+46,layer2.0.conv2.qkv_conv.bias,torch.Size([84]),84
+47,layer2.0.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+48,layer2.0.conv2.attn_out.bias,torch.Size([4]),4
+49,layer2.0.bn2.weight,torch.Size([128]),128
+50,layer2.0.bn2.bias,torch.Size([128]),128
+51,layer2.0.downsample.0.conv_out.weight,"torch.Size([124, 64, 1, 1])",7936
+52,layer2.0.downsample.0.conv_out.bias,torch.Size([124]),124
+53,layer2.0.downsample.0.qkv_conv.weight,"torch.Size([84, 64, 1, 1])",5376
+54,layer2.0.downsample.0.qkv_conv.bias,torch.Size([84]),84
+55,layer2.0.downsample.0.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+56,layer2.0.downsample.0.attn_out.bias,torch.Size([4]),4
+57,layer2.0.downsample.1.weight,torch.Size([128]),128
+58,layer2.0.downsample.1.bias,torch.Size([128]),128
+59,layer2.1.conv1.conv_out.weight,"torch.Size([124, 128, 3, 3])",142848
+60,layer2.1.conv1.conv_out.bias,torch.Size([124]),124
+61,layer2.1.conv1.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+62,layer2.1.conv1.qkv_conv.bias,torch.Size([84]),84
+63,layer2.1.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+64,layer2.1.conv1.attn_out.bias,torch.Size([4]),4
+65,layer2.1.bn1.weight,torch.Size([128]),128
+66,layer2.1.bn1.bias,torch.Size([128]),128
+67,layer2.1.conv2.conv_out.weight,"torch.Size([124, 128, 3, 3])",142848
+68,layer2.1.conv2.conv_out.bias,torch.Size([124]),124
+69,layer2.1.conv2.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+70,layer2.1.conv2.qkv_conv.bias,torch.Size([84]),84
+71,layer2.1.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+72,layer2.1.conv2.attn_out.bias,torch.Size([4]),4
+73,layer2.1.bn2.weight,torch.Size([128]),128
+74,layer2.1.bn2.bias,torch.Size([128]),128
+75,layer3.0.conv1.conv_out.weight,"torch.Size([252, 128, 3, 3])",290304
+76,layer3.0.conv1.conv_out.bias,torch.Size([252]),252
+77,layer3.0.conv1.qkv_conv.weight,"torch.Size([84, 128, 3, 3])",96768
+78,layer3.0.conv1.qkv_conv.bias,torch.Size([84]),84
+79,layer3.0.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+80,layer3.0.conv1.attn_out.bias,torch.Size([4]),4
+81,layer3.0.bn1.weight,torch.Size([256]),256
+82,layer3.0.bn1.bias,torch.Size([256]),256
+83,layer3.0.conv2.conv_out.weight,"torch.Size([252, 256, 3, 3])",580608
+84,layer3.0.conv2.conv_out.bias,torch.Size([252]),252
+85,layer3.0.conv2.qkv_conv.weight,"torch.Size([84, 256, 3, 3])",193536
+86,layer3.0.conv2.qkv_conv.bias,torch.Size([84]),84
+87,layer3.0.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+88,layer3.0.conv2.attn_out.bias,torch.Size([4]),4
+89,layer3.0.bn2.weight,torch.Size([256]),256
+90,layer3.0.bn2.bias,torch.Size([256]),256
+91,layer3.0.downsample.0.conv_out.weight,"torch.Size([252, 128, 1, 1])",32256
+92,layer3.0.downsample.0.conv_out.bias,torch.Size([252]),252
+93,layer3.0.downsample.0.qkv_conv.weight,"torch.Size([84, 128, 1, 1])",10752
+94,layer3.0.downsample.0.qkv_conv.bias,torch.Size([84]),84
+95,layer3.0.downsample.0.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+96,layer3.0.downsample.0.attn_out.bias,torch.Size([4]),4
+97,layer3.0.downsample.1.weight,torch.Size([256]),256
+98,layer3.0.downsample.1.bias,torch.Size([256]),256
+99,layer3.1.conv1.conv_out.weight,"torch.Size([252, 256, 3, 3])",580608
+100,layer3.1.conv1.conv_out.bias,torch.Size([252]),252
+101,layer3.1.conv1.qkv_conv.weight,"torch.Size([84, 256, 3, 3])",193536
+102,layer3.1.conv1.qkv_conv.bias,torch.Size([84]),84
+103,layer3.1.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+104,layer3.1.conv1.attn_out.bias,torch.Size([4]),4
+105,layer3.1.bn1.weight,torch.Size([256]),256
+106,layer3.1.bn1.bias,torch.Size([256]),256
+107,layer3.1.conv2.conv_out.weight,"torch.Size([252, 256, 3, 3])",580608
+108,layer3.1.conv2.conv_out.bias,torch.Size([252]),252
+109,layer3.1.conv2.qkv_conv.weight,"torch.Size([84, 256, 3, 3])",193536
+110,layer3.1.conv2.qkv_conv.bias,torch.Size([84]),84
+111,layer3.1.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+112,layer3.1.conv2.attn_out.bias,torch.Size([4]),4
+113,layer3.1.bn2.weight,torch.Size([256]),256
+114,layer3.1.bn2.bias,torch.Size([256]),256
+115,layer4.0.conv1.conv_out.weight,"torch.Size([508, 256, 3, 3])",1170432
+116,layer4.0.conv1.conv_out.bias,torch.Size([508]),508
+117,layer4.0.conv1.qkv_conv.weight,"torch.Size([84, 256, 3, 3])",193536
+118,layer4.0.conv1.qkv_conv.bias,torch.Size([84]),84
+119,layer4.0.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+120,layer4.0.conv1.attn_out.bias,torch.Size([4]),4
+121,layer4.0.bn1.weight,torch.Size([512]),512
+122,layer4.0.bn1.bias,torch.Size([512]),512
+123,layer4.0.conv2.conv_out.weight,"torch.Size([508, 512, 3, 3])",2340864
+124,layer4.0.conv2.conv_out.bias,torch.Size([508]),508
+125,layer4.0.conv2.qkv_conv.weight,"torch.Size([84, 512, 3, 3])",387072
+126,layer4.0.conv2.qkv_conv.bias,torch.Size([84]),84
+127,layer4.0.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+128,layer4.0.conv2.attn_out.bias,torch.Size([4]),4
+129,layer4.0.bn2.weight,torch.Size([512]),512
+130,layer4.0.bn2.bias,torch.Size([512]),512
+131,layer4.0.downsample.0.conv_out.weight,"torch.Size([508, 256, 1, 1])",130048
+132,layer4.0.downsample.0.conv_out.bias,torch.Size([508]),508
+133,layer4.0.downsample.0.qkv_conv.weight,"torch.Size([84, 256, 1, 1])",21504
+134,layer4.0.downsample.0.qkv_conv.bias,torch.Size([84]),84
+135,layer4.0.downsample.0.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+136,layer4.0.downsample.0.attn_out.bias,torch.Size([4]),4
+137,layer4.0.downsample.1.weight,torch.Size([512]),512
+138,layer4.0.downsample.1.bias,torch.Size([512]),512
+139,layer4.1.conv1.conv_out.weight,"torch.Size([508, 512, 3, 3])",2340864
+140,layer4.1.conv1.conv_out.bias,torch.Size([508]),508
+141,layer4.1.conv1.qkv_conv.weight,"torch.Size([84, 512, 3, 3])",387072
+142,layer4.1.conv1.qkv_conv.bias,torch.Size([84]),84
+143,layer4.1.conv1.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+144,layer4.1.conv1.attn_out.bias,torch.Size([4]),4
+145,layer4.1.bn1.weight,torch.Size([512]),512
+146,layer4.1.bn1.bias,torch.Size([512]),512
+147,layer4.1.conv2.conv_out.weight,"torch.Size([508, 512, 3, 3])",2340864
+148,layer4.1.conv2.conv_out.bias,torch.Size([508]),508
+149,layer4.1.conv2.qkv_conv.weight,"torch.Size([84, 512, 3, 3])",387072
+150,layer4.1.conv2.qkv_conv.bias,torch.Size([84]),84
+151,layer4.1.conv2.attn_out.weight,"torch.Size([4, 4, 1, 1])",16
+152,layer4.1.conv2.attn_out.bias,torch.Size([4]),4
+153,layer4.1.bn2.weight,torch.Size([512]),512
+154,layer4.1.bn2.bias,torch.Size([512]),512
+155,fc.weight,"torch.Size([100, 512])",51200
+156,fc.bias,torch.Size([100]),100

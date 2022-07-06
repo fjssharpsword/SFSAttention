@@ -77,8 +77,8 @@ def Train():
     print('********************load data succeed!********************')
 
     print('********************load model********************')
-    model = resnet18(pretrained=False, num_classes=100)
-    #model = densenet121(pretrained=False, num_classes=100)
+    #model = resnet18(pretrained=False, num_classes=100)
+    model = densenet121(pretrained=False, num_classes=100)
     #model = EfficientNet.from_name('efficientnet-b0', in_channels=3, num_classes=100)
     if os.path.exists(CKPT_PATH):
         checkpoint = torch.load(CKPT_PATH)
@@ -183,16 +183,27 @@ def Test():
     print('********************load data succeed!********************')
 
     print('********************load model********************')
-    model = resnet18(pretrained=False, num_classes=100).cuda()
-    """
+    #model = EfficientNet.from_name('efficientnet-b0', in_channels=3, num_classes=100).cuda()
+    #model = resnet18(pretrained=False, num_classes=100).cuda()
+    model = densenet121(pretrained=False, num_classes=100).cuda()
+
     param_size = 0
+    conv_count = 0
+    #name_list, shape_list, size_list = [], [], []
     for name, param in model.named_parameters():
         if param.requires_grad:
-            print(name,'---', param.size())
+            #print(name,'---', param.size(), '---', count_bytes(param.numel()))
+            #name_list.append(name)
+            #shape_list.append(param.size())
+            #size_list.append(param.numel())
             param_size = param_size + param.numel()
-    """
-    #model = densenet121(pretrained=False, num_classes=100).cuda()
-    #model = EfficientNet.from_name('efficientnet-b0', in_channels=3, num_classes=100).cuda()
+            if 'conv' in name: conv_count = conv_count + 1
+    print("\r Params of model: {}".format(count_bytes(param_size)) )
+    print("\r Number of convolution layers: {}".format(conv_count) )
+    #df = pd.DataFrame({'layer':name_list,'shape':shape_list, 'size':size_list})
+    #df.to_csv('/data/pycode/SFSAttention/logs/resnet18_param.csv')
+    
+    
     if os.path.exists(CKPT_PATH):
         checkpoint = torch.load(CKPT_PATH)
         model.load_state_dict(checkpoint) #strict=False
@@ -247,7 +258,7 @@ def Test():
     print("\r Top-5 ACC/CI = %.4f/%.4f" % (acc, ci) )
 
 def main():
-    Train()
+    #Train()
     Test()
 
 if __name__ == '__main__':

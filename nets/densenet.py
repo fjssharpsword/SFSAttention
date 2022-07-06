@@ -195,11 +195,11 @@ class DenseNet(nn.Module):
 
         # First convolution
         self.features = nn.Sequential(OrderedDict([
-            ('conv0', nn.Conv2d(3, num_init_features, kernel_size=7, stride=2, padding=3, bias=False)), #imagenet
-            #('conv0', nn.Conv2d(3, num_init_features, kernel_size=3, stride=1, padding=1, bias=False)), #cifar
+            #('conv0', nn.Conv2d(3, num_init_features, kernel_size=7, stride=2, padding=3, bias=False)), #imagenet
+            ('conv0', nn.Conv2d(3, num_init_features, kernel_size=3, stride=1, padding=1, bias=False)), #cifar
             ('norm0', nn.BatchNorm2d(num_init_features)),
             ('relu0', nn.ReLU(inplace=True)),
-            ('pool0', nn.MaxPool2d(kernel_size=3, stride=2, padding=1)), #imagenet
+            #('pool0', nn.MaxPool2d(kernel_size=3, stride=2, padding=1)), #imagenet
             #('pool1', nn.MaxPool2d(kernel_size=3, stride=2, padding=1)), #for attention layer
             #('attlayer', SNALayer(channels=num_init_features)),#attention layer
         ]))
@@ -229,8 +229,8 @@ class DenseNet(nn.Module):
         self.attlayer = SNALayer(channels=num_features)
 
         # Linear layer
-        #self.classifier = nn.Linear(num_features, num_classes) #for celoss
-        self.classifier = nn.Sequential(nn.Linear(num_features, num_classes), nn.Sigmoid()) #for bceloss
+        self.classifier = nn.Linear(num_features, num_classes) #for celoss
+        #self.classifier = nn.Sequential(nn.Linear(num_features, num_classes), nn.Sigmoid()) #for bceloss
 
         # Official init from torch repo.
         for m in self.modules():
