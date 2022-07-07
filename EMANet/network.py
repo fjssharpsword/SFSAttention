@@ -9,6 +9,8 @@ import torch.nn.functional as F
 from torch.nn.modules.batchnorm import _BatchNorm
 
 from bn_lib.nn.modules import SynchronizedBatchNorm2d
+from sna_ema import SNALayer
+
 import settings
 
 norm_layer = partial(SynchronizedBatchNorm2d, momentum=settings.BN_MOM)
@@ -70,6 +72,9 @@ class ResNet(nn.Module):
         self.bn1 = norm_layer(self.inplanes)
         self.relu = nn.ReLU(inplace=True)
         self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
+
+        self.snalayer = SNALayer(channels=self.inplanes) #SNA attention layer
+
         self.layer1 = self._make_layer(block, 64, layers[0])
         self.layer2 = self._make_layer(block, 128, layers[1], stride=2)
 
@@ -133,6 +138,8 @@ class ResNet(nn.Module):
         x = self.bn1(x)
         x = self.relu(x)
         x = self.maxpool(x)
+
+        #x = self.snalayer(x) #SNA Attention
 
         x = self.layer1(x)
         x = self.layer2(x)
@@ -290,9 +297,12 @@ class EMANet(nn.Module):
                                        reduction='none')
 
     def forward(self, img, lbl=None, size=None):
+
         x = self.extractor(img)
         x = self.fc0(x)
+
         x, mu = self.emau(x)
+
         x = self.fc1(x)
         x = self.fc2(x)
 

@@ -11,9 +11,9 @@ from torch.nn.modules.batchnorm import _BatchNorm
 import settings
 from hamburger import ConvBNReLU, get_hamburger
 from sync_bn.nn.modules import SynchronizedBatchNorm2d
+from sna_ham import SNALayer
 
 norm_layer = partial(SynchronizedBatchNorm2d, momentum=settings.BN_MOM)
-
 
 class Bottleneck(nn.Module):
     expansion = 4
@@ -71,6 +71,9 @@ class ResNet(nn.Module):
         self.bn1 = norm_layer(self.inplanes)
         self.relu = nn.ReLU(inplace=True)
         self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
+
+        self.snalayer = SNALayer(channels=self.inplanes) #SNA attention layer
+
         self.layer1 = self._make_layer(block, 64, layers[0])
         self.layer2 = self._make_layer(block, 128, layers[1], stride=2)
 
@@ -133,6 +136,8 @@ class ResNet(nn.Module):
         x = self.bn1(x)
         x = self.relu(x)
         x = self.maxpool(x)
+
+        #x = self.snalayer(x) #SNA Attention
 
         x = self.layer1(x)
         x = self.layer2(x)
@@ -201,8 +206,7 @@ class HamNet(nn.Module):
                                 nn.Conv2d(256, n_classes, 1))
 
         # Put the criterion inside the model to make GPU load balanced
-        self.crit = CrossEntropyLoss2d(ignore_index=settings.IGNORE_LABEL,
-                                       reduction='none')
+        self.crit = CrossEntropyLoss2d(ignore_index=settings.IGNORE_LABEL, reduction='none')
 
     def forward(self, img, lbl=None, size=None):
         x = self.backbone(img)
