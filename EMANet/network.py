@@ -8,10 +8,13 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.nn.modules.batchnorm import _BatchNorm
 
-from bn_lib.nn.modules import SynchronizedBatchNorm2d
-from sna_ema import SNALayer
+from EMANet.bn_lib.nn.modules import SynchronizedBatchNorm2d
+from EMANet.sna_ema import SNALayer
+import EMANet.settings as settings
 
-import settings
+#from bn_lib.nn.modules import SynchronizedBatchNorm2d
+#from sna_ema import SNALayer
+#import settings
 
 norm_layer = partial(SynchronizedBatchNorm2d, momentum=settings.BN_MOM)
 
@@ -293,8 +296,7 @@ class EMANet(nn.Module):
         self.fc2 = nn.Conv2d(256, n_classes, 1)
 
         # Put the criterion inside the model to make GPU load balanced
-        self.crit = CrossEntropyLoss2d(ignore_index=settings.IGNORE_LABEL, 
-                                       reduction='none')
+        self.crit = CrossEntropyLoss2d(ignore_index=settings.IGNORE_LABEL, reduction='none')
 
     def forward(self, img, lbl=None, size=None):
 
@@ -330,7 +332,7 @@ class CrossEntropyLoss2d(nn.Module):
 
 def test_net():
     model = EMANet(n_classes=21, n_layers=50)
-    model.eval()
+    model.train()
     print(list(model.named_children()))
     image = torch.randn(1, 3, 513, 513)
     label = torch.zeros(1, 513, 513).long()

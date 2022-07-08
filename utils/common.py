@@ -130,6 +130,20 @@ def transparent_back(img, gt=True):
                     img.putpixel(dot,color_1)
     return img
 
+def DiceLoss(input, target):
+        N = target.size(0)
+        smooth = 1
+    
+        input_flat = input.view(N, -1)
+        target_flat = target.view(N, -1)
+    
+        intersection = input_flat * target_flat
+    
+        loss = 2 * (intersection.sum(1) + smooth) / (input_flat.sum(1) + target_flat.sum(1) + smooth)
+        loss = 1 - loss.sum() / N
+    
+        return loss
+
 if __name__ == "__main__":
     #for debug  
     A = torch.rand((8, 2048, 64*64))
