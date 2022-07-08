@@ -203,7 +203,6 @@ def Test():
     #df = pd.DataFrame({'layer':name_list,'shape':shape_list, 'size':size_list})
     #df.to_csv('/data/pycode/SFSAttention/logs/resnet18_param.csv')
     
-    
     if os.path.exists(CKPT_PATH):
         checkpoint = torch.load(CKPT_PATH)
         model.load_state_dict(checkpoint) #strict=False

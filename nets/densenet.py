@@ -70,6 +70,7 @@ class _DenseLayer(nn.Module):
         #self.add_module('attlayer', SELayer(growth_rate, reduction=16))
         #self.add_module('attlayer', ECA_layer(channel=growth_rate, k_size=3))
         #self.add_module('attlayer', SNALayer(channels=growth_rate))
+        self.add_module('attlayer', SALayer(in_ch=growth_rate, k=2))
 
     def bn_function(self, inputs: List[Tensor]) -> Tensor:
         concated_features = torch.cat(inputs, 1)
@@ -226,7 +227,7 @@ class DenseNet(nn.Module):
         # Final batch norm
         self.features.add_module('norm5', nn.BatchNorm2d(num_features))
 
-        self.attlayer = SNALayer(channels=num_features)
+        #self.attlayer = SNALayer(channels=num_features)
 
         # Linear layer
         self.classifier = nn.Linear(num_features, num_classes) #for celoss
@@ -247,7 +248,7 @@ class DenseNet(nn.Module):
     def forward(self, x: Tensor) -> Tensor:
         features = self.features(x)   
         
-        x = self.attlayer(x)#attention layer
+        #x = self.attlayer(x)#attention layer
 
         out = F.relu(features, inplace=True)
         out = F.adaptive_avg_pool2d(out, (1, 1))

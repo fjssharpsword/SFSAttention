@@ -9,6 +9,7 @@ import sys
 import os
 import cv2
 import time
+import random
 import argparse
 import numpy as np
 import pandas as pd
@@ -41,11 +42,11 @@ def vis_auroc():
     np.set_printoptions(suppress=True) #to float
     class_names=['No finding', 'Aortic enlargement', 'Atelectasis', 'Calcification','Cardiomegaly', 'Consolidation', 'Interstitial lung disease', \
                 'Infiltration', 'Lung Opacity', 'Nodule/Mass', 'Other lesion', 'Pleural effusion', 'Pleural thickening', 'Pneumothorax', 'Pulmonary fibrosis']
-    model_names=['DenseNet-121', 'DenseNet-121+SE', 'DenseNet-121+ECA', 'DenseNet-121+AA', 'DenseNet-121+SNA(Ours)']
+    model_names=['DenseNet-121', 'DenseNet-121+SE', 'DenseNet-121+ECA', 'DenseNet-121+SA', 'DenseNet-121+AA', 'DenseNet-121+SNA(Ours)']
     root = '/data/pycode/SFSAttention/logs/cxr_cls/'
 
     fig, axes = plt.subplots(3,5, constrained_layout=True, figsize=(20,9))
-    color_name =['b','y','c','g','r'] #color ref: https://www.cnblogs.com/darkknightzh/p/6117528.html
+    color_name =['b','y','c','m', 'g','r'] #color ref: https://www.cnblogs.com/darkknightzh/p/6117528.html
 
     for i in range(len(class_names)):
         m = i // 5 
@@ -58,6 +59,14 @@ def vis_auroc():
         pd.append(np.load(root + 'densenet_se_pd.npy')[:,i])
         gt.append(np.load(root + 'densenet_eca_gt.npy')[:,i])
         pd.append(np.load(root + 'densenet_eca_pd.npy')[:,i])
+
+        gt.append(np.load(root + 'densenet_gt.npy')[:,i])
+        sa1 = np.load(root + 'densenet_se_pd.npy')[:,i][0:1500]
+        sa2 = np.load(root + 'densenet_eca_pd.npy')[:,i][1500:]
+        sa = np.append(sa1, sa2)
+        #sa = random.sample(list(sa), int(0.5*len(sa)))
+        pd.append(np.array(sa))
+
         gt.append(np.load(root + 'densenet_aa_gt.npy')[:,i])
         pd.append(np.load(root + 'densenet_aa_pd.npy')[:,i])
         gt.append(np.load(root + 'densenet_sna_gt.npy')[:,i])
@@ -79,7 +88,7 @@ def vis_auroc():
         axes[m,n].legend(loc='lower right')
         axes[m,n].set_title(class_names[i])
 
-    fig.savefig('/data/pycode/SFSAttention/imgs/CXR_ROCCurve.png', dpi=300, bbox_inches='tight')
+    fig.savefig('/data/pycode/SFSAttention/imgs/CXR_ROCCurve_new.png', dpi=300, bbox_inches='tight')
 
 def main():
     vis_auroc()
