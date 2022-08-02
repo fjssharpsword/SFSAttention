@@ -86,7 +86,7 @@ def main():
     #conversion
     # load input wave
     #selected_speakers = ['man_can_1', 'man_can_2', 'man_chn_1', 'man_chn_2', 'women_can_1', 'women_can_2', 'women_chn_1', 'women_chn_2']
-    src_key = 'cvte' #random.choice(selected_speakers)
+    src_key = 'xxx' #random.choice(selected_speakers)
     wav_path = root + 'Demo/chn-corpus/' + src_key + '.wav'
     audio, source_sr = librosa.load(wav_path, sr=24000)
     audio = audio / np.max(np.abs(audio))
